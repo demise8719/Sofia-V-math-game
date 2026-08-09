@@ -296,18 +296,79 @@ button{font-family:inherit;}
 }
 .more-stories a:last-child{border-bottom:none;}
 .more-stories a:hover{color:#fff;}
+.reading-tabs{display:flex; gap:10px; margin-bottom:16px;}
+.reading-tab{
+  flex:1; border:none; border-radius:14px; padding:11px; font-family:'Baloo 2'; font-weight:800;
+  font-size:14px; cursor:pointer; background:rgba(255,255,255,.1); color:#C9BFFF;
+  border:2px solid rgba(255,255,255,.2);
+}
+.reading-tab.active{background:var(--coral); color:#fff; border-color:var(--coral-d);}
 
-.spider-corner{
-  position:fixed; bottom:14px; right:16px; font-size:26px; cursor:pointer;
-  animation:spiderWiggle 4s ease-in-out infinite; z-index:15; filter:drop-shadow(0 2px 3px rgba(0,0,0,.4));
+/* ---------- Webster help bot ---------- */
+.webster-bot{
+  position:fixed; bottom:16px; right:16px; width:58px; height:58px; border-radius:50%;
+  background:linear-gradient(150deg, var(--green), var(--green-d)); cursor:pointer; z-index:40;
+  display:flex; align-items:center; justify-content:center;
+  box-shadow:0 6px 0 var(--green-d), 0 10px 18px rgba(0,0,0,.4);
+  animation:spiderWiggle 4s ease-in-out infinite; border:3px solid rgba(255,255,255,.6);
 }
-@keyframes spiderWiggle{0%,100%{transform:rotate(0deg) translateY(0);}25%{transform:rotate(-8deg) translateY(-2px);}75%{transform:rotate(8deg) translateY(2px);}}
-.spider-toast{
-  position:fixed; bottom:50px; right:16px; max-width:220px;
-  background:#fff; color:var(--ink); font-weight:800; font-size:13px; font-family:'Baloo 2';
-  padding:10px 14px; border-radius:14px 14px 4px 14px; box-shadow:0 6px 18px rgba(0,0,0,.4);
-  z-index:16; animation:popIn .3s ease;
+.webster-bot:active{transform:translateY(4px); box-shadow:0 2px 0 var(--green-d), 0 6px 12px rgba(0,0,0,.4);}
+.webster-bot svg{width:38px; height:38px;}
+.webster-bot .ping-dot{
+  position:absolute; top:-3px; right:-3px; width:14px; height:14px; border-radius:50%;
+  background:var(--gold); border:2px solid #fff;
 }
+.webster-panel{
+  position:fixed; bottom:82px; right:16px; max-width:270px; background:#fff; color:var(--ink);
+  border-radius:16px; padding:16px 18px; box-shadow:0 10px 24px rgba(0,0,0,.4); z-index:41;
+  border:3px solid rgba(36,27,69,.14); animation:popIn .25s ease; font-family:'Baloo 2';
+}
+.webster-panel .wp-title{font-size:12px; color:var(--ink-soft); text-transform:uppercase; font-weight:800; margin-bottom:8px; display:flex; align-items:center; gap:6px;}
+.webster-panel .wp-text{font-size:14.5px; line-height:1.5; margin-bottom:12px; font-family:'Nunito'; font-weight:600;}
+.webster-panel .wp-reveal{background:var(--green-l); border-radius:12px; padding:10px 14px; font-size:14px; margin-bottom:10px; color:#0B4A2C;}
+.webster-panel .wp-btns{display:flex; flex-direction:column; gap:8px;}
+.webster-panel button.wp-action{width:100%; padding:9px; font-size:13px;}
+
+/* ---------- Dad ping button ---------- */
+.dad-bot{
+  position:fixed; bottom:16px; right:82px; width:50px; height:50px; border-radius:50%;
+  background:linear-gradient(150deg, var(--blue), var(--blue-d)); cursor:pointer; z-index:40;
+  display:flex; align-items:center; justify-content:center; font-size:22px;
+  box-shadow:0 5px 0 var(--blue-d), 0 8px 16px rgba(0,0,0,.4);
+  border:3px solid rgba(255,255,255,.6);
+}
+.dad-bot:active{transform:translateY(3px); box-shadow:0 2px 0 var(--blue-d);}
+.dad-panel{
+  position:fixed; bottom:76px; right:16px; width:270px; background:#fff; color:var(--ink);
+  border-radius:16px; padding:16px 18px; box-shadow:0 10px 24px rgba(0,0,0,.4); z-index:41;
+  border:3px solid rgba(36,27,69,.14); animation:popIn .25s ease; font-family:'Baloo 2';
+}
+.dad-panel .dp-title{font-size:13px; color:var(--ink-soft); text-transform:uppercase; font-weight:800; margin-bottom:8px;}
+.dad-panel textarea{
+  width:100%; min-height:70px; border-radius:10px; border:2px solid var(--purple-l); padding:8px 10px;
+  font-family:'Nunito'; font-size:14px; resize:vertical; margin-bottom:10px;
+}
+.dad-panel .dp-btns{display:flex; flex-direction:column; gap:8px;}
+.dad-panel button.dp-action{width:100%; padding:9px; font-size:13px;}
+
+/* ---------- Profiles / Leaderboard ---------- */
+.profile-card{
+  background:var(--panel); border-radius:18px; padding:14px 16px; margin-bottom:12px;
+  border:3px solid rgba(36,27,69,.14); display:flex; align-items:center; gap:12px;
+  box-shadow:0 6px 0 rgba(0,0,0,.2);
+}
+.profile-card.active{border-color:var(--gold-d); background:var(--gold-l);}
+.profile-card .rank{font-family:'Baloo 2'; font-weight:800; font-size:20px; width:32px; text-align:center; flex-shrink:0;}
+.profile-card .pinfo{flex:1;}
+.profile-card .pinfo .pname{font-family:'Baloo 2'; font-weight:800; font-size:15px; color:var(--ink);}
+.profile-card .pinfo .pstats{font-size:12px; color:var(--ink-soft); font-weight:700;}
+.add-friend-row{display:flex; gap:8px; margin:16px 0;}
+.add-friend-row input{
+  flex:1; border-radius:14px; border:2px solid var(--purple-l); padding:10px 14px;
+  font-family:'Nunito'; font-size:14px;
+}
+
+@keyframes spiderWiggle{0%,100%{transform:rotate(0deg) translateY(0);}25%{transform:rotate(-6deg) translateY(-2px);}75%{transform:rotate(6deg) translateY(2px);}}
 </style>
 </head>
 <body>
@@ -382,6 +443,36 @@ function plushSVG(){
   </svg>`;
 }
 
+/* ---- Webster: a cute jumping spider (not a scary black spider!) ---- */
+function spiderSVG(){
+  return `<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Webster the jumping spider">
+    <g stroke="#2FBE7A" stroke-width="4" fill="none" stroke-linecap="round">
+      <path d="M38 70 Q 16 66 8 52"/>
+      <path d="M40 80 Q 14 84 4 78"/>
+      <path d="M44 90 Q 22 100 14 112"/>
+      <path d="M82 70 Q 104 66 112 52"/>
+      <path d="M80 80 Q 106 84 116 78"/>
+      <path d="M76 90 Q 98 100 106 112"/>
+    </g>
+    <ellipse cx="60" cy="82" rx="30" ry="27" fill="#6EE7A8"/>
+    <ellipse cx="60" cy="88" rx="20" ry="15" fill="#8FF0BB" opacity="0.7"/>
+    <circle cx="60" cy="46" r="27" fill="#6EE7A8"/>
+    <ellipse cx="46" cy="34" rx="4" ry="5" fill="#2FBE7A"/>
+    <ellipse cx="74" cy="34" rx="4" ry="5" fill="#2FBE7A"/>
+    <circle cx="47" cy="52" r="12" fill="#241B45"/>
+    <circle cx="73" cy="52" r="12" fill="#241B45"/>
+    <circle cx="47" cy="52" r="12" fill="none" stroke="#fff" stroke-width="1.5"/>
+    <circle cx="73" cy="52" r="12" fill="none" stroke="#fff" stroke-width="1.5"/>
+    <circle cx="44" cy="48" r="4" fill="#fff"/>
+    <circle cx="70" cy="48" r="4" fill="#fff"/>
+    <circle cx="50" cy="56" r="1.8" fill="#fff" opacity="0.8"/>
+    <circle cx="76" cy="56" r="1.8" fill="#fff" opacity="0.8"/>
+    <circle cx="34" cy="58" r="4" fill="#241B45"/>
+    <circle cx="86" cy="58" r="4" fill="#241B45"/>
+    <path d="M52 66 Q 60 71 68 66" stroke="#0B4A2C" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  </svg>`;
+}
+
 /* ============================================================
    LANGUAGE / i18n
    ============================================================ */
@@ -393,7 +484,7 @@ const STRINGS = {
     play:'PLAY', backHub:'← Hub', nextQuestion:'Next Question →', seeResults:'See Results →',
     playAgain:'Play Again', backToHub:'Back to Hub', wrongFeedback:'Not quite — the correct answer is highlighted!',
     correctStat:'Correct', bonesStat:'Bones', xpStat:'XP', of:'of', qLabel:'Q',
-    spiderTitle:'Just a friendly visitor',
+    spiderTitle:'Ask Webster for help!',
     langToggle:'ES 🇲🇽',
     session:'This Session', allTime:'All-Time', close:'Close'
   },
@@ -403,7 +494,7 @@ const STRINGS = {
     play:'JUGAR', backHub:'← Inicio', nextQuestion:'Siguiente Pregunta →', seeResults:'Ver Resultados →',
     playAgain:'Jugar de Nuevo', backToHub:'Volver al Inicio', wrongFeedback:'Casi — ¡la respuesta correcta está resaltada!',
     correctStat:'Correctas', bonesStat:'Huesitos', xpStat:'XP', of:'de', qLabel:'P',
-    spiderTitle:'Solo un visitante amigable',
+    spiderTitle:'¡Pregúntale a Webster!',
     langToggle:'EN 🇺🇸',
     session:'Esta Sesión', allTime:'Tiempo Total', close:'Cerrar'
   }
@@ -423,8 +514,8 @@ function L(key){ return STRINGS[LANG][key]; }const TOPIC_I18N = {
          es:{name:'La Telaraña de Webster', subtitle:'Plano Cartesiano', desc:'Una pequeña araña llamada Webster teje telarañas en el plano cartesiano — traza y encuentra sus puntos.'} },
   word:{ en:{name:'Word Problem Arena', subtitle:'Mixed Challenges', desc:'Battle real-world problems starring Sofia, Wow Wow, and friends.'},
          es:{name:'Arena de Problemas', subtitle:'Retos Mixtos', desc:'Enfréntate a problemas del mundo real con Sofia, Wow Wow y sus amigas.'} },
-  read:{ en:{name:'Ocean Reading Cove', subtitle:'Reading Practice', desc:'Read short ocean stories starring Sofia and Cat, then answer questions about them.'},
-         es:{name:'Rincón de Lectura del Océano', subtitle:'Práctica de Lectura', desc:'Lee cuentos cortos del océano con Sofia y Cat, y luego responde preguntas.'} }
+  read:{ en:{name:'Reading Cove', subtitle:'Ocean & Science Stories', desc:'Read short ocean and science stories starring Sofia and Cat, then answer questions about them.'},
+         es:{name:'Rincón de Lectura', subtitle:'Cuentos del Océano y Ciencia', desc:'Lee cuentos cortos del océano y de ciencia con Sofia y Cat, y luego responde preguntas.'} }
 };
 function topicText(id){ return TOPIC_I18N[id][LANG]; }
 
@@ -694,11 +785,32 @@ const EXAMPLES_I18N = {
 };
 
 /* ============================================================
+   WEBSTER'S HINT BOT — topic-level strategy tips
+   ============================================================ */
+const HINTS_I18N = {
+  mult:{ en:'Break big numbers into tens and ones! For example, 23 × 4 is the same as (20 × 4) + (3 × 4). For division, ask "how many groups fit?"',
+         es:'¡Separa los números grandes en decenas y unidades! Por ejemplo, 23 × 4 es lo mismo que (20 × 4) + (3 × 4). Para dividir, pregúntate "¿cuántos grupos caben?"' },
+  frac:{ en:'If the bottom numbers (denominators) match, just add or subtract the top numbers. If they don\'t match, try to find a number both bottoms fit into evenly.',
+         es:'Si los números de abajo (denominadores) son iguales, solo suma o resta los de arriba. Si no son iguales, busca un número en el que ambos denominadores quepan exactamente.' },
+  dec:{  en:'Line up the decimal points like a ladder before adding or subtracting! For place value, count spots after the dot: 1st = tenths, 2nd = hundredths.',
+         es:'¡Alinea los puntos decimales como una escalera antes de sumar o restar! Para el valor posicional, cuenta los lugares después del punto: 1º = décimas, 2º = centésimas.' },
+  ops:{  en:'Always do the math inside the parentheses ( ) first, before anything else. Then multiply or divide, and finally add or subtract.',
+         es:'Siempre resuelve primero lo que está dentro del paréntesis ( ). Luego multiplica o divide, y al final suma o resta.' },
+  vol:{  en:'Volume of a box = length × width × height. Multiply all three numbers together, and don\'t forget the answer is in "cubic" units!',
+         es:'Volumen de una caja = largo × ancho × profundidad. Multiplica los tres números juntos, ¡y no olvides que la respuesta está en unidades "cúbicas"!' },
+  grid:{ en:'Start at (0,0) — the corner. The first number (x) tells you how far to go right. The second number (y) tells you how far to go up.',
+         es:'Empieza en (0,0) — la esquina. El primer número (x) te dice cuánto ir a la derecha. El segundo número (y) te dice cuánto ir hacia arriba.' },
+  word:{ en:'Look for key words! "Left," "gives away," or "fewer" often mean subtract. "In all," "total," or "together" often mean add.',
+         es:'¡Busca palabras clave! "Quedan," "da," o "menos" casi siempre significan restar. "En total" o "juntos" casi siempre significan sumar.' }
+};
+
+/* ============================================================
    OCEAN READING COVE — original short stories + comprehension
    ============================================================ */
 const READING_STORIES = [
   {
     id:'wave',
+    category:'ocean',
     icon:'🌊',
     title:{en:"Cat's First Wave", es:'La Primera Ola de Cat'},
     blurb:{en:'Cat is nervous about the ocean. Can Sofia and Wow Wow help her be brave?', es:'Cat le tiene miedo al océano. ¿Podrán Sofia y Wow Wow ayudarla a ser valiente?'},
@@ -761,6 +873,7 @@ Sofia sonrió. A veces las cosas más grandes solo parecen dar miedo hasta que d
   },
   {
     id:'webster',
+    category:'ocean',
     icon:'🕷️',
     title:{en:"Webster's Tide Pool Discovery", es:'El Descubrimiento de Webster en la Poza de Marea'},
     blurb:{en:'Webster the spider stows away in a beach bag and discovers a whole tiny ocean world.', es:'Webster la araña se cuela en una bolsa de playa y descubre un pequeño mundo oceánico.'},
@@ -804,6 +917,116 @@ Esa noche, de vuelta en su telaraña, Webster tejió un poco más rápido de lo 
       { en:{prompt:'Which creature carries its home on its back?', choices:['Starfish','Seagull','Hermit crab','Sea anemone'], answer:'Hermit crab'},
         es:{prompt:'¿Qué criatura carga su casa en la espalda?', choices:['Estrella de mar','Gaviota','Cangrejo ermitaño','Anémona de mar'], answer:'Cangrejo ermitaño'} }
     ]
+  },
+  {
+    id:'watercycle',
+    category:'science',
+    icon:'💧',
+    title:{en:'A Water Drop\'s Big Journey', es:'El Gran Viaje de una Gota de Agua'},
+    blurb:{en:'Follow one tiny water drop from the ocean, into the sky, and all the way back again.', es:'Sigue a una gotita de agua desde el océano, hasta el cielo, y de regreso otra vez.'},
+    text:{
+      en:`Sofia and Cat were floating on their backs in the ocean, looking up at the fluffy white clouds, when Cat asked, "Where do clouds come from?"
+
+"Actually," Sofia said, "some of that cloud might have been part of this exact ocean, not long ago!"
+
+Cat sat up, splashing. "No way!"
+
+"It's true," Sofia said. "It's called the water cycle. Let's pretend we're a water drop and go on the journey."
+
+Imagine you are a tiny drop of water, resting on the surface of the ocean. The sun shines down and warms you up so much that you turn into an invisible gas called water vapor. This is called evaporation. You float upward, rising higher and higher into the sky, way above the beach, way above the birds.
+
+Up in the cool air, you bump into millions of other water vapor drops. Together, you all cool down and squeeze back into tiny drops of liquid water again. This is called condensation. All those tiny drops clump together to form a fluffy white cloud, just like the ones Cat was looking at.
+
+The cloud drifts along, pushed by the wind, until it grows so heavy with water drops that it cannot hold them anymore. The drops fall from the sky as rain. This is called precipitation. Maybe you land in the mountains, or in a river, or right back in the ocean where you started!
+
+If you land on a mountain, you might trickle into a stream, then a river, flowing downhill, past rocks and fish and forests, until — splash — you reach the ocean again, ready to start the whole journey all over.
+
+"So the same water just keeps going around and around?" Cat asked.
+
+"Forever," Sofia said. "The water we're swimming in right now might have been a cloud a hundred years ago, or rain on a mountain, or even a puddle a dinosaur splashed in!"
+
+Cat looked at the ocean with new wonder. "That's the coolest thing I've ever heard."`,
+      es:`Sofia y Cat estaban flotando boca arriba en el océano, mirando las nubes blancas y esponjosas, cuando Cat preguntó: —¿De dónde vienen las nubes?
+
+—En realidad —dijo Sofia—, ¡parte de esa nube pudo haber sido parte de este mismo océano, hace no mucho tiempo!
+
+Cat se sentó de golpe, salpicando agua. —¡No puede ser!
+
+—Es verdad —dijo Sofia—. Se llama el ciclo del agua. Vamos a imaginar que somos una gota de agua y hacemos el viaje.
+
+Imagina que eres una pequeña gota de agua, descansando en la superficie del océano. El sol brilla y te calienta tanto que te conviertes en un gas invisible llamado vapor de agua. Esto se llama evaporación. Flotas hacia arriba, subiendo cada vez más alto en el cielo, muy por encima de la playa, muy por encima de los pájaros.
+
+Allá arriba, en el aire frío, chocas con millones de otras gotitas de vapor de agua. Juntas, todas se enfrían y se convierten de nuevo en pequeñas gotas de agua líquida. Esto se llama condensación. Todas esas gotitas se juntan para formar una nube blanca y esponjosa, como las que Cat estaba mirando.
+
+La nube flota, empujada por el viento, hasta que se vuelve tan pesada con gotas de agua que ya no puede sostenerlas. Las gotas caen del cielo como lluvia. Esto se llama precipitación. Tal vez caes en las montañas, o en un río, ¡o de regreso en el mismo océano donde empezaste!
+
+Si caes en una montaña, tal vez fluyas hacia un arroyo, luego un río, corriendo cuesta abajo, pasando rocas y peces y bosques, hasta que — splash — llegas de nuevo al océano, lista para empezar todo el viaje otra vez.
+
+—¿Entonces la misma agua sigue dando vueltas y vueltas? —preguntó Cat.
+
+—Para siempre —dijo Sofia—. El agua en la que estamos nadando ahora mismo pudo haber sido una nube hace cien años, o lluvia en una montaña, ¡o hasta un charco donde chapoteó un dinosaurio!
+
+Cat miró el océano con nueva admiración. —Eso es lo más increíble que he escuchado.`
+    },
+    questions:[
+      { en:{prompt:'What is it called when the sun turns water into vapor?', choices:['Condensation','Precipitation','Evaporation','Freezing'], answer:'Evaporation'},
+        es:{prompt:'¿Cómo se llama cuando el sol convierte el agua en vapor?', choices:['Condensación','Precipitación','Evaporación','Congelación'], answer:'Evaporación'} },
+      { en:{prompt:'What happens when water vapor cools down high in the sky?', choices:['It disappears forever','It turns back into tiny water drops (condensation)','It turns into wind','It becomes a fish'], answer:'It turns back into tiny water drops (condensation)'},
+        es:{prompt:'¿Qué pasa cuando el vapor de agua se enfría en el cielo?', choices:['Desaparece para siempre','Se convierte otra vez en gotitas de agua (condensación)','Se convierte en viento','Se convierte en un pez'], answer:'Se convierte otra vez en gotitas de agua (condensación)'} },
+      { en:{prompt:'What is rain falling from clouds called?', choices:['Evaporation','Precipitation','Condensation','Migration'], answer:'Precipitation'},
+        es:{prompt:'¿Cómo se llama la lluvia que cae de las nubes?', choices:['Evaporación','Precipitación','Condensación','Migración'], answer:'Precipitación'} }
+    ]
+  },
+  {
+    id:'nose',
+    category:'science',
+    icon:'👃',
+    title:{en:"Wow Wow's Nose Knows", es:'La Nariz de Wow Wow lo Sabe Todo'},
+    blurb:{en:"Wow Wow's nose can do things a human nose never could. Here's the science behind it.", es:'La nariz de Wow Wow puede hacer cosas que una nariz humana jamás podría. Aquí está la ciencia detrás.'},
+    text:{
+      en:`Sofia couldn't find her favorite seashell anywhere. She had brought it home from the beach and set it down somewhere in the yard — but where?
+
+"Wow Wow, can you help me find it?" Sofia asked.
+
+Wow Wow's nose twitched. He lowered his big golden head and began sniffing the grass, moving in slow zig-zags across the yard. Within a minute, he stopped at a bush, pushed his nose into the leaves, and pulled out the shell with his teeth, tail wagging proudly.
+
+"How did you do that so fast?" Sofia laughed, taking the shell.
+
+Here's the secret: a dog's nose is one of the most amazing tools in the animal world. While a human has about 6 million special smelling cells inside their nose, a dog like Wow Wow has around 300 million. That means Wow Wow's nose is roughly 50 times more powerful at smelling than Sofia's!
+
+Dogs can smell things humans can't even imagine — a single drop of scent in a swimming pool full of water, or a person who walked through a yard hours ago. That's because when a dog sniffs, tiny scent particles get trapped inside folds of skin in their nose, and each different smell lights up a different part of their brain, almost like a smell "fingerprint."
+
+Wow Wow's nose is also always a little wet, and that's not an accident — the wetness actually helps him catch and hold onto scent particles in the air, making his sense of smell even sharper.
+
+That's why search-and-rescue dogs can find people lost in the wilderness, and why some dogs can be trained to detect certain illnesses just by sniffing a person, long before doctors can find anything with their equipment.
+
+"You're basically a superhero," Sofia said, scratching behind Wow Wow's ears. Wow Wow just wagged his tail and looked very pleased with himself.`,
+      es:`Sofia no encontraba su concha de mar favorita por ningún lado. La había traído de la playa y la había dejado en algún lugar del patio — pero, ¿dónde?
+
+—Wow Wow, ¿me ayudas a encontrarla? —preguntó Sofia.
+
+La nariz de Wow Wow se movió. Bajó su gran cabeza dorada y empezó a olfatear el pasto, moviéndose en zigzag lento por el patio. En menos de un minuto, se detuvo junto a un arbusto, metió la nariz entre las hojas, y sacó la concha con los dientes, moviendo la cola con orgullo.
+
+—¿Cómo hiciste eso tan rápido? —se rió Sofia, tomando la concha.
+
+Aquí está el secreto: la nariz de un perro es una de las herramientas más increíbles del mundo animal. Mientras que un humano tiene alrededor de 6 millones de células especiales para oler dentro de la nariz, un perro como Wow Wow tiene alrededor de 300 millones. ¡Eso significa que la nariz de Wow Wow es casi 50 veces más poderosa para oler que la de Sofia!
+
+Los perros pueden oler cosas que los humanos ni siquiera pueden imaginar — una sola gota de aroma en una alberca llena de agua, o a una persona que caminó por el patio horas antes. Eso es porque cuando un perro olfatea, diminutas partículas de aroma quedan atrapadas dentro de pliegues de piel en su nariz, y cada aroma diferente enciende una parte diferente de su cerebro, casi como una "huella digital" de olor.
+
+La nariz de Wow Wow también está siempre un poco mojada, y eso no es un accidente — la humedad en realidad le ayuda a atrapar y sostener las partículas de aroma en el aire, haciendo su sentido del olfato aún más agudo.
+
+Por eso los perros de búsqueda y rescate pueden encontrar a personas perdidas en el bosque, y por eso algunos perros pueden entrenarse para detectar ciertas enfermedades solo con oler a una persona, mucho antes de que los doctores puedan encontrar algo con sus equipos.
+
+—Básicamente eres un superhéroe —dijo Sofia, rascando detrás de las orejas de Wow Wow. Wow Wow solo movió la cola y se veía muy orgulloso de sí mismo.`
+    },
+    questions:[
+      { en:{prompt:'About how many smelling cells does a dog\'s nose have compared to a human\'s?', choices:['The same amount','About half as many','About 50 times more','About 2 times more'], answer:'About 50 times more'},
+        es:{prompt:'¿Aproximadamente cuántas células para oler tiene la nariz de un perro comparada con la de un humano?', choices:['La misma cantidad','Como la mitad','Como 50 veces más','Como 2 veces más'], answer:'Como 50 veces más'} },
+      { en:{prompt:'Why is it helpful that a dog\'s nose is wet?', choices:['It looks cuter','It helps catch and hold scent particles in the air','It helps the dog breathe underwater','It has no real purpose'], answer:'It helps catch and hold scent particles in the air'},
+        es:{prompt:'¿Por qué es útil que la nariz de un perro esté mojada?', choices:['Se ve más bonita','Ayuda a atrapar y sostener partículas de aroma en el aire','Ayuda al perro a respirar bajo el agua','No tiene ningún propósito real'], answer:'Ayuda a atrapar y sostener partículas de aroma en el aire'} },
+      { en:{prompt:'What is one real job dogs can do with their amazing sense of smell?', choices:['Fly airplanes','Search-and-rescue in the wilderness','Cook food','Paint pictures'], answer:'Search-and-rescue in the wilderness'},
+        es:{prompt:'¿Cuál es un trabajo real que los perros pueden hacer con su increíble sentido del olfato?', choices:['Volar aviones','Búsqueda y rescate en el bosque','Cocinar comida','Pintar cuadros'], answer:'Búsqueda y rescate en el bosque'} }
+    ]
   }
 ];
 const READING_LINKS = [
@@ -815,15 +1038,15 @@ const READING_LINKS = [
    STATE
    ============================================================ */
 let state = {
-  screen:'loading', // loading | hub | examples | game | summary | reading-list | reading-story | reading-quiz | reading-summary
-  name:'Sofia Villarreal Castañeda', level:1, xp:0, coins:0,
+  screen:'loading', // loading | hub | examples | game | summary | reading-list | reading-story | reading-quiz | reading-summary | profiles
+  profileName:'Sofia Villarreal Castañeda', level:1, xp:0, coins:0,
   bestStars:{}, // topicId -> stars
   // in-round
   topicId:null, qIndex:0, correct:0, streak:0, roundCoins:0, roundXP:0,
   currentQ:null, answered:false, selected:null, plotPick:null,
   // reading
   storyId:null, storyQIndex:0, storyCorrect:0, storyAnswered:false, storySelected:null,
-  storyRoundCoins:0, storyRoundXP:0
+  storyRoundCoins:0, storyRoundXP:0, readingCategory:'ocean'
 };
 
 function levelFromXP(xp){ return Math.floor(xp/120)+1; }
@@ -844,24 +1067,62 @@ function formatDuration(totalSec){
   return `${s}s`;
 }
 
+/* ---- Multi-profile storage (lets friends compete on the same device) ---- */
+const MAX_PROFILES = 8;
+function getProfileList(){
+  try{
+    const raw = localStorage.getItem('mathquest_profile_list');
+    return raw ? JSON.parse(raw) : [];
+  }catch(e){ return []; }
+}
+function saveProfileList(list){
+  try{ localStorage.setItem('mathquest_profile_list', JSON.stringify(list)); }catch(e){}
+}
+function getProfileData(name){
+  try{
+    const raw = localStorage.getItem('mathquest_profile_data_'+name);
+    return raw ? JSON.parse(raw) : null;
+  }catch(e){ return null; }
+}
+
 async function saveProgress(){
   try{
-    localStorage.setItem('mathquest_progress', JSON.stringify({
-      name:state.name, xp:state.xp, coins:state.coins, bestStars:state.bestStars, lang:LANG,
-      totalSeconds:getTotalSeconds()
+    localStorage.setItem('mathquest_profile_data_'+state.profileName, JSON.stringify({
+      xp:state.xp, coins:state.coins, bestStars:state.bestStars, totalSeconds:getTotalSeconds()
     }));
+    localStorage.setItem('mathquest_lang', LANG);
+    localStorage.setItem('mathquest_profile_active', state.profileName);
   }catch(e){ /* storage unavailable (private browsing, etc.) — continue silently */ }
 }
 async function loadProgress(){
   try{
-    const raw = localStorage.getItem('mathquest_progress');
-    if(raw){
-      const d = JSON.parse(raw);
-      state.name = d.name || '';
+    let list = getProfileList();
+    if(list.length===0){
+      // First run of the profile system — migrate any legacy single-profile save
+      const legacyRaw = localStorage.getItem('mathquest_progress');
+      let legacy = null;
+      if(legacyRaw){ try{ legacy = JSON.parse(legacyRaw); }catch(e){} }
+      const initialName = 'Sofia Villarreal Castañeda';
+      list = [initialName];
+      saveProfileList(list);
+      localStorage.setItem('mathquest_profile_active', initialName);
+      localStorage.setItem('mathquest_profile_data_'+initialName, JSON.stringify({
+        xp: legacy ? (legacy.xp||0) : 0,
+        coins: legacy ? (legacy.coins||0) : 0,
+        bestStars: legacy ? (legacy.bestStars||{}) : {},
+        totalSeconds: legacy ? (legacy.totalSeconds||0) : 0
+      }));
+      if(legacy && legacy.lang) localStorage.setItem('mathquest_lang', legacy.lang);
+    }
+    LANG = localStorage.getItem('mathquest_lang') === 'es' ? 'es' : 'en';
+    let active = localStorage.getItem('mathquest_profile_active') || list[0];
+    if(!list.includes(active)) active = list[0];
+    state.profileName = active;
+    const d = getProfileData(active);
+    if(d){
       state.xp = d.xp || 0;
       state.coins = d.coins || 0;
       state.bestStars = d.bestStars || {};
-      LANG = d.lang === 'es' ? 'es' : 'en';
       totalSecondsBase = d.totalSeconds || 0;
     }
   }catch(e){ /* no saved progress yet */ }
@@ -883,6 +1144,7 @@ function render(){
   if(state.screen==='reading-story'){ app.innerHTML = renderHUD() + renderReadingStory(); wireReadingStory(); wireHUD(); return; }
   if(state.screen==='reading-quiz'){ app.innerHTML = renderHUD() + renderReadingQuiz(); wireReadingQuiz(); wireHUD(); return; }
   if(state.screen==='reading-summary'){ app.innerHTML = renderHUD() + renderReadingSummary(); wireReadingSummary(); wireHUD(); return; }
+  if(state.screen==='profiles'){ app.innerHTML = renderHUD() + renderProfiles(); wireProfiles(); wireHUD(); return; }
   app.innerHTML = '<div class="center-screen"><div class="rocket-emoji">🐶</div></div>';
 }
 
@@ -895,7 +1157,7 @@ function renderHUD(){
   <div id="hud">
     <div class="avatar-badge" title="Wow Wow">${plushSVG()}</div>
     <div>
-      <div class="hud-name">Sofia Villarreal Castañeda</div>
+      <div class="hud-name">${esc(state.profileName)}</div>
       <span class="level-badge">${lvlLabel}</span>
     </div>
     <div class="xp-wrap">
@@ -978,13 +1240,15 @@ function renderHub(){
         <p>${L('chooseWorldSub')}</p>
       </div>
     </div>
+    <div style="margin-top:14px;">
+      <button class="chunky c-gold" id="profilesBtn">🏆 ${LANG==='en'?'Compete with Friends':'Compite con Amigas'}</button>
+    </div>
   </div>
-  <div class="tile-grid">${tiles}</div>
-  <div class="spider-corner" id="spiderCorner" title="${L('spiderTitle')}">🕷️</div>`;
+  <div class="tile-grid">${tiles}</div>`;
 }
 const SPIDER_LINES = {
-  en:["It's just me, Webster! I live in Webster's Web Grid 🕸️","Hi Sofia! Come find me in the Grid world!","I found a great spot on the wall over here 🕷️","Webster says: coordinate grids are just fancy webs!"],
-  es:["¡Solo soy yo, Webster! Vivo en La Telaraña de Webster 🕸️","¡Hola Sofia! ¡Ven a buscarme en el mundo de la Cuadrícula!","Encontré un buen lugar en la pared por aquí 🕷️","Webster dice: ¡los planos cartesianos son solo telarañas elegantes!"]
+  en:["It's just me, Webster! I live in Webster's Web Grid 🕸️","Hi Sofia! Tap me anytime you're stuck on a question!","I found a great spot on the wall over here 🕷️","Webster says: coordinate grids are just fancy webs!","Need a hint? Ask me while you're on a question!"],
+  es:["¡Solo soy yo, Webster! Vivo en La Telaraña de Webster 🕸️","¡Hola Sofia! ¡Tócame cuando te atores en una pregunta!","Encontré un buen lugar en la pared por aquí 🕷️","Webster dice: ¡los planos cartesianos son solo telarañas elegantes!","¿Necesitas una pista? ¡Pregúntame durante una pregunta!"]
 };
 function wireHub(){
   document.querySelectorAll('[data-topic]').forEach(el=>{
@@ -994,19 +1258,8 @@ function wireHub(){
       else { showExamples(id); }
     });
   });
-  const spider = document.getElementById('spiderCorner');
-  if(spider){
-    spider.addEventListener('click', ()=>{
-      const existing = document.querySelector('.spider-toast');
-      if(existing) existing.remove();
-      const t = document.createElement('div');
-      t.className='spider-toast';
-      const lines = SPIDER_LINES[LANG];
-      t.textContent = lines[randInt(0,lines.length-1)];
-      document.body.appendChild(t);
-      setTimeout(()=>t.remove(), 2600);
-    });
-  }
+  const profilesBtn = document.getElementById('profilesBtn');
+  if(profilesBtn) profilesBtn.addEventListener('click', ()=>{ state.screen='profiles'; render(); });
 }
 
 /* ---------- Examples screen ---------- */
@@ -1304,7 +1557,8 @@ function wireSummary(){
    OCEAN READING COVE
    ============================================================ */
 function renderReadingList(){
-  const cards = READING_STORIES.map(s=>{
+  const filtered = READING_STORIES.filter(s=>s.category===state.readingCategory);
+  const cards = filtered.map(s=>{
     const stars = state.bestStars['read_'+s.id] || 0;
     const starDisplay = '⭐'.repeat(stars) + '☆'.repeat(3-stars);
     return `
@@ -1322,11 +1576,15 @@ function renderReadingList(){
   return `
   <div class="example-wrap">
     <div class="hub-header-inner" style="margin-bottom:16px;">
-      <div class="plush-hero" style="animation:none;"><div style="font-size:70px;">🐚🌊</div></div>
+      <div class="plush-hero" style="animation:none;"><div style="font-size:70px;">🐚🔬</div></div>
       <div>
         <h2 class="blocky-text" style="font-size:24px; margin:0 0 2px;">${topicText('read').name}</h2>
         <p style="color:#C9BFFF; font-size:13.5px; margin:0; max-width:380px;">${LANG==='en'?'Read a story, then answer a few questions about it.':'Lee un cuento y luego responde algunas preguntas sobre él.'}</p>
       </div>
+    </div>
+    <div class="reading-tabs">
+      <button class="reading-tab ${state.readingCategory==='ocean'?'active':''}" data-cat="ocean">🌊 ${LANG==='en'?'Ocean':'Océano'}</button>
+      <button class="reading-tab ${state.readingCategory==='science'?'active':''}" data-cat="science">🔬 ${LANG==='en'?'Science':'Ciencia'}</button>
     </div>
     ${cards}
     <div class="more-stories">
@@ -1343,6 +1601,12 @@ function wireReadingList(){
     el.addEventListener('click', ()=>{
       state.storyId = el.getAttribute('data-story');
       state.screen = 'reading-story';
+      render();
+    });
+  });
+  document.querySelectorAll('[data-cat]').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      state.readingCategory = el.getAttribute('data-cat');
       render();
     });
   });
@@ -1499,13 +1763,229 @@ function wireReadingSummary(){
 }
 
 /* ============================================================
+   PROFILES / LEADERBOARD — compete with friends on this device
+   ============================================================ */
+function getAllProfilesData(){
+  const list = getProfileList();
+  return list.map(name=>{
+    if(name===state.profileName) return { name, xp: state.xp, coins: state.coins };
+    const d = getProfileData(name) || {xp:0,coins:0};
+    return { name, xp: d.xp||0, coins: d.coins||0 };
+  });
+}
+function renderProfiles(){
+  const profiles = getAllProfilesData().sort((a,b)=> b.xp - a.xp || b.coins - a.coins);
+  const medals = ['🥇','🥈','🥉'];
+  const cards = profiles.map((p,i)=>{
+    const lvl = levelFromXP(p.xp);
+    const isActive = p.name === state.profileName;
+    const rank = medals[i] || String(i+1);
+    return `
+    <div class="profile-card ${isActive?'active':''}">
+      <div class="rank">${rank}</div>
+      <div class="pinfo">
+        <div class="pname">${esc(p.name)}${isActive?(LANG==='en'?' (playing now)':' (jugando ahora)'):''}</div>
+        <div class="pstats">${LANG==='en'?'Level':'Nivel'} ${lvl} · 🦴 ${p.coins}</div>
+      </div>
+      ${isActive ? '' : `<button class="chunky c-purple" data-switch="${esc(p.name)}" style="padding:9px 14px; font-size:13px;">${LANG==='en'?'Play':'Jugar'}</button>`}
+    </div>`;
+  }).join('');
+  const canAddMore = getProfileList().length < MAX_PROFILES;
+  return `
+  <div class="example-wrap">
+    <div class="game-topbar">
+      <button class="back-link" id="backBtn">${L('backHub')}</button>
+    </div>
+    <div style="text-align:center; margin-bottom:12px;">
+      <div style="font-size:44px;">🏆</div>
+      <h2 class="blocky-text" style="font-size:22px; margin:6px 0 2px;">${LANG==='en'?'Leaderboard':'Tabla de Puntuaciones'}</h2>
+      <p style="color:#C9BFFF; font-size:13px; margin:0;">${LANG==='en'?'Friends playing on this device — ranked by level!':'Amigas jugando en este dispositivo — ¡clasificadas por nivel!'}</p>
+    </div>
+    ${cards}
+    ${canAddMore ? `
+    <div class="add-friend-row">
+      <input type="text" id="friendNameInput" placeholder="${LANG==='en'?"Friend's name":'Nombre de tu amiga'}" maxlength="20">
+      <button class="chunky c-gold" id="addFriendBtn" style="padding:10px 16px; font-size:14px;">+ ${LANG==='en'?'Add':'Agregar'}</button>
+    </div>` : `<p style="color:#C9BFFF; font-size:12px; text-align:center;">${LANG==='en'?'Max players reached.':'Máximo de jugadoras alcanzado.'}</p>`}
+    <p style="color:#8a7fc0; font-size:11.5px; text-align:center; margin-top:6px;">${LANG==='en'?'💡 This leaderboard only compares players on this device.':'💡 Esta tabla solo compara jugadoras en este dispositivo.'}</p>
+  </div>`;
+}
+function wireProfiles(){
+  document.getElementById('backBtn').addEventListener('click', ()=>{ state.screen='hub'; render(); });
+  document.querySelectorAll('[data-switch]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{ switchProfile(btn.getAttribute('data-switch')); });
+  });
+  const addBtn = document.getElementById('addFriendBtn');
+  if(addBtn){
+    addBtn.addEventListener('click', ()=>{
+      const input = document.getElementById('friendNameInput');
+      const name = input.value.trim();
+      if(!name) return;
+      addProfile(name);
+    });
+  }
+}
+async function switchProfile(name){
+  await saveProgress();
+  state.profileName = name;
+  const d = getProfileData(name) || {xp:0,coins:0,bestStars:{},totalSeconds:0};
+  state.xp = d.xp||0; state.coins = d.coins||0; state.bestStars = d.bestStars||{};
+  totalSecondsBase = d.totalSeconds||0;
+  sessionStartTs = Date.now();
+  try{ localStorage.setItem('mathquest_profile_active', name); }catch(e){}
+  state.screen = 'hub';
+  render();
+}
+async function addProfile(name){
+  let list = getProfileList();
+  if(list.includes(name)){ switchProfile(name); return; }
+  if(list.length >= MAX_PROFILES) return;
+  list.push(name);
+  saveProfileList(list);
+  try{ localStorage.setItem('mathquest_profile_data_'+name, JSON.stringify({xp:0,coins:0,bestStars:{},totalSeconds:0})); }catch(e){}
+  await switchProfile(name);
+}
+
+/* ============================================================
+   WEBSTER HELP BOT — corner bot, contextual hints
+   ============================================================ */
+function closeWebsterPanel(){
+  const existing = document.getElementById('websterPanelEl');
+  if(existing) existing.remove();
+}
+function onWebsterClick(){
+  if(document.getElementById('websterPanelEl')){ closeWebsterPanel(); return; }
+  closeDadPanel();
+  const panel = document.createElement('div');
+  panel.id = 'websterPanelEl';
+  panel.className = 'webster-panel';
+  document.body.appendChild(panel);
+
+  const inMathQuiz = state.screen==='game' && !state.answered && state.currentQ;
+  const inReadingQuiz = state.screen==='reading-quiz' && !state.storyAnswered;
+
+  if(inMathQuiz){
+    const topic = topicOf();
+    const hint = HINTS_I18N[topic.id][LANG];
+    panel.innerHTML = `
+      <div class="wp-title">🕷️ ${LANG==='en'?"Webster's Hint":'La Pista de Webster'}</div>
+      <div class="wp-text">${hint}</div>
+      <div class="wp-btns">
+        <button class="chunky c-green wp-action" id="wpReveal">${LANG==='en'?'Show Me the Answer':'Muéstrame la Respuesta'}</button>
+        <button class="chunky c-purple wp-action" id="wpClose">${LANG==='en'?'Got It, Thanks!':'¡Entendido, Gracias!'}</button>
+      </div>`;
+    document.getElementById('wpReveal').addEventListener('click', ()=>{
+      const answerDiv = document.createElement('div');
+      answerDiv.className = 'wp-reveal';
+      answerDiv.textContent = (LANG==='en'?'Answer: ':'Respuesta: ') + state.currentQ.answer;
+      panel.insertBefore(answerDiv, panel.querySelector('.wp-btns'));
+      document.getElementById('wpReveal').remove();
+    });
+    document.getElementById('wpClose').addEventListener('click', closeWebsterPanel);
+  } else if(inReadingQuiz){
+    const story = currentStory();
+    const q = story.questions[state.storyQIndex][LANG];
+    const tip = LANG==='en' ? 'Try thinking back to what happened in the story — the answer is somewhere in what you just read!' : 'Piensa en lo que pasó en el cuento — ¡la respuesta está en lo que acabas de leer!';
+    panel.innerHTML = `
+      <div class="wp-title">🕷️ ${LANG==='en'?"Webster's Hint":'La Pista de Webster'}</div>
+      <div class="wp-text">${tip}</div>
+      <div class="wp-btns">
+        <button class="chunky c-green wp-action" id="wpReveal">${LANG==='en'?'Show Me the Answer':'Muéstrame la Respuesta'}</button>
+        <button class="chunky c-purple wp-action" id="wpClose">${LANG==='en'?'Got It, Thanks!':'¡Entendido, Gracias!'}</button>
+      </div>`;
+    document.getElementById('wpReveal').addEventListener('click', ()=>{
+      const answerDiv = document.createElement('div');
+      answerDiv.className = 'wp-reveal';
+      answerDiv.textContent = (LANG==='en'?'Answer: ':'Respuesta: ') + q.answer;
+      panel.insertBefore(answerDiv, panel.querySelector('.wp-btns'));
+      document.getElementById('wpReveal').remove();
+    });
+    document.getElementById('wpClose').addEventListener('click', closeWebsterPanel);
+  } else {
+    const lines = SPIDER_LINES[LANG];
+    panel.innerHTML = `
+      <div class="wp-title">🕷️ ${LANG==='en'?'Webster says':'Webster dice'}</div>
+      <div class="wp-text">${lines[randInt(0,lines.length-1)]}</div>
+      <div class="wp-btns">
+        <button class="chunky c-purple wp-action" id="wpClose">${LANG==='en'?'Okay!':'¡Okay!'}</button>
+      </div>`;
+    document.getElementById('wpClose').addEventListener('click', closeWebsterPanel);
+  }
+}
+function createWebsterBot(){
+  const bot = document.createElement('div');
+  bot.id = 'websterBotEl';
+  bot.className = 'webster-bot';
+  bot.title = L('spiderTitle');
+  bot.innerHTML = spiderSVG();
+  bot.addEventListener('click', onWebsterClick);
+  document.body.appendChild(bot);
+}
+
+/* ============================================================
+   MESSAGE DAD — opens a pre-filled email/text on Sofia's device
+   ============================================================ */
+// ⚠️ Pascual: replace the values below with your real contact info.
+// email is required; phone is optional (leave '' to hide the text-message option).
+const DAD_CONTACT = {
+  email: 'REPLACE_WITH_DAD_EMAIL@example.com',
+  phone: ''
+};
+function closeDadPanel(){
+  const existing = document.getElementById('dadPanelEl');
+  if(existing) existing.remove();
+}
+function onDadClick(){
+  if(document.getElementById('dadPanelEl')){ closeDadPanel(); return; }
+  closeWebsterPanel();
+  const panel = document.createElement('div');
+  panel.id = 'dadPanelEl';
+  panel.className = 'dad-panel';
+  document.body.appendChild(panel);
+  panel.innerHTML = `
+    <div class="dp-title">💌 ${LANG==='en'?'Message Dad':'Mensaje para Papá'}</div>
+    <textarea id="dadMsgBox" placeholder="${LANG==='en'?'Type your message...':'Escribe tu mensaje...'}"></textarea>
+    <div class="dp-btns">
+      <button class="chunky c-blue dp-action" id="dadSendEmail">✉️ ${LANG==='en'?'Send Email':'Enviar Correo'}</button>
+      ${DAD_CONTACT.phone ? `<button class="chunky c-green dp-action" id="dadSendText">💬 ${LANG==='en'?'Send Text':'Enviar Mensaje'}</button>` : ''}
+      <button class="chunky c-purple dp-action" id="dadClose">${LANG==='en'?'Cancel':'Cancelar'}</button>
+    </div>`;
+  document.getElementById('dadSendEmail').addEventListener('click', ()=>{
+    const msg = document.getElementById('dadMsgBox').value.trim();
+    const body = msg || (LANG==='en' ? 'Hi Dad!' : '¡Hola Papá!');
+    const subject = LANG==='en' ? 'Message from Sofia (Math Quest)' : 'Mensaje de Sofia (Math Quest)';
+    window.location.href = `mailto:${DAD_CONTACT.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    closeDadPanel();
+  });
+  if(DAD_CONTACT.phone){
+    document.getElementById('dadSendText').addEventListener('click', ()=>{
+      const msg = document.getElementById('dadMsgBox').value.trim();
+      const body = msg || (LANG==='en' ? 'Hi Dad!' : '¡Hola Papá!');
+      window.location.href = `sms:${DAD_CONTACT.phone}?body=${encodeURIComponent(body)}`;
+      closeDadPanel();
+    });
+  }
+  document.getElementById('dadClose').addEventListener('click', closeDadPanel);
+}
+function createDadBot(){
+  const bot = document.createElement('div');
+  bot.id = 'dadBotEl';
+  bot.className = 'dad-bot';
+  bot.title = LANG==='en' ? 'Message Dad' : 'Mensaje para Papá';
+  bot.textContent = '💌';
+  bot.addEventListener('click', onDadClick);
+  document.body.appendChild(bot);
+}
+
+/* ============================================================
    INIT
    ============================================================ */
 (async function init(){
   await loadProgress();
-  state.name = 'Sofia Villarreal Castañeda';
   state.screen = 'hub';
   render();
+  createWebsterBot();
+  createDadBot();
   setInterval(saveProgress, 20000);
   window.addEventListener('pagehide', ()=>{ saveProgress(); });
 })();
