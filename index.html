@@ -15,6 +15,7 @@
   --blue:#4FC3F7;   --blue-d:#1E9FDB;   --blue-l:#E6F8FF;
   --green:#6EE7A8;  --green-d:#2FBE7A;  --green-l:#E7FFF2;
   --orange:#FF9F5A; --orange-d:#E67A2E; --orange-l:#FFF1E6;
+  --coral:#FF6F6F;  --coral-d:#E24D4D;  --coral-l:#FFE9E9;
   --ink:#241B45; --ink-soft:#6A5F99;
   --bg1:#1B1035; --bg2:#2E1E5E;
   --panel:#FFFFFF;
@@ -71,6 +72,8 @@ button{font-family:inherit;}
 .c-green:active{box-shadow:0 0 0 var(--green-d), inset 0 2px 0 rgba(255,255,255,.4);}
 .c-orange{background:var(--orange); box-shadow:0 5px 0 var(--orange-d), inset 0 2px 0 rgba(255,255,255,.4);}
 .c-orange:active{box-shadow:0 0 0 var(--orange-d), inset 0 2px 0 rgba(255,255,255,.4);}
+.c-coral{background:var(--coral); box-shadow:0 5px 0 var(--coral-d), inset 0 2px 0 rgba(255,255,255,.4);}
+.c-coral:active{box-shadow:0 0 0 var(--coral-d), inset 0 2px 0 rgba(255,255,255,.4);}
 
 /* ---------- HUD ---------- */
 #hud{
@@ -249,6 +252,51 @@ button{font-family:inherit;}
 
 .sr-only{position:absolute; width:1px;height:1px; overflow:hidden; clip:rect(0,0,0,0);}
 
+/* ---------- Examples screen ---------- */
+.example-wrap{padding:18px 20px 40px;}
+.example-card{
+  background:var(--panel); border-radius:22px; padding:26px 24px; margin-bottom:16px;
+  border:3px solid rgba(36,27,69,.14);
+  box-shadow:0 8px 0 rgba(0,0,0,.25), 0 14px 24px rgba(0,0,0,.35);
+}
+.example-card .ex-label{font-family:'Baloo 2'; font-weight:800; font-size:12px; color:var(--ink-soft); text-transform:uppercase; margin-bottom:8px;}
+.example-card .ex-problem{font-family:'Baloo 2'; font-size:19px; color:var(--ink); margin:0 0 10px;}
+.example-card .ex-solution{background:var(--purple-l); border-radius:14px; padding:12px 16px; font-size:14.5px; color:var(--ink); line-height:1.5;}
+.example-card .ex-solution b{color:var(--purple-d);}
+.example-actions{display:flex; justify-content:center; margin-top:8px;}
+
+/* ---------- Reading Cove ---------- */
+.story-card{
+  background:var(--panel); border-radius:20px; overflow:hidden; margin-bottom:16px;
+  border:3px solid rgba(36,27,69,.14);
+  box-shadow:0 7px 0 rgba(0,0,0,.25), 0 12px 20px rgba(0,0,0,.35);
+  display:flex; align-items:center; gap:14px; padding:16px;
+}
+.story-card .story-icon{font-size:38px; flex-shrink:0;}
+.story-card .story-info{flex:1;}
+.story-card h3{margin:0 0 3px; font-size:17px; color:var(--ink);}
+.story-card p{margin:0; font-size:13px; color:#7c72a3; line-height:1.35;}
+.story-reader{
+  background:var(--panel); border-radius:22px; padding:28px 26px;
+  border:3px solid rgba(36,27,69,.14);
+  box-shadow:0 8px 0 rgba(0,0,0,.25), 0 14px 24px rgba(0,0,0,.35);
+}
+.story-reader h2{margin:0 0 14px; font-size:24px; color:var(--ink);}
+.story-reader .story-text{font-size:15.5px; line-height:1.75; color:var(--ink); white-space:pre-line;}
+.story-reader .story-text p{margin:0 0 14px;}
+.reader-actions{display:flex; justify-content:center; margin-top:20px;}
+.more-stories{
+  margin-top:8px; padding:16px 18px; background:rgba(255,255,255,.08); border-radius:18px;
+  border:2px dashed rgba(255,255,255,.25);
+}
+.more-stories h4{color:#fff; margin:0 0 8px; font-size:14px; font-family:'Baloo 2';}
+.more-stories a{
+  display:block; color:#C9BFFF; font-weight:700; font-size:13.5px; text-decoration:none;
+  padding:6px 0; border-bottom:1px solid rgba(255,255,255,.1);
+}
+.more-stories a:last-child{border-bottom:none;}
+.more-stories a:hover{color:#fff;}
+
 .spider-corner{
   position:fixed; bottom:14px; right:16px; font-size:26px; cursor:pointer;
   animation:spiderWiggle 4s ease-in-out infinite; z-index:15; filter:drop-shadow(0 2px 3px rgba(0,0,0,.4));
@@ -374,10 +422,11 @@ function L(key){ return STRINGS[LANG][key]; }const TOPIC_I18N = {
   grid:{ en:{name:"Webster's Web Grid", subtitle:'Coordinate Plane', desc:'A little spider named Webster spins webs on the coordinate grid — plot and find his spots.'},
          es:{name:'La Telaraña de Webster', subtitle:'Plano Cartesiano', desc:'Una pequeña araña llamada Webster teje telarañas en el plano cartesiano — traza y encuentra sus puntos.'} },
   word:{ en:{name:'Word Problem Arena', subtitle:'Mixed Challenges', desc:'Battle real-world problems starring Sofia, Wow Wow, and friends.'},
-         es:{name:'Arena de Problemas', subtitle:'Retos Mixtos', desc:'Enfréntate a problemas del mundo real con Sofia, Wow Wow y sus amigas.'} }
+         es:{name:'Arena de Problemas', subtitle:'Retos Mixtos', desc:'Enfréntate a problemas del mundo real con Sofia, Wow Wow y sus amigas.'} },
+  read:{ en:{name:'Ocean Reading Cove', subtitle:'Reading Practice', desc:'Read short ocean stories starring Sofia and Cat, then answer questions about them.'},
+         es:{name:'Rincón de Lectura del Océano', subtitle:'Práctica de Lectura', desc:'Lee cuentos cortos del océano con Sofia y Cat, y luego responde preguntas.'} }
 };
 function topicText(id){ return TOPIC_I18N[id][LANG]; }
-const PLACE_NAMES_I18N = { en:['ones','tenths','hundredths','thousandths'], es:['unidades','décimas','centésimas','milésimas'] };
 
 /* ============================================================
    QUESTION GENERATORS
@@ -386,17 +435,25 @@ const PLACE_NAMES_I18N = { en:['ones','tenths','hundredths','thousandths'], es:[
 /* ---- Multiplication & Division ---- */
 function genMultDiv(){
   const t = randInt(0,2);
-  if(t===0){ const a=randInt(12,98), b=randInt(2,9); return mcQuestionInt(`${a} × ${b} = ?`, a*b); }
-  if(t===1){ const a=randInt(11,49), b=randInt(11,29); return mcQuestionInt(`${a} × ${b} = ?`, a*b); }
-  const b=randInt(2,12), q=randInt(3,20), a=b*q; return mcQuestionInt(`${a} ÷ ${b} = ?`, q);
+  if(t===0){ const a=randInt(11,60), b=randInt(2,9); return mcQuestionInt(`${a} × ${b} = ?`, a*b); }
+  if(t===1){ const a=randInt(11,29), b=randInt(11,19); return mcQuestionInt(`${a} × ${b} = ?`, a*b); }
+  const b=randInt(2,10), q=randInt(2,12), a=b*q; return mcQuestionInt(`${a} ÷ ${b} = ?`, q);
 }
 
 /* ---- Fractions ---- */
-const FRAC_DENOMS = [2,3,4,5,6,8];
+const FRAC_DENOMS = [2,3,4,5,6,8,10];
 function genFracAddSub(isAdd){
-  let d1,d2,tries=0;
-  do{ d1=FRAC_DENOMS[randInt(0,FRAC_DENOMS.length-1)]; d2=FRAC_DENOMS[randInt(0,FRAC_DENOMS.length-1)]; tries++; }
-  while((d1===d2 || lcm(d1,d2)>40) && tries<50);
+  let d1 = FRAC_DENOMS[randInt(0,FRAC_DENOMS.length-1)];
+  let d2;
+  const sameDenom = Math.random() < 0.6;
+  if(sameDenom){
+    d2 = d1;
+  } else {
+    const doubled = d1*2;
+    if(FRAC_DENOMS.includes(doubled) && Math.random()<0.7){ d2 = doubled; }
+    else if(d1%2===0 && FRAC_DENOMS.includes(d1/2)){ d2 = d1/2; }
+    else { d2 = d1; }
+  }
   let n1=randInt(1,d1-1), n2=randInt(1,d2-1);
   const L=lcm(d1,d2);
   let numA=n1*(L/d1), numB=n2*(L/d2);
@@ -416,7 +473,7 @@ function genFracAddSub(isAdd){
 }
 function genFracMulWhole(){
   const d=FRAC_DENOMS[randInt(0,FRAC_DENOMS.length-1)];
-  const n=randInt(1,d-1), w=randInt(2,6);
+  const n=randInt(1,d-1), w=randInt(2,4);
   const [sn,sd]=simplifyFrac(n*w,d);
   const prompt=`${n}/${d} × ${w} = ?`;
   const answerStr=fracStr(sn,sd), answerVal=sn/sd;
@@ -442,7 +499,7 @@ function genFracCompare(){
 
 /* ---- Decimals ---- */
 function genDecAddSub(isAdd){
-  let a=randInt(100,999)/100, b=randInt(10,899)/100;
+  let a=randInt(100,599)/100, b=randInt(20,399)/100;
   if(!isAdd && a<b) [a,b]=[b,a];
   let val = isAdd ? a+b : a-b;
   val = Math.round(val*100)/100;
@@ -454,7 +511,7 @@ function genDecAddSub(isAdd){
   return {type:'mc', prompt, choices:shuffle([...choices]), answer:answerStr};
 }
 function genDecMul(){
-  const a=randInt(11,99)/10, w=randInt(2,9);
+  const a=randInt(11,50)/10, w=randInt(2,5);
   const val=Math.round(a*w*100)/100;
   const answerStr=val.toFixed(2);
   const prompt=`${a.toFixed(1)} × ${w} = ?`;
@@ -463,11 +520,12 @@ function genDecMul(){
   let tries=0; while(choices.size<4 && tries<30){tries++; addNumDistractor(choices,val,val+randInt(-15,15)/10,2);}
   return {type:'mc', prompt, choices:shuffle([...choices]), answer:answerStr};
 }
+const PLACE_NAMES_I18N = { en:['ones','tenths','hundredths'], es:['unidades','décimas','centésimas'] };
 function genDecPlaceValue(){
-  const ones=randInt(1,9), t=randInt(0,9), h=randInt(0,9), th=randInt(0,9);
-  const numStr=`${ones}.${t}${h}${th}`;
-  const placeIdx=randInt(1,3);
-  const digit=[ones,t,h,th][placeIdx];
+  const ones=randInt(1,9), t=randInt(0,9), h=randInt(0,9);
+  const numStr=`${ones}.${t}${h}`;
+  const placeIdx=randInt(1,2);
+  const digit=[ones,t,h][placeIdx];
   const names = PLACE_NAMES_I18N[LANG];
   const prompt = LANG==='en'
     ? `In the number ${numStr}, what is the value of the digit ${digit} in the ${names[placeIdx]} place?`
@@ -479,9 +537,7 @@ function genDecPlaceValue(){
 function genDecCompare(){
   const vals=new Set();
   while(vals.size<4){
-    const style=randInt(0,2);
-    let v;
-    if(style===0) v=randInt(1,9)/10; else if(style===1) v=randInt(1,99)/100; else v=randInt(1,999)/1000;
+    const v = Math.random()<0.5 ? randInt(1,9)/10 : randInt(1,99)/100;
     vals.add(v);
   }
   const arr=[...vals];
@@ -499,16 +555,16 @@ function genDecCompare(){
 function genOrderOps(){
   const t=randInt(0,3);
   let prompt, val;
-  if(t===0){ const a=randInt(2,9),b=randInt(2,9),c=randInt(2,9); val=(a+b)*c; prompt=`(${a} + ${b}) × ${c} = ?`; }
-  else if(t===1){ const a=randInt(2,9), b=randInt(5,12), c=randInt(1,b-1); val=a*(b-c); prompt=`${a} × (${b} - ${c}) = ?`; }
-  else if(t===2){ const c=randInt(2,6), q=randInt(2,9), b=randInt(1,9), a=b+c*q, d=randInt(1,9); val=q+d; prompt=`(${a} - ${b}) ÷ ${c} + ${d} = ?`; }
-  else { const a=randInt(1,20), b=randInt(2,9), c=randInt(2,9); val=a+b*c; prompt=`${a} + ${b} × ${c} = ?`; }
+  if(t===0){ const a=randInt(2,6),b=randInt(2,6),c=randInt(2,5); val=(a+b)*c; prompt=`(${a} + ${b}) × ${c} = ?`; }
+  else if(t===1){ const a=randInt(2,6), b=randInt(4,9), c=randInt(1,b-1); val=a*(b-c); prompt=`${a} × (${b} - ${c}) = ?`; }
+  else if(t===2){ const c=randInt(2,4), q=randInt(2,7), b=randInt(1,6), a=b+c*q, d=randInt(1,6); val=q+d; prompt=`(${a} - ${b}) ÷ ${c} + ${d} = ?`; }
+  else { const a=randInt(1,12), b=randInt(2,6), c=randInt(2,6); val=a+b*c; prompt=`${a} + ${b} × ${c} = ?`; }
   return mcQuestionInt(prompt, val);
 }
 
 /* ---- Volume ---- */
 function genVolume(){
-  const l=randInt(2,9), w=randInt(2,9), h=randInt(2,9), V=l*w*h;
+  const l=randInt(2,6), w=randInt(2,6), h=randInt(2,6), V=l*w*h;
   const scene = randInt(0,2);
   const unit = scene===0 ? 'ft' : 'cm';
   if(LANG==='en'){
@@ -526,7 +582,7 @@ function genVolume(){
 
 /* ---- Coordinate plane ---- */
 function genGrid(){
-  const x=randInt(0,9), y=randInt(0,9);
+  const x=randInt(0,6), y=randInt(0,6);
   if(Math.random()<0.5){
     // identify: show marked point, choose coordinates
     const answer=`(${x}, ${y})`;
@@ -547,17 +603,17 @@ function genGrid(){
 /* ---- Word problems ---- */
 const FRIEND_NAMES = ['Sofia','Sofia','Emma','Camila','Isabella'];
 function genWord(){
-  const t=randInt(0,3);
+  const t=randInt(0,4);
   if(t===0){
     const name = FRIEND_NAMES[randInt(0,FRIEND_NAMES.length-1)];
-    const c=randInt(3,8), b=randInt(2,9), a=randInt(c*b+5, c*b+40);
+    const c=randInt(2,5), b=randInt(2,6), a=randInt(c*b+3, c*b+15);
     const prompt = LANG==='en'
       ? `${name} has ${a} dog treats for Wow Wow. She gives ${b} treats to each of ${c} of Wow Wow's doggy friends. How many treats does she have left?`
       : `${name} tiene ${a} premios para Wow Wow. Le da ${b} premios a cada uno de los ${c} amigos peludos de Wow Wow. ¿Cuántos premios le quedan?`;
     return mcQuestionInt(prompt, a-b*c);
   }
   if(t===1){
-    const d=FRAC_DENOMS[randInt(0,FRAC_DENOMS.length-1)]; const n=randInt(1,d-1); const w=randInt(2,5);
+    const d=FRAC_DENOMS[randInt(0,FRAC_DENOMS.length-1)]; const n=randInt(1,d-1); const w=randInt(2,3);
     const [sn,sd]=simplifyFrac(n*w,d);
     const answerStr=fracStr(sn,sd), answerVal=sn/sd;
     const choices=new Set([answerStr]);
@@ -570,7 +626,7 @@ function genWord(){
     return {type:'mc', prompt, choices:shuffle([...choices]), answer:answerStr};
   }
   if(t===2){
-    const price1=(randInt(150,999)/100), price2=(randInt(150,999)/100);
+    const price1=(randInt(100,400)/100), price2=(randInt(100,300)/100);
     const val=Math.round((price1+price2)*100)/100; const answerStr=val.toFixed(2);
     const choices=new Set([answerStr]);
     addNumDistractor(choices,val,val+0.1,2); addNumDistractor(choices,val,val-0.1,2); addNumDistractor(choices,val,val+0.01,2);
@@ -580,15 +636,22 @@ function genWord(){
       : `En la tienda de la alberca, Sofia compra una paleta por $${price1.toFixed(2)} y limonada por $${price2.toFixed(2)}. ¿Cuánto gastó en total?`;
     return {type:'mc', prompt, choices:shuffle([...choices]), answer:answerStr};
   }
-  const l=randInt(2,8), w=randInt(2,8), h=randInt(2,8), V=l*w*h;
+  if(t===3){
+    const l=randInt(2,6), w=randInt(2,6), h=randInt(2,6), V=l*w*h;
+    const prompt = LANG==='en'
+      ? `Webster the spider is spinning a box-shaped web frame that is ${l} in. long, ${w} in. wide, and ${h} in. tall. What is the volume of the frame?`
+      : `Webster la araña está tejiendo un marco de telaraña en forma de caja que mide ${l} in. de largo, ${w} in. de ancho y ${h} in. de alto. ¿Cuál es el volumen del marco?`;
+    return mcQuestionInt(prompt, V);
+  }
+  const b=randInt(2,9), a=randInt(b+5,b+30);
   const prompt = LANG==='en'
-    ? `Webster the spider is spinning a box-shaped web frame that is ${l} in. long, ${w} in. wide, and ${h} in. tall. What is the volume of the frame?`
-    : `Webster la araña está tejiendo un marco de telaraña en forma de caja que mide ${l} in. de largo, ${w} in. de ancho y ${h} in. de alto. ¿Cuál es el volumen del marco?`;
-  return mcQuestionInt(prompt, V);
+    ? `Sofia's little sister Cat collected ${a} seashells at the beach. She gives ${b} shells to Sofia. How many shells does Cat have left?`
+    : `Cat, la hermanita de Sofia, recogió ${a} conchas en la playa. Le da ${b} conchas a Sofia. ¿Cuántas conchas le quedan a Cat?`;
+  return mcQuestionInt(prompt, a-b);
 }
 // clean, guaranteed-divisible version overriding the messy branch above
 function genWordDivision(){
-  const b=randInt(3,9), q=randInt(4,12), a=b*q;
+  const b=randInt(2,6), q=randInt(2,8), a=b*q;
   const prompt = LANG==='en'
     ? `At the pool, ${a} kids split evenly into ${b} swim lanes. How many kids are in each lane?`
     : `En la alberca, ${a} niños se dividen en partes iguales en ${b} carriles de natación. ¿Cuántos niños hay en cada carril?`;
@@ -606,19 +669,161 @@ const TOPICS = [
   {id:'vol', icon:'🏊', color:'blue', gen:()=>genVolume()},
   {id:'grid', icon:'🕸️', color:'green', gen:()=>genGrid()},
   {id:'word', icon:'⚔️', color:'orange', gen:()=>{const r=randInt(0,4); return r===4 ? genWordDivision() : genWord();}},
+  {id:'read', icon:'🐚', color:'coral', gen:null},
 ];
 const ROUND_LEN = 8;
+
+/* ============================================================
+   WORKED EXAMPLES (shown before each round)
+   ============================================================ */
+const EXAMPLES_I18N = {
+  mult:{ en:[{problem:'Wow Wow fetched 6 tennis balls, 4 times in a row. How many balls total?', solution:'6 × 4 = <b>24 balls</b> 🎾 Think of it as 4 groups of 6 balls, added together.'}],
+         es:[{problem:'Wow Wow buscó 6 pelotas de tenis, 4 veces seguidas. ¿Cuántas pelotas en total?', solution:'6 × 4 = <b>24 pelotas</b> 🎾 Piénsalo como 4 grupos de 6 pelotas, sumados juntos.'}] },
+  frac:{ en:[{problem:'Sofia and her sister Cat share a pizza cut into 8 slices. Sofia eats 3/8 and Cat eats 2/8. How much did they eat together?', solution:'3/8 + 2/8 = <b>5/8</b> 🍕 When the bottom numbers (denominators) match, just add the top numbers!'}],
+         es:[{problem:'Sofia y su hermana Cat comparten una pizza cortada en 8 rebanadas. Sofia come 3/8 y Cat come 2/8. ¿Cuánto comieron juntas?', solution:'3/8 + 2/8 = <b>5/8</b> 🍕 Cuando el número de abajo (denominador) es igual, ¡solo suma los números de arriba!'}] },
+  dec:{  en:[{problem:'Sofia has $3.25 and finds $1.50 more. How much does she have now?', solution:'$3.25 + $1.50 = <b>$4.75</b> 💎 Line up the decimal points, then add just like normal numbers.'}],
+         es:[{problem:'Sofia tiene $3.25 y encuentra $1.50 más. ¿Cuánto tiene ahora?', solution:'$3.25 + $1.50 = <b>$4.75</b> 💎 Alinea los puntos decimales y suma como números normales.'}] },
+  ops:{  en:[{problem:'(4 + 2) × 3 = ?', solution:'Always solve inside the parentheses first: 4+2=6. Then 6 × 3 = <b>18</b> 🧩'}],
+         es:[{problem:'(4 + 2) × 3 = ?', solution:'Siempre resuelve dentro del paréntesis primero: 4+2=6. Luego 6 × 3 = <b>18</b> 🧩'}] },
+  vol:{  en:[{problem:"Sofia's pool is 4 ft long, 3 ft wide, and 2 ft deep. What's its volume?", solution:'Volume = length × width × height = 4 × 3 × 2 = <b>24 cubic feet</b> 🏊'}],
+         es:[{problem:'La alberca de Sofia mide 4 ft de largo, 3 ft de ancho y 2 ft de profundidad. ¿Cuál es su volumen?', solution:'Volumen = largo × ancho × profundidad = 4 × 3 × 2 = <b>24 pies cúbicos</b> 🏊'}] },
+  grid:{ en:[{problem:'Plot the point (3, 2).', solution:"Start at (0,0). Move 3 steps right, then 2 steps up. That's <b>(3, 2)</b>! 🕸️ (x = right/left, y = up/down)"}],
+         es:[{problem:'Traza el punto (3, 2).', solution:'Empieza en (0,0). Muévete 3 pasos a la derecha, luego 2 pasos hacia arriba. ¡Ese es el punto <b>(3, 2)</b>! 🕸️ (x = derecha/izquierda, y = arriba/abajo)'}] },
+  word:{ en:[{problem:'Cat has 12 seashells. She gives 3 to Sofia. How many does Cat have left?', solution:'12 - 3 = <b>9 seashells</b> ⚔️ Words like "gives away" or "left" are a clue to subtract!'}],
+         es:[{problem:'Cat tiene 12 conchas. Le da 3 a Sofia. ¿Cuántas le quedan a Cat?', solution:'12 - 3 = <b>9 conchas</b> ⚔️ Palabras como "da" o "quedan" son una pista para restar.'}] }
+};
+
+/* ============================================================
+   OCEAN READING COVE — original short stories + comprehension
+   ============================================================ */
+const READING_STORIES = [
+  {
+    id:'wave',
+    icon:'🌊',
+    title:{en:"Cat's First Wave", es:'La Primera Ola de Cat'},
+    blurb:{en:'Cat is nervous about the ocean. Can Sofia and Wow Wow help her be brave?', es:'Cat le tiene miedo al océano. ¿Podrán Sofia y Wow Wow ayudarla a ser valiente?'},
+    text:{
+      en:`Sofia loved the ocean. She loved the salty smell, the warm sand between her toes, and the sound of the waves rolling in and out. But her little sister Cat was not so sure about it.
+
+"It's so big," Cat said, staying safely back on the dry sand. "What if a wave knocks me over?"
+
+Wow Wow, Sofia's golden retriever, ran circles around Cat, wagging his tail. He barked, as if to say, "Come on, it's fun!" But Cat just hugged her knees and watched the water from a distance.
+
+Sofia sat down next to her sister. "Do you remember when you learned to ride your bike?" she asked. "You were scared then too. But you took one small step at a time, and now you love it."
+
+Cat thought about that. She looked out at the water. The waves were not really that big — they were gentle, rolling up the sand and then sliding back out again, like the ocean was breathing.
+
+"Let's start small," Sofia said. "Just our toes first."
+
+They walked together to where the wet sand met the water. A tiny wave rushed up and tickled their feet. Cat giggled. It was cold, but it did not knock her over at all.
+
+"See?" Sofia said. "One small step."
+
+They took another step, and then another. Wow Wow splashed in beside them, kicking up water with his big paws. Soon Cat was laughing and jumping over the little waves instead of hiding from them.
+
+By the end of the afternoon, Cat was standing waist-deep in the water, holding Sofia's hand, feeling the waves lift her up and set her back down, over and over, like the ocean was rocking her gently.
+
+"I did it," Cat said, grinning from ear to ear. "The ocean isn't scary. It's amazing!"
+
+Sofia smiled. Sometimes the biggest things only look scary until you take that first small step.`,
+      es:`A Sofia le encantaba el océano. Le encantaba el olor salado, la arena tibia entre los dedos de los pies y el sonido de las olas que iban y venían. Pero su hermanita Cat no estaba tan segura.
+
+—Es tan grande —dijo Cat, quedándose en la arena seca—. ¿Y si una ola me tumba?
+
+Wow Wow, el golden retriever de Sofia, corría en círculos alrededor de Cat, moviendo la cola. Ladró, como diciendo: "¡Vamos, es divertido!". Pero Cat solo abrazó sus rodillas y observó el agua desde lejos.
+
+Sofia se sentó junto a su hermana. —¿Te acuerdas cuando aprendiste a andar en bicicleta? —le preguntó—. También tenías miedo entonces. Pero diste un pequeño paso a la vez, y ahora te encanta.
+
+Cat pensó en eso. Miró el agua. Las olas en realidad no eran tan grandes — subían suavemente por la arena y luego regresaban, como si el océano estuviera respirando.
+
+—Empecemos poquito a poco —dijo Sofia—. Primero solo los dedos de los pies.
+
+Caminaron juntas hasta donde la arena mojada se encontraba con el agua. Una olita corrió y les hizo cosquillas en los pies. Cat se rió. Estaba fría, pero no la tumbó para nada.
+
+—¿Ves? —dijo Sofia—. Un pequeño paso.
+
+Dieron otro paso, y luego otro. Wow Wow chapoteaba a su lado, salpicando agua con sus grandes patas. Pronto Cat se estaba riendo y saltando sobre las olitas en vez de esconderse de ellas.
+
+Al final de la tarde, Cat estaba parada con el agua hasta la cintura, tomada de la mano de Sofia, sintiendo cómo las olas la levantaban y la bajaban suavemente, una y otra vez, como si el océano la estuviera meciendo.
+
+—¡Lo logré! —dijo Cat, sonriendo de oreja a oreja—. El océano no da miedo. ¡Es increíble!
+
+Sofia sonrió. A veces las cosas más grandes solo parecen dar miedo hasta que das ese primer pequeño paso.`
+    },
+    questions:[
+      { en:{prompt:'How did Cat feel about the ocean at the beginning of the story?', choices:['Excited','Nervous','Bored','Angry'], answer:'Nervous'},
+        es:{prompt:'¿Cómo se sentía Cat sobre el océano al principio del cuento?', choices:['Emocionada','Nerviosa','Aburrida','Enojada'], answer:'Nerviosa'} },
+      { en:{prompt:'What advice did Sofia give Cat?', choices:['To go home','To watch from the sand forever','To take one small step at a time','To swim far out alone'], answer:'To take one small step at a time'},
+        es:{prompt:'¿Qué consejo le dio Sofia a Cat?', choices:['Que se fuera a casa','Que mirara desde la arena para siempre','Que diera un pequeño paso a la vez','Que nadara sola muy lejos'], answer:'Que diera un pequeño paso a la vez'} },
+      { en:{prompt:'How did Cat feel by the end of the story?', choices:['Still scared','Brave and happy','Sad','Sleepy'], answer:'Brave and happy'},
+        es:{prompt:'¿Cómo se sentía Cat al final del cuento?', choices:['Todavía asustada','Valiente y feliz','Triste','Con sueño'], answer:'Valiente y feliz'} }
+    ]
+  },
+  {
+    id:'webster',
+    icon:'🕷️',
+    title:{en:"Webster's Tide Pool Discovery", es:'El Descubrimiento de Webster en la Poza de Marea'},
+    blurb:{en:'Webster the spider stows away in a beach bag and discovers a whole tiny ocean world.', es:'Webster la araña se cuela en una bolsa de playa y descubre un pequeño mundo oceánico.'},
+    text:{
+      en:`Webster the spider had never seen the ocean before. He usually stayed cozy at home, spinning webs in quiet corners. But one morning, he crawled into Sofia's beach bag to nap in the shade of a towel — and before he knew it, he was at the beach!
+
+When Webster peeked out, he did not see the wide, wavy ocean at first. Instead, he found himself looking into a small pool of water, tucked between some rocks. It was a tide pool, left behind after the ocean water rolled back out.
+
+"This is like a tiny ocean of its own," Webster whispered, amazed.
+
+Inside the pool, an orange starfish clung to a rock, moving so slowly it barely seemed to move at all. Nearby, a small hermit crab scuttled sideways, dragging its borrowed shell like a tiny house on its back. A cluster of purple sea anemones waved their soft arms in the water, looking almost like flowers, even though they were animals.
+
+Webster watched a little fish dart between two rocks, hiding from a curious seagull above. "Everyone here has a job," Webster thought. "The starfish is a great hunter, even if it's slow. The hermit crab always carries its home. And the anemone catches its food with those waving arms."
+
+Sofia found Webster resting on a warm rock near the tide pool. "There you are!" she laughed. "Did you find something amazing?"
+
+Webster couldn't answer in words, but if he could, he would have said: the ocean isn't just the big waves crashing on the sand. Sometimes the most amazing parts are the small, quiet pools left behind, filled with tiny creatures each doing their own important job.
+
+That night, back home in his web, Webster spun a little faster than usual, thinking about the tide pool and all its tiny neighbors.`,
+      es:`Webster la araña nunca había visto el océano. Normalmente se quedaba cómodo en casa, tejiendo telarañas en rincones tranquilos. Pero una mañana, se metió en la bolsa de playa de Sofia para dormir la siesta a la sombra de una toalla — y sin darse cuenta, ¡ya estaba en la playa!
+
+Cuando Webster se asomó, al principio no vio el océano ancho y ondulante. En cambio, se encontró mirando dentro de una pequeña poza de agua, escondida entre unas rocas. Era una poza de marea, que quedó atrás cuando el agua del océano regresó.
+
+—Esto es como un pequeño océano propio —susurró Webster, asombrado.
+
+Dentro de la poza, una estrella de mar naranja se sujetaba a una roca, moviéndose tan despacio que casi no parecía moverse. Cerca de ahí, un pequeño cangrejo ermitaño caminaba de lado, arrastrando su concha prestada como una casita en su espalda. Un grupo de anémonas de mar moradas movía sus suaves brazos en el agua, pareciendo casi flores, aunque en realidad eran animales.
+
+Webster observó a un pequeño pez que se movía rápido entre dos rocas, escondiéndose de una gaviota curiosa arriba. "Todos aquí tienen un trabajo," pensó Webster. "La estrella de mar es una gran cazadora, aunque sea lenta. El cangrejo ermitaño siempre carga su casa. Y la anémona atrapa su comida con esos brazos que se mueven."
+
+Sofia encontró a Webster descansando en una roca tibia cerca de la poza de marea. —¡Ahí estás! —se rió—. ¿Encontraste algo increíble?
+
+Webster no podía responder con palabras, pero si pudiera, habría dicho: el océano no son solo las olas grandes que rompen en la arena. A veces las partes más increíbles son las pozas pequeñas y tranquilas que quedan atrás, llenas de criaturas diminutas, cada una haciendo su propio trabajo importante.
+
+Esa noche, de vuelta en su telaraña, Webster tejió un poco más rápido de lo normal, pensando en la poza de marea y todos sus pequeños vecinos.`
+    },
+    questions:[
+      { en:{prompt:'How did Webster end up at the beach?', choices:['He flew there','He hid in Sofia\'s beach bag','He walked all the way','Sofia carried him on purpose'], answer:'He hid in Sofia\'s beach bag'},
+        es:{prompt:'¿Cómo llegó Webster a la playa?', choices:['Voló hasta allá','Se escondió en la bolsa de playa de Sofia','Caminó todo el camino','Sofia lo llevó a propósito'], answer:'Se escondió en la bolsa de playa de Sofia'} },
+      { en:{prompt:'What is a tide pool?', choices:['A swimming pool at a hotel','A small pool of water left behind by the ocean','A puddle in the street','A pool made of sand'], answer:'A small pool of water left behind by the ocean'},
+        es:{prompt:'¿Qué es una poza de marea?', choices:['Una alberca de un hotel','Una pequeña poza de agua que deja el océano','Un charco en la calle','Una poza hecha de arena'], answer:'Una pequeña poza de agua que deja el océano'} },
+      { en:{prompt:'Which creature carries its home on its back?', choices:['Starfish','Seagull','Hermit crab','Sea anemone'], answer:'Hermit crab'},
+        es:{prompt:'¿Qué criatura carga su casa en la espalda?', choices:['Estrella de mar','Gaviota','Cangrejo ermitaño','Anémona de mar'], answer:'Cangrejo ermitaño'} }
+    ]
+  }
+];
+const READING_LINKS = [
+  {title:'Free Kids Books — Sea Creatures', url:'https://freekidsbooks.org/subject/animals/sea-creatures/'},
+  {title:'Storyberries — The Sea', url:'https://www.storyberries.com/bedtime-stories-the-sea/'}
+];
 
 /* ============================================================
    STATE
    ============================================================ */
 let state = {
-  screen:'loading', // loading | hub | game | summary
+  screen:'loading', // loading | hub | examples | game | summary | reading-list | reading-story | reading-quiz | reading-summary
   name:'Sofia Villarreal Castañeda', level:1, xp:0, coins:0,
   bestStars:{}, // topicId -> stars
   // in-round
   topicId:null, qIndex:0, correct:0, streak:0, roundCoins:0, roundXP:0,
-  currentQ:null, answered:false, selected:null, plotPick:null
+  currentQ:null, answered:false, selected:null, plotPick:null,
+  // reading
+  storyId:null, storyQIndex:0, storyCorrect:0, storyAnswered:false, storySelected:null,
+  storyRoundCoins:0, storyRoundXP:0
 };
 
 function levelFromXP(xp){ return Math.floor(xp/120)+1; }
@@ -671,8 +876,13 @@ function esc(s){ const d=document.createElement('div'); d.textContent=s; return 
 
 function render(){
   if(state.screen==='hub'){ app.innerHTML = renderHUD() + renderHub(); wireHub(); wireHUD(); return; }
+  if(state.screen==='examples'){ app.innerHTML = renderHUD() + renderExamples(); wireExamples(); wireHUD(); return; }
   if(state.screen==='game'){ app.innerHTML = renderHUD() + renderGame(); wireGame(); wireHUD(); return; }
   if(state.screen==='summary'){ app.innerHTML = renderHUD() + renderSummary(); wireSummary(); wireHUD(); return; }
+  if(state.screen==='reading-list'){ app.innerHTML = renderHUD() + renderReadingList(); wireReadingList(); wireHUD(); return; }
+  if(state.screen==='reading-story'){ app.innerHTML = renderHUD() + renderReadingStory(); wireReadingStory(); wireHUD(); return; }
+  if(state.screen==='reading-quiz'){ app.innerHTML = renderHUD() + renderReadingQuiz(); wireReadingQuiz(); wireHUD(); return; }
+  if(state.screen==='reading-summary'){ app.innerHTML = renderHUD() + renderReadingSummary(); wireReadingSummary(); wireHUD(); return; }
   app.innerHTML = '<div class="center-screen"><div class="rocket-emoji">🐶</div></div>';
 }
 
@@ -779,7 +989,9 @@ const SPIDER_LINES = {
 function wireHub(){
   document.querySelectorAll('[data-topic]').forEach(el=>{
     el.addEventListener('click', ()=>{
-      startRound(el.getAttribute('data-topic'));
+      const id = el.getAttribute('data-topic');
+      if(id==='read'){ state.screen='reading-list'; render(); }
+      else { showExamples(id); }
     });
   });
   const spider = document.getElementById('spiderCorner');
@@ -797,7 +1009,44 @@ function wireHub(){
   }
 }
 
-function startRound(topicId){
+/* ---------- Examples screen ---------- */
+function showExamples(topicId){
+  state.topicId = topicId;
+  state.screen = 'examples';
+  render();
+}
+function renderExamples(){
+  const topic = TOPICS.find(t=>t.id===state.topicId);
+  const tx = topicText(topic.id);
+  const examples = EXAMPLES_I18N[topic.id][LANG];
+  const cards = examples.map(ex=>`
+    <div class="example-card">
+      <div class="ex-label">${LANG==='en'?'Example':'Ejemplo'}</div>
+      <p class="ex-problem">${ex.problem}</p>
+      <div class="ex-solution">${ex.solution}</div>
+    </div>`).join('');
+  return `
+  <div class="example-wrap">
+    <div class="game-topbar">
+      <button class="back-link" id="backBtn">${L('backHub')}</button>
+    </div>
+    <div style="text-align:center; margin-bottom:16px;">
+      <div style="font-size:44px;">${topic.icon}</div>
+      <h2 class="blocky-text" style="font-size:22px; margin:6px 0 2px;">${tx.name}</h2>
+      <p style="color:#C9BFFF; font-size:13.5px; margin:0;">${LANG==='en'?"Here's how it works:":'Así funciona:'}</p>
+    </div>
+    ${cards}
+    <div class="example-actions">
+      <button class="chunky c-${topic.color}" id="readyBtn">${LANG==='en'?"I'm Ready! Let's Play →":'¡Estoy Lista! A Jugar →'}</button>
+    </div>
+  </div>`;
+}
+function wireExamples(){
+  document.getElementById('backBtn').addEventListener('click', ()=>{ state.screen='hub'; render(); });
+  document.getElementById('readyBtn').addEventListener('click', ()=>{ startRoundActual(state.topicId); });
+}
+
+function startRoundActual(topicId){
   state.topicId = topicId;
   state.qIndex = 0;
   state.correct = 0;
@@ -1047,8 +1296,206 @@ function renderSummary(){
   </div>`;
 }
 function wireSummary(){
-  document.getElementById('againBtn').addEventListener('click', ()=>startRound(state.topicId));
+  document.getElementById('againBtn').addEventListener('click', ()=>startRoundActual(state.topicId));
   document.getElementById('hubBtn').addEventListener('click', ()=>{ state.screen='hub'; render(); });
+}
+
+/* ============================================================
+   OCEAN READING COVE
+   ============================================================ */
+function renderReadingList(){
+  const cards = READING_STORIES.map(s=>{
+    const stars = state.bestStars['read_'+s.id] || 0;
+    const starDisplay = '⭐'.repeat(stars) + '☆'.repeat(3-stars);
+    return `
+    <div class="story-card" data-story="${s.id}">
+      <div class="story-icon">${s.icon}</div>
+      <div class="story-info">
+        <h3>${s.title[LANG]}</h3>
+        <p>${s.blurb[LANG]}</p>
+        <p style="margin-top:4px; letter-spacing:1px;">${starDisplay}</p>
+      </div>
+      <button class="chunky c-coral" data-story="${s.id}" style="padding:10px 16px; font-size:14px;">${LANG==='en'?'Read':'Leer'}</button>
+    </div>`;
+  }).join('');
+  const links = READING_LINKS.map(l=>`<a href="${l.url}" target="_blank" rel="noopener">${l.title} ↗</a>`).join('');
+  return `
+  <div class="example-wrap">
+    <div class="hub-header-inner" style="margin-bottom:16px;">
+      <div class="plush-hero" style="animation:none;"><div style="font-size:70px;">🐚🌊</div></div>
+      <div>
+        <h2 class="blocky-text" style="font-size:24px; margin:0 0 2px;">${topicText('read').name}</h2>
+        <p style="color:#C9BFFF; font-size:13.5px; margin:0; max-width:380px;">${LANG==='en'?'Read a story, then answer a few questions about it.':'Lee un cuento y luego responde algunas preguntas sobre él.'}</p>
+      </div>
+    </div>
+    ${cards}
+    <div class="more-stories">
+      <h4>${LANG==='en'?'🔗 More free ocean stories to read':'🔗 Más cuentos gratis del océano para leer'}</h4>
+      ${links}
+    </div>
+    <div class="example-actions" style="margin-top:16px;">
+      <button class="chunky c-purple" id="backBtn2">${L('backHub')}</button>
+    </div>
+  </div>`;
+}
+function wireReadingList(){
+  document.querySelectorAll('[data-story]').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      state.storyId = el.getAttribute('data-story');
+      state.screen = 'reading-story';
+      render();
+    });
+  });
+  const back = document.getElementById('backBtn2');
+  if(back) back.addEventListener('click', ()=>{ state.screen='hub'; render(); });
+}
+
+function currentStory(){ return READING_STORIES.find(s=>s.id===state.storyId); }
+
+function renderReadingStory(){
+  const story = currentStory();
+  const paragraphs = story.text[LANG].split('\n\n').map(p=>`<p>${p}</p>`).join('');
+  return `
+  <div class="example-wrap">
+    <div class="game-topbar">
+      <button class="back-link" id="backBtn">${L('backHub')}</button>
+    </div>
+    <div class="story-reader">
+      <div style="font-size:36px; text-align:center; margin-bottom:6px;">${story.icon}</div>
+      <h2 style="text-align:center;">${story.title[LANG]}</h2>
+      <div class="story-text">${paragraphs}</div>
+    </div>
+    <div class="reader-actions">
+      <button class="chunky c-coral" id="quizBtn">${LANG==='en'?"I'm Done Reading — Quiz Me! 🐚":'Terminé de Leer — ¡Pregúntame! 🐚'}</button>
+    </div>
+  </div>`;
+}
+function wireReadingStory(){
+  document.getElementById('backBtn').addEventListener('click', ()=>{ state.screen='reading-list'; render(); });
+  document.getElementById('quizBtn').addEventListener('click', ()=>{
+    state.storyQIndex = 0;
+    state.storyCorrect = 0;
+    state.storyAnswered = false;
+    state.storySelected = null;
+    state.storyRoundCoins = 0;
+    state.storyRoundXP = 0;
+    state.screen = 'reading-quiz';
+    render();
+  });
+}
+
+function renderReadingQuiz(){
+  const story = currentStory();
+  const q = story.questions[state.storyQIndex][LANG];
+  const btns = q.choices.map(c=>{
+    let cls='choice-btn';
+    if(state.storyAnswered){
+      if(c===q.answer) cls+=' correct';
+      else if(c===state.storySelected) cls+=' wrong';
+    }
+    return `<button class="${cls}" data-choice="${esc(c)}" ${state.storyAnswered?'disabled':''}>${esc(c)}</button>`;
+  }).join('');
+  let feedback = '';
+  if(state.storyAnswered){
+    const wasRight = state.storySelected===q.answer;
+    feedback = `<div class="feedback-row ${wasRight?'ok':'bad'}">${wasRight? pickPraise() : L('wrongFeedback')}</div>
+      <button class="chunky c-purple next-btn" id="storyNextBtn">${state.storyQIndex+1>=story.questions.length? L('seeResults') : L('nextQuestion')}</button>`;
+  } else {
+    feedback = `<div class="feedback-row"></div>`;
+  }
+  return `
+  <div class="game-wrap">
+    <div class="game-topbar">
+      <button class="back-link" id="backBtn">${L('backHub')}</button>
+      <div class="progress-dots">${story.questions.map((_,i)=>`<span class="pdot ${i<state.storyQIndex?'done':(i===state.storyQIndex?'current':'')}"></span>`).join('')}</div>
+      <div></div>
+    </div>
+    <div class="q-card">
+      <div style="font-family:'Baloo 2'; font-size:13px; color:var(--ink-soft); font-weight:800; margin-bottom:10px;">
+        ${story.icon} ${story.title[LANG].toUpperCase()} · ${L('qLabel')}${state.storyQIndex+1} ${L('of')} ${story.questions.length}
+      </div>
+      <p class="q-prompt">${esc(q.prompt)}</p>
+      <div class="choices-grid">${btns}</div>
+      ${feedback}
+    </div>
+  </div>`;
+}
+function wireReadingQuiz(){
+  document.getElementById('backBtn').addEventListener('click', ()=>{ state.screen='hub'; render(); });
+  if(!state.storyAnswered){
+    document.querySelectorAll('.choice-btn').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const val = btn.getAttribute('data-choice');
+        state.storySelected = val;
+        answerStoryQuestion(val===currentStory().questions[state.storyQIndex][LANG].answer);
+      });
+    });
+  }
+  const nextBtn = document.getElementById('storyNextBtn');
+  if(nextBtn) nextBtn.addEventListener('click', nextStoryQuestion);
+}
+function answerStoryQuestion(isCorrect){
+  state.storyAnswered = true;
+  if(isCorrect){
+    state.storyCorrect++;
+    const coinsGained = 10, xpGained = 15;
+    state.coins += coinsGained; state.storyRoundCoins += coinsGained;
+    state.xp += xpGained; state.storyRoundXP += xpGained;
+  } else {
+    state.coins += 2; state.storyRoundCoins += 2;
+    state.xp += 3; state.storyRoundXP += 3;
+  }
+  render();
+  saveProgress();
+}
+function nextStoryQuestion(){
+  const story = currentStory();
+  state.storyQIndex++;
+  if(state.storyQIndex >= story.questions.length){ finishReading(); return; }
+  state.storyAnswered = false;
+  state.storySelected = null;
+  render();
+}
+function finishReading(){
+  const story = currentStory();
+  const acc = state.storyCorrect / story.questions.length;
+  let stars = acc>=0.9?3:acc>=0.65?2:1;
+  const key = 'read_'+story.id;
+  const prevBest = state.bestStars[key] || 0;
+  if(stars>prevBest) state.bestStars[key] = stars;
+  const overallPrev = state.bestStars['read'] || 0;
+  if(stars>overallPrev) state.bestStars['read'] = stars;
+  state.screen = 'reading-summary';
+  render();
+  saveProgress();
+}
+function renderReadingSummary(){
+  const story = currentStory();
+  const acc = state.storyCorrect/story.questions.length;
+  let earnedStars = acc>=0.9?3:acc>=0.65?2:1;
+  const starDisplay = '⭐'.repeat(earnedStars)+'☆'.repeat(3-earnedStars);
+  const completeTitle = LANG==='en' ? `${story.title[LANG]} Complete!` : `¡${story.title[LANG]} Completado!`;
+  return `
+  <div class="summary-card">
+    <div style="font-size:44px;">${story.icon}</div>
+    <h2 style="margin:6px 0 0;">${completeTitle}</h2>
+    <div class="stars-row">${starDisplay}</div>
+    <div class="summary-stats">
+      <div class="stat-box"><div class="num">${state.storyCorrect}/${story.questions.length}</div><div class="lbl">${L('correctStat')}</div></div>
+      <div class="stat-box"><div class="num">+${state.storyRoundCoins}</div><div class="lbl">${L('bonesStat')}</div></div>
+      <div class="stat-box"><div class="num">+${state.storyRoundXP}</div><div class="lbl">${L('xpStat')}</div></div>
+    </div>
+    <div class="summary-btns">
+      <button class="chunky c-coral" id="storyAgainBtn">${L('playAgain')}</button>
+      <button class="chunky c-purple" id="storyListBtn">${LANG==='en'?'More Stories':'Más Cuentos'}</button>
+      <button class="chunky c-purple" id="hubBtn2">${L('backToHub')}</button>
+    </div>
+  </div>`;
+}
+function wireReadingSummary(){
+  document.getElementById('storyAgainBtn').addEventListener('click', ()=>{ state.screen='reading-story'; render(); });
+  document.getElementById('storyListBtn').addEventListener('click', ()=>{ state.screen='reading-list'; render(); });
+  document.getElementById('hubBtn2').addEventListener('click', ()=>{ state.screen='hub'; render(); });
 }
 
 /* ============================================================
