@@ -1995,13 +1995,19 @@ async function sendDadMessage(panel){
       headers:{'Content-Type':'application/json'},
       body: JSON.stringify({ message, from: state.profileName, lang: LANG })
     });
-    if(!resp.ok) throw new Error('send failed');
+    if(!resp.ok){
+      let bodyText = '';
+      try{ bodyText = await resp.text(); }catch(e2){}
+      console.error('[MathQuest] send-dad-message failed — status:', resp.status, 'body:', bodyText);
+      throw new Error('send failed: '+resp.status);
+    }
     panel.innerHTML = `
       <div class="dp-title">💌 ${LANG==='en'?'Message Dad':'Mensaje para Papá'}</div>
       <div class="wp-text">${LANG==='en'?'Sent! Dad will get it soon. 💌':'¡Enviado! Papá lo recibirá pronto. 💌'}</div>
       <div class="dp-btns"><button class="chunky c-purple dp-action" id="dadClose2">${LANG==='en'?'Okay!':'¡Okay!'}</button></div>`;
     document.getElementById('dadClose2').addEventListener('click', closeDadPanel);
   }catch(e){
+    console.error('[MathQuest] send-dad-message error:', e);
     panel.innerHTML = `
       <div class="dp-title">💌 ${LANG==='en'?'Message Dad':'Mensaje para Papá'}</div>
       <div class="wp-text">${LANG==='en'?"Hmm, that didn't send. Try again in a bit, or tell Dad in person!":'Mmm, eso no se envió. ¡Inténtalo de nuevo más tarde, o dile a Papá en persona!'}</div>
