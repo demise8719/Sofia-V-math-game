@@ -1029,10 +1029,22 @@ Por eso los perros de búsqueda y rescate pueden encontrar a personas perdidas e
     ]
   }
 ];
-const READING_LINKS = [
-  {title:'Free Kids Books — Sea Creatures', url:'https://freekidsbooks.org/subject/animals/sea-creatures/'},
-  {title:'Storyberries — The Sea', url:'https://www.storyberries.com/bedtime-stories-the-sea/'}
-];
+const READING_LINKS = {
+  ocean: [
+    {title:'Free Kids Books — Sea Creatures', url:'https://freekidsbooks.org/subject/animals/sea-creatures/'},
+    {title:'Storyberries — The Sea', url:'https://www.storyberries.com/bedtime-stories-the-sea/'}
+  ],
+  science: [
+    {title:'NASA Space Place — Science for Kids', url:'https://spaceplace.nasa.gov/'},
+    {title:'Free Kids Books — Science', url:'https://freekidsbooks.org/subject/science/'},
+    {title:'Free Kids Books — Space', url:'https://freekidsbooks.org/subject/science/space/'},
+    {title:'Free Kids Books — The Human Body', url:'https://freekidsbooks.org/subject/science/the-body/'},
+    {title:'Wikijunior — Free Science Books Hub', url:'https://en.wikibooks.org/wiki/Wikijunior'},
+    {title:'Wikijunior — Human Body (ages 8–12)', url:'https://en.wikibooks.org/wiki/Wikijunior:Human_Body'},
+    {title:'Wikijunior — Biology', url:'https://en.wikibooks.org/wiki/Wikijunior:Biology'},
+    {title:'Storyberries — Free Kids Stories', url:'https://www.storyberries.com/'}
+  ]
+};
 
 /* ============================================================
    STATE
@@ -1069,6 +1081,10 @@ function formatDuration(totalSec){
 
 /* ---- Multi-profile storage (lets friends compete on the same device) ---- */
 const MAX_PROFILES = 8;
+// ⚠️ Pascual: set a simple shared code here — only kids you've told this code to
+// will be able to add themselves to the leaderboard. Not real security, just a
+// friendly gate against random internet visitors adding fake profiles.
+const FRIEND_ACCESS_CODE = 'WOWWOW123';
 function getProfileList(){
   try{
     const raw = localStorage.getItem('mathquest_profile_list');
@@ -1572,7 +1588,10 @@ function renderReadingList(){
       <button class="chunky c-coral" data-story="${s.id}" style="padding:10px 16px; font-size:14px;">${LANG==='en'?'Read':'Leer'}</button>
     </div>`;
   }).join('');
-  const links = READING_LINKS.map(l=>`<a href="${l.url}" target="_blank" rel="noopener">${l.title} ↗</a>`).join('');
+  const links = READING_LINKS[state.readingCategory].map(l=>`<a href="${l.url}" target="_blank" rel="noopener">${l.title} ↗</a>`).join('');
+  const linksHeading = state.readingCategory==='ocean'
+    ? (LANG==='en'?'🔗 More free ocean stories to read':'🔗 Más cuentos gratis del océano para leer')
+    : (LANG==='en'?'🔗 More free science books to read':'🔗 Más libros gratis de ciencia para leer');
   return `
   <div class="example-wrap">
     <div class="hub-header-inner" style="margin-bottom:16px;">
@@ -1588,7 +1607,7 @@ function renderReadingList(){
     </div>
     ${cards}
     <div class="more-stories">
-      <h4>${LANG==='en'?'🔗 More free ocean stories to read':'🔗 Más cuentos gratis del océano para leer'}</h4>
+      <h4>${linksHeading}</h4>
       ${links}
     </div>
     <div class="example-actions" style="margin-top:16px;">
@@ -1805,8 +1824,12 @@ function renderProfiles(){
     ${canAddMore ? `
     <div class="add-friend-row">
       <input type="text" id="friendNameInput" placeholder="${LANG==='en'?"Friend's name":'Nombre de tu amiga'}" maxlength="20">
+      <input type="text" id="friendCodeInput" placeholder="${LANG==='en'?'Code':'Código'}" maxlength="20" style="max-width:90px;">
       <button class="chunky c-gold" id="addFriendBtn" style="padding:10px 16px; font-size:14px;">+ ${LANG==='en'?'Add':'Agregar'}</button>
-    </div>` : `<p style="color:#C9BFFF; font-size:12px; text-align:center;">${LANG==='en'?'Max players reached.':'Máximo de jugadoras alcanzado.'}</p>`}
+    </div>
+    <p style="color:#8a7fc0; font-size:11.5px; text-align:center; margin:-8px 0 6px;">${LANG==='en'?'Ask your dad for the code!':'¡Pídele el código a tu papá!'}</p>
+    <p id="friendCodeError" style="color:#FF5A6E; font-size:12.5px; text-align:center; font-weight:800; display:none;">${LANG==='en'?"That code isn't right — ask your dad!":'Ese código no es correcto — ¡pregúntale a tu papá!'}</p>
+    ` : `<p style="color:#C9BFFF; font-size:12px; text-align:center;">${LANG==='en'?'Max players reached.':'Máximo de jugadoras alcanzado.'}</p>`}
     <p style="color:#8a7fc0; font-size:11.5px; text-align:center; margin-top:6px;">${LANG==='en'?'💡 This leaderboard only compares players on this device.':'💡 Esta tabla solo compara jugadoras en este dispositivo.'}</p>
   </div>`;
 }
@@ -1818,9 +1841,17 @@ function wireProfiles(){
   const addBtn = document.getElementById('addFriendBtn');
   if(addBtn){
     addBtn.addEventListener('click', ()=>{
-      const input = document.getElementById('friendNameInput');
-      const name = input.value.trim();
+      const nameInput = document.getElementById('friendNameInput');
+      const codeInput = document.getElementById('friendCodeInput');
+      const errorEl = document.getElementById('friendCodeError');
+      const name = nameInput.value.trim();
+      const code = codeInput.value.trim();
       if(!name) return;
+      if(code !== FRIEND_ACCESS_CODE){
+        if(errorEl) errorEl.style.display = 'block';
+        return;
+      }
+      if(errorEl) errorEl.style.display = 'none';
       addProfile(name);
     });
   }
@@ -1923,14 +1954,10 @@ function createWebsterBot(){
 }
 
 /* ============================================================
-   MESSAGE DAD — opens a pre-filled email/text on Sofia's device
+   MESSAGE DAD — actually delivers to Pascual via a backend email API
+   (no Claude/Anthropic tokens involved — this is a plain email send,
+   so there is no per-message AI cost at all)
    ============================================================ */
-// ⚠️ Pascual: replace the values below with your real contact info.
-// email is required; phone is optional (leave '' to hide the text-message option).
-const DAD_CONTACT = {
-  email: 'REPLACE_WITH_DAD_EMAIL@example.com',
-  phone: ''
-};
 function closeDadPanel(){
   const existing = document.getElementById('dadPanelEl');
   if(existing) existing.remove();
@@ -1942,30 +1969,45 @@ function onDadClick(){
   panel.id = 'dadPanelEl';
   panel.className = 'dad-panel';
   document.body.appendChild(panel);
+  renderDadPanelIdle(panel);
+}
+function renderDadPanelIdle(panel){
   panel.innerHTML = `
     <div class="dp-title">💌 ${LANG==='en'?'Message Dad':'Mensaje para Papá'}</div>
-    <textarea id="dadMsgBox" placeholder="${LANG==='en'?'Type your message...':'Escribe tu mensaje...'}"></textarea>
+    <textarea id="dadMsgBox" maxlength="500" placeholder="${LANG==='en'?'Type your message...':'Escribe tu mensaje...'}"></textarea>
     <div class="dp-btns">
-      <button class="chunky c-blue dp-action" id="dadSendEmail">✉️ ${LANG==='en'?'Send Email':'Enviar Correo'}</button>
-      ${DAD_CONTACT.phone ? `<button class="chunky c-green dp-action" id="dadSendText">💬 ${LANG==='en'?'Send Text':'Enviar Mensaje'}</button>` : ''}
+      <button class="chunky c-blue dp-action" id="dadSendBtn">✉️ ${LANG==='en'?'Send to Dad':'Enviar a Papá'}</button>
       <button class="chunky c-purple dp-action" id="dadClose">${LANG==='en'?'Cancel':'Cancelar'}</button>
     </div>`;
-  document.getElementById('dadSendEmail').addEventListener('click', ()=>{
-    const msg = document.getElementById('dadMsgBox').value.trim();
-    const body = msg || (LANG==='en' ? 'Hi Dad!' : '¡Hola Papá!');
-    const subject = LANG==='en' ? 'Message from Sofia (Math Quest)' : 'Mensaje de Sofia (Math Quest)';
-    window.location.href = `mailto:${DAD_CONTACT.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    closeDadPanel();
-  });
-  if(DAD_CONTACT.phone){
-    document.getElementById('dadSendText').addEventListener('click', ()=>{
-      const msg = document.getElementById('dadMsgBox').value.trim();
-      const body = msg || (LANG==='en' ? 'Hi Dad!' : '¡Hola Papá!');
-      window.location.href = `sms:${DAD_CONTACT.phone}?body=${encodeURIComponent(body)}`;
-      closeDadPanel();
-    });
-  }
+  document.getElementById('dadSendBtn').addEventListener('click', ()=>sendDadMessage(panel));
   document.getElementById('dadClose').addEventListener('click', closeDadPanel);
+}
+async function sendDadMessage(panel){
+  const box = document.getElementById('dadMsgBox');
+  const message = box ? box.value.trim() : '';
+  if(!message) return;
+  panel.innerHTML = `
+    <div class="dp-title">💌 ${LANG==='en'?'Message Dad':'Mensaje para Papá'}</div>
+    <div class="wp-text">${LANG==='en'?'Sending... 🐾':'Enviando... 🐾'}</div>`;
+  try{
+    const resp = await fetch('/api/send-dad-message', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ message, from: state.profileName, lang: LANG })
+    });
+    if(!resp.ok) throw new Error('send failed');
+    panel.innerHTML = `
+      <div class="dp-title">💌 ${LANG==='en'?'Message Dad':'Mensaje para Papá'}</div>
+      <div class="wp-text">${LANG==='en'?'Sent! Dad will get it soon. 💌':'¡Enviado! Papá lo recibirá pronto. 💌'}</div>
+      <div class="dp-btns"><button class="chunky c-purple dp-action" id="dadClose2">${LANG==='en'?'Okay!':'¡Okay!'}</button></div>`;
+    document.getElementById('dadClose2').addEventListener('click', closeDadPanel);
+  }catch(e){
+    panel.innerHTML = `
+      <div class="dp-title">💌 ${LANG==='en'?'Message Dad':'Mensaje para Papá'}</div>
+      <div class="wp-text">${LANG==='en'?"Hmm, that didn't send. Try again in a bit, or tell Dad in person!":'Mmm, eso no se envió. ¡Inténtalo de nuevo más tarde, o dile a Papá en persona!'}</div>
+      <div class="dp-btns"><button class="chunky c-purple dp-action" id="dadClose3">${LANG==='en'?'Okay':'Okay'}</button></div>`;
+    document.getElementById('dadClose3').addEventListener('click', closeDadPanel);
+  }
 }
 function createDadBot(){
   const bot = document.createElement('div');
