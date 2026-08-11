@@ -16,6 +16,7 @@
   --green:#6EE7A8;  --green-d:#2FBE7A;  --green-l:#E7FFF2;
   --orange:#FF9F5A; --orange-d:#E67A2E; --orange-l:#FFF1E6;
   --coral:#FF6F6F;  --coral-d:#E24D4D;  --coral-l:#FFE9E9;
+  --crystal-gold:#FFD866; --crystal-red:#E84A5F;
   --ink:#241B45; --ink-soft:#6A5F99;
   --bg1:#1B1035; --bg2:#2E1E5E;
   --panel:#FFFFFF;
@@ -78,8 +79,8 @@ button{font-family:inherit;}
 /* ---------- HUD ---------- */
 #hud{
   position:sticky; top:0; z-index:20;
-  display:flex; align-items:center; gap:14px;
-  padding:12px 18px; margin-bottom:6px;
+  display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+  padding:10px 18px; margin-bottom:6px;
   background:rgba(27,16,53,.72); backdrop-filter:blur(10px);
   border-bottom:2px solid rgba(255,255,255,.08);
 }
@@ -368,6 +369,72 @@ button{font-family:inherit;}
   font-family:'Nunito'; font-size:14px;
 }
 
+/* ---------- Currency pills ---------- */
+.crystal-pill{
+  display:flex;align-items:center;gap:5px;
+  background:rgba(232,74,95,.15); border:2px solid var(--crystal-red);
+  border-radius:20px; padding:5px 10px; color:#FFD9D9; font-weight:800; font-size:13px;
+  flex-shrink:0;
+}
+
+/* ---------- Companion select ---------- */
+.companion-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:16px; margin:20px 0;}
+.companion-card{
+  background:var(--panel); border-radius:20px; padding:18px 14px; text-align:center;
+  border:3px solid rgba(36,27,69,.14); cursor:pointer;
+  box-shadow:0 6px 0 rgba(0,0,0,.2); transition:transform .15s ease;
+}
+.companion-card:hover{transform:translateY(-4px);}
+.companion-card.selected{border-color:var(--gold-d); background:var(--gold-l);}
+.companion-card svg{width:90px; height:90px;}
+.companion-card h4{margin:8px 0 2px; font-size:15px; color:var(--ink);}
+.companion-card p{margin:0; font-size:11.5px; color:var(--ink-soft);}
+
+/* ---------- Avatar customizer ---------- */
+.avatar-preview{display:flex; justify-content:center; margin:16px 0;}
+.avatar-preview svg{width:130px; height:130px;}
+.swatch-row{display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin-bottom:18px;}
+.swatch{
+  width:38px; height:38px; border-radius:50%; cursor:pointer; border:3px solid transparent;
+  box-shadow:0 3px 0 rgba(0,0,0,.25);
+}
+.swatch.selected{border-color:#fff; box-shadow:0 0 0 3px var(--purple), 0 3px 0 rgba(0,0,0,.25);}
+.hair-option{
+  padding:10px 16px; border-radius:14px; background:var(--purple-l); color:var(--purple-d);
+  font-family:'Baloo 2'; font-weight:700; cursor:pointer; border:2px solid transparent; font-size:13px;
+}
+.hair-option.selected{background:var(--purple); color:#fff; border-color:var(--purple-d);}
+.hair-row{display:flex; gap:8px; flex-wrap:wrap; justify-content:center; margin-bottom:16px;}
+.customizer-label{font-family:'Baloo 2'; font-weight:800; font-size:13px; color:#C9BFFF; text-align:center; margin:14px 0 8px;}
+
+/* ---------- Shops ---------- */
+.shop-header{text-align:center; margin-bottom:16px;}
+.shop-header .shop-icon{font-size:48px;}
+.shop-bg{
+  border-radius:22px; padding:18px; margin-bottom:16px;
+  background:linear-gradient(160deg, #2E1E5E, #1B1035);
+  border:3px solid rgba(255,255,255,.1);
+}
+.shop-tabs{display:flex; gap:8px; margin-bottom:14px; flex-wrap:wrap;}
+.shop-tab{
+  border:none; border-radius:12px; padding:8px 14px; font-family:'Baloo 2'; font-weight:800;
+  font-size:12.5px; cursor:pointer; background:rgba(255,255,255,.1); color:#C9BFFF;
+  border:2px solid rgba(255,255,255,.2);
+}
+.shop-tab.active{background:var(--gold); color:#4A3200; border-color:var(--gold-d);}
+.item-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(110px,1fr)); gap:10px;}
+.shop-item{
+  background:rgba(255,255,255,.06); border-radius:16px; padding:12px 8px; text-align:center;
+  border:2px solid rgba(255,255,255,.12); cursor:pointer; transition:transform .1s;
+}
+.shop-item:hover{transform:translateY(-2px); background:rgba(255,255,255,.1);}
+.shop-item.owned{border-color:var(--green);}
+.shop-item.equipped{border-color:var(--gold); background:rgba(255,201,60,.12);}
+.shop-item .item-icon{font-size:30px;}
+.shop-item .item-name{font-family:'Baloo 2'; font-weight:700; font-size:11.5px; color:#fff; margin:4px 0 2px; line-height:1.2;}
+.shop-item .item-price{font-size:11px; color:#C9BFFF; font-weight:800;}
+.shop-item .item-status{font-size:10px; color:var(--green); font-weight:800; margin-top:2px;}
+
 @keyframes spiderWiggle{0%,100%{transform:rotate(0deg) translateY(0);}25%{transform:rotate(-6deg) translateY(-2px);}75%{transform:rotate(6deg) translateY(2px);}}
 </style>
 </head>
@@ -473,6 +540,203 @@ function spiderSVG(){
   </svg>`;
 }
 
+/* ---- Cat companion plush ---- */
+function catSVG(){
+  return `<svg viewBox="0 0 160 150" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Cat companion plush">
+    <ellipse cx="80" cy="118" rx="42" ry="25" fill="#93A0BE"/>
+    <ellipse cx="80" cy="112" rx="42" ry="25" fill="#B8C4D9"/>
+    <ellipse cx="80" cy="118" rx="22" ry="14" fill="#F0F3FA"/>
+    <path d="M118 105 Q 138 100 134 78 Q 130 92 114 96 Z" fill="#B8C4D9"/>
+    <path d="M46 122 Q 30 128 32 138" stroke="#93A0BE" stroke-width="8" fill="none" stroke-linecap="round"/>
+    <path d="M40 34 L 30 6 L 56 28 Z" fill="#B8C4D9" stroke="#93A0BE" stroke-width="2"/>
+    <path d="M120 34 L 130 6 L 104 28 Z" fill="#B8C4D9" stroke="#93A0BE" stroke-width="2"/>
+    <path d="M42 30 L 36 14 L 52 27 Z" fill="#F4A6C1"/>
+    <path d="M118 30 L 124 14 L 108 27 Z" fill="#F4A6C1"/>
+    <circle cx="80" cy="58" r="36" fill="#B8C4D9"/>
+    <ellipse cx="80" cy="72" rx="18" ry="12" fill="#F0F3FA"/>
+    <path d="M80 68 L 75 74 L 85 74 Z" fill="#F4A6C1"/>
+    <path d="M80 75 Q 74 80 68 78" stroke="#4A5570" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <path d="M80 75 Q 86 80 92 78" stroke="#4A5570" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <circle cx="65" cy="54" r="6" fill="#241B45"/>
+    <circle cx="95" cy="54" r="6" fill="#241B45"/>
+    <circle cx="63" cy="52" r="1.8" fill="#fff"/>
+    <circle cx="93" cy="52" r="1.8" fill="#fff"/>
+    <path d="M50 64 L 20 60 M50 68 L 20 70 M50 60 L 22 52" stroke="#4A5570" stroke-width="1.2" opacity="0.6"/>
+    <path d="M110 64 L 140 60 M110 68 L 140 70 M110 60 L 138 52" stroke="#4A5570" stroke-width="1.2" opacity="0.6"/>
+    <circle cx="80" cy="98" r="9" fill="#4FC3F7" stroke="#fff" stroke-width="2"/>
+  </svg>`;
+}
+
+/* ---- Baby dragon companion plush ---- */
+function dragonSVG(){
+  return `<svg viewBox="0 0 160 150" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Baby dragon companion plush">
+    <ellipse cx="80" cy="118" rx="42" ry="25" fill="#9B7FE0"/>
+    <ellipse cx="80" cy="112" rx="42" ry="25" fill="#B79DF0"/>
+    <ellipse cx="80" cy="118" rx="20" ry="13" fill="#EBE1FF"/>
+    <path d="M118 100 Q 140 96 136 116 Q 128 108 112 106 Z" fill="#B79DF0" stroke="#9B7FE0" stroke-width="2"/>
+    <path d="M40 96 Q 18 92 22 112 Q 30 104 46 102 Z" fill="#B79DF0" stroke="#9B7FE0" stroke-width="2"/>
+    <path d="M62 30 L 58 16 L 70 28 Z" fill="#7A5FC7"/>
+    <path d="M80 26 L 78 10 L 90 24 Z" fill="#7A5FC7"/>
+    <path d="M98 30 L 96 16 L 108 28 Z" fill="#7A5FC7"/>
+    <circle cx="80" cy="58" r="34" fill="#B79DF0"/>
+    <ellipse cx="80" cy="74" rx="17" ry="11" fill="#EBE1FF"/>
+    <circle cx="73" cy="76" r="1.6" fill="#7A5FC7"/>
+    <circle cx="87" cy="76" r="1.6" fill="#7A5FC7"/>
+    <path d="M72 82 Q 80 87 88 82" stroke="#5A4390" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+    <circle cx="66" cy="53" r="6" fill="#241B45"/>
+    <circle cx="94" cy="53" r="6" fill="#241B45"/>
+    <circle cx="64" cy="51" r="1.8" fill="#fff"/>
+    <circle cx="92" cy="51" r="1.8" fill="#fff"/>
+    <path d="M46 100 Q 32 108 36 122 Q 44 116 50 108" fill="#B79DF0" stroke="#9B7FE0" stroke-width="2"/>
+    <path d="M32 118 L 26 112 L 36 116 Z" fill="#7A5FC7"/>
+    <circle cx="80" cy="97" r="9" fill="#FF9F5A" stroke="#fff" stroke-width="2"/>
+  </svg>`;
+}
+
+/* ---- Simple customizable avatar face ---- */
+function avatarSVG(skin, eye, hair){
+  skin = skin || '#F1C27D';
+  eye = eye || '#6B4423';
+  hair = hair || 'short';
+  let hairShape = '';
+  const hc = '#4A3222';
+  if(hair==='short'){
+    hairShape = `<path d="M18 55 Q 20 12 60 12 Q 100 12 102 55 Q 90 40 60 40 Q 30 40 18 55 Z" fill="${hc}"/>`;
+  } else if(hair==='ponytail'){
+    hairShape = `<path d="M18 55 Q 20 12 60 12 Q 100 12 102 55 Q 90 40 60 40 Q 30 40 18 55 Z" fill="${hc}"/>
+      <path d="M100 40 Q 118 46 112 78 Q 104 60 96 44 Z" fill="${hc}"/>`;
+  } else if(hair==='pigtails'){
+    hairShape = `<path d="M18 55 Q 20 12 60 12 Q 100 12 102 55 Q 90 40 60 40 Q 30 40 18 55 Z" fill="${hc}"/>
+      <circle cx="18" cy="60" r="12" fill="${hc}"/><circle cx="102" cy="60" r="12" fill="${hc}"/>`;
+  } else if(hair==='curly'){
+    hairShape = `<circle cx="30" cy="30" r="14" fill="${hc}"/><circle cx="50" cy="18" r="15" fill="${hc}"/>
+      <circle cx="70" cy="18" r="15" fill="${hc}"/><circle cx="90" cy="30" r="14" fill="${hc}"/>
+      <circle cx="60" cy="14" r="13" fill="${hc}"/>`;
+  }
+  return `<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Sofia's avatar">
+    <circle cx="60" cy="68" r="44" fill="${skin}"/>
+    <circle cx="44" cy="66" r="7" fill="${eye}"/>
+    <circle cx="76" cy="66" r="7" fill="${eye}"/>
+    <circle cx="42" cy="64" r="2" fill="#fff"/>
+    <circle cx="74" cy="64" r="2" fill="#fff"/>
+    <path d="M48 88 Q 60 96 72 88" stroke="#8A5A3A" stroke-width="3" fill="none" stroke-linecap="round"/>
+    ${hairShape}
+  </svg>`;
+}
+
+const SKIN_TONES = ['#FFDBAC','#F1C27D','#E0AC69','#C68642','#8D5524','#4A2C17'];
+const EYE_COLORS = ['#6B4423','#4FC3F7','#6EE7A8','#A67C52','#8C97A8','#E8A33D'];
+const HAIR_STYLES = [
+  {id:'short', en:'Short', es:'Corto'},
+  {id:'ponytail', en:'Ponytail', es:'Coleta'},
+  {id:'pigtails', en:'Pigtails', es:'Coletas'},
+  {id:'curly', en:'Curly', es:'Rizado'},
+  {id:'none', en:'None', es:'Ninguno'}
+];
+
+/* ============================================================
+   COMPANIONS — this year's 3 starter pets (rotates in future years)
+   ============================================================ */
+const COMPANIONS = [
+  {id:'dog', icon:'🐶', svg:plushSVG, name:{en:'Wow Wow', es:'Wow Wow'}, desc:{en:'A loyal golden retriever pup', es:'Un cachorro golden retriever leal'}, treatIcon:'🦴', treatName:{en:'Bone Treat', es:'Hueso'}},
+  {id:'cat', icon:'🐱', svg:catSVG, name:{en:'Miso', es:'Miso'}, desc:{en:'A clever, curious kitten', es:'Una gatita lista y curiosa'}, treatIcon:'🐟', treatName:{en:'Tuna Treat', es:'Botana de Atún'}},
+  {id:'dragon', icon:'🐲', svg:dragonSVG, name:{en:'Ember', es:'Ember'}, desc:{en:'A tiny dragon who loves math', es:'Un pequeño dragón que ama las matemáticas'}, treatIcon:'🔥', treatName:{en:'Fireberry', es:'Baya de Fuego'}}
+];
+function companionById(id){ return COMPANIONS.find(c=>c.id===id) || COMPANIONS[0]; }
+
+/* ============================================================
+   SHOP CATALOGS
+   ============================================================ */
+const CLOSET_ITEMS = [
+  {id:'cap', icon:'🧢', cat:'hats', price:50, name:{en:'Baseball Cap', es:'Gorra'}},
+  {id:'sunhat', icon:'👒', cat:'hats', price:60, name:{en:'Sun Hat', es:'Sombrero de Sol'}},
+  {id:'wizardhat', icon:'🧙', cat:'hats', price:150, name:{en:'Wizard Hat', es:'Sombrero de Mago'}},
+  {id:'crown', icon:'👑', cat:'hats', price:300, name:{en:'Crown', es:'Corona'}},
+  {id:'tophat', icon:'🎩', cat:'hats', price:120, name:{en:'Top Hat', es:'Sombrero de Copa'}},
+  {id:'flowercrown', icon:'🌸', cat:'hats', price:90, name:{en:'Flower Crown', es:'Corona de Flores'}},
+  {id:'hoodie', icon:'🧥', cat:'outfits', price:80, name:{en:'Hoodie', es:'Sudadera'}},
+  {id:'cape', icon:'🦸', cat:'outfits', price:200, name:{en:'Superhero Cape', es:'Capa de Superhéroe'}},
+  {id:'labcoat', icon:'🥼', cat:'outfits', price:150, name:{en:'Lab Coat', es:'Bata de Laboratorio'}},
+  {id:'rainbow', icon:'🌈', cat:'outfits', price:70, name:{en:'Rainbow Shirt', es:'Camisa Arcoíris'}},
+  {id:'spacesuit', icon:'👨‍🚀', cat:'outfits', price:250, name:{en:'Space Suit', es:'Traje Espacial'}},
+  {id:'tutu', icon:'🩰', cat:'outfits', price:110, name:{en:'Tutu', es:'Tutú'}},
+  {id:'sunglasses', icon:'🕶️', cat:'accessories', price:60, name:{en:'Sunglasses', es:'Lentes de Sol'}},
+  {id:'backpack', icon:'🎒', cat:'accessories', price:90, name:{en:'Backpack', es:'Mochila'}},
+  {id:'bowtie', icon:'🎀', cat:'accessories', price:40, name:{en:'Bow Tie', es:'Moño'}},
+  {id:'scarf', icon:'🧣', cat:'accessories', price:50, name:{en:'Scarf', es:'Bufanda'}},
+  {id:'headphones', icon:'🎧', cat:'accessories', price:110, name:{en:'Headphones', es:'Audífonos'}},
+  {id:'wand', icon:'⭐', cat:'accessories', price:130, name:{en:'Star Wand', es:'Varita Estrella'}},
+  {id:'sneakers', icon:'👟', cat:'shoes', price:70, name:{en:'Sneakers', es:'Tenis'}},
+  {id:'rainboots', icon:'🥾', cat:'shoes', price:60, name:{en:'Rain Boots', es:'Botas de Lluvia'}},
+  {id:'skates', icon:'🛼', cat:'shoes', price:140, name:{en:'Roller Skates', es:'Patines'}},
+  {id:'sandals', icon:'🩴', cat:'shoes', price:40, name:{en:'Sandals', es:'Sandalias'}},
+  {id:'sparklyshoes', icon:'✨', cat:'shoes', price:180, name:{en:'Sparkly Shoes', es:'Zapatos Brillantes'}},
+  {id:'cleats', icon:'⚽', cat:'shoes', price:90, name:{en:'Soccer Cleats', es:'Tacos de Fútbol'}}
+];
+const CLOSET_CATS = [
+  {id:'hats', en:'Hats', es:'Sombreros'},
+  {id:'outfits', en:'Outfits', es:'Trajes'},
+  {id:'accessories', en:'Accessories', es:'Accesorios'},
+  {id:'shoes', en:'Shoes', es:'Zapatos'}
+];
+const PET_ITEMS = [
+  {id:'collar', icon:'🔵', cat:'gear', price:30, name:{en:'Collar', es:'Collar'}},
+  {id:'bandana', icon:'🧡', cat:'gear', price:25, name:{en:'Bandana', es:'Pañoleta'}},
+  {id:'bow', icon:'🎀', cat:'gear', price:20, name:{en:'Bow', es:'Moño'}},
+  {id:'minibackpack', icon:'🎒', cat:'gear', price:50, name:{en:'Mini Backpack', es:'Mini Mochila'}},
+  {id:'partyhat', icon:'🎉', cat:'gear', price:35, name:{en:'Party Hat', es:'Sombrero de Fiesta'}},
+  {id:'sweater', icon:'🧶', cat:'gear', price:45, name:{en:'Sweater', es:'Suéter'}},
+  {id:'booties', icon:'👢', cat:'gear', price:40, name:{en:'Booties', es:'Botitas'}},
+  {id:'petcape', icon:'🦸', cat:'gear', price:60, name:{en:'Cape', es:'Capa'}},
+  {id:'cozybed', icon:'🛏️', cat:'home', price:80, name:{en:'Cozy Bed', es:'Cama Acogedora'}},
+  {id:'deluxeden', icon:'🏠', cat:'home', price:150, name:{en:'Deluxe Den', es:'Guarida de Lujo'}},
+  {id:'cloudpillow', icon:'☁️', cat:'home', price:100, name:{en:'Cloud Pillow', es:'Almohada de Nube'}}
+];
+const PET_TREATS = {
+  dog: [
+    {id:'bacon', icon:'🥓', price:15, name:{en:'Bacon Bites', es:'Bocaditos de Tocino'}},
+    {id:'squeaky', icon:'🧸', price:20, name:{en:'Squeaky Toy', es:'Juguete que Suena'}},
+    {id:'pbbone', icon:'🦴', price:25, name:{en:'Peanut Butter Bone', es:'Hueso de Cacahuate'}}
+  ],
+  cat: [
+    {id:'tuna', icon:'🐟', price:15, name:{en:'Tuna Treat', es:'Botana de Atún'}},
+    {id:'catnip', icon:'🧶', price:20, name:{en:'Catnip Toy', es:'Juguete de Hierba Gatera'}},
+    {id:'yarn', icon:'🧵', price:18, name:{en:'Yarn Ball', es:'Bola de Estambre'}}
+  ],
+  dragon: [
+    {id:'fireberry', icon:'🔥', price:15, name:{en:'Fireberries', es:'Bayas de Fuego'}},
+    {id:'gemsnack', icon:'💎', price:25, name:{en:'Crystal Gem Snack', es:'Botana de Cristal'}},
+    {id:'goldenegg', icon:'🥚', price:30, name:{en:'Golden Egg Treat', es:'Huevo Dorado'}}
+  ]
+};
+const PET_CATS = [
+  {id:'gear', en:'Gear', es:'Accesorios'},
+  {id:'treats', en:'Treats', es:'Golosinas'},
+  {id:'home', en:'Home', es:'Hogar'}
+];
+
+/* ---- Shop entry chime, synthesized (no audio file needed) ---- */
+function playShopChime(){
+  try{
+    const AC = window.AudioContext || window.webkitAudioContext;
+    if(!AC) return;
+    const ctx = new AC();
+    const notes = [660, 880];
+    notes.forEach((freq, i)=>{
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.value = freq;
+      gain.gain.setValueAtTime(0.001, ctx.currentTime + i*0.12);
+      gain.gain.linearRampToValueAtTime(0.15, ctx.currentTime + i*0.12 + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i*0.12 + 0.35);
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.start(ctx.currentTime + i*0.12);
+      osc.stop(ctx.currentTime + i*0.12 + 0.4);
+    });
+  }catch(e){ /* audio unavailable, continue silently */ }
+}
+
 /* ============================================================
    LANGUAGE / i18n
    ============================================================ */
@@ -486,7 +750,11 @@ const STRINGS = {
     correctStat:'Correct', bonesStat:'Bones', xpStat:'XP', of:'of', qLabel:'Q',
     spiderTitle:'Ask Webster for help!',
     langToggle:'ES 🇲🇽',
-    session:'This Session', allTime:'All-Time', close:'Close'
+    session:'This Session', allTime:'All-Time', close:'Close',
+    chooseCompanion:'Choose Your Companion!', chooseCompanionSub:"This year's starters — pick who joins your adventure!",
+    confirmCompanion:'Choose', customizeAvatar:'Customize Me!', skinTone:'Skin Tone', eyeColor:'Eye Color', hairStyle:'Hair Style',
+    saveAvatar:'Save & Continue', closet:'Closet', petShop:'Pet Shop', buy:'Buy', equip:'Equip', unequip:'Unequip',
+    owned:'Owned', equipped:'Equipped', notEnough:"You need more!", welcomeShop:'Welcome to the shop!'
   },
   es:{
     chooseWorld:'¡Elige tu mundo, Sofia! 🐾',
@@ -496,7 +764,11 @@ const STRINGS = {
     correctStat:'Correctas', bonesStat:'Huesitos', xpStat:'XP', of:'de', qLabel:'P',
     spiderTitle:'¡Pregúntale a Webster!',
     langToggle:'EN 🇺🇸',
-    session:'Esta Sesión', allTime:'Tiempo Total', close:'Cerrar'
+    session:'Esta Sesión', allTime:'Tiempo Total', close:'Cerrar',
+    chooseCompanion:'¡Elige a tu Compañero!', chooseCompanionSub:'Los iniciales de este año — ¡elige quién se une a tu aventura!',
+    confirmCompanion:'Elegir', customizeAvatar:'¡Personalízame!', skinTone:'Tono de Piel', eyeColor:'Color de Ojos', hairStyle:'Peinado',
+    saveAvatar:'Guardar y Continuar', closet:'Clóset', petShop:'Tienda de Mascotas', buy:'Comprar', equip:'Usar', unequip:'Quitar',
+    owned:'Comprado', equipped:'Puesto', notEnough:'¡Necesitas más!', welcomeShop:'¡Bienvenida a la tienda!'
   }
 };
 function L(key){ return STRINGS[LANG][key]; }const TOPIC_I18N = {
@@ -1050,15 +1322,21 @@ const READING_LINKS = {
    STATE
    ============================================================ */
 let state = {
-  screen:'loading', // loading | hub | examples | game | summary | reading-list | reading-story | reading-quiz | reading-summary | profiles
-  profileName:'Sofia Villarreal Castañeda', level:1, xp:0, coins:0,
+  screen:'loading', // loading | hub | examples | game | summary | reading-list | reading-story | reading-quiz | reading-summary | profiles | companion-select | avatar-customize | closet | pet-shop
+  profileName:'Sofia Villarreal Castañeda', level:1, xp:0, coins:0, crystals:0,
   bestStars:{}, // topicId -> stars
+  companionId:null, // null until first chosen
+  avatar:{skin:SKIN_TONES[1], eye:EYE_COLORS[0], hair:'short'},
+  ownedClosetItems:[], equippedClosetItems:[],
+  ownedPetItems:[], equippedPetItems:[],
   // in-round
   topicId:null, qIndex:0, correct:0, streak:0, roundCoins:0, roundXP:0,
   currentQ:null, answered:false, selected:null, plotPick:null,
   // reading
   storyId:null, storyQIndex:0, storyCorrect:0, storyAnswered:false, storySelected:null,
-  storyRoundCoins:0, storyRoundXP:0, readingCategory:'ocean'
+  storyRoundCoins:0, storyRoundXP:0, readingCategory:'ocean',
+  // shop UI
+  shopTab:'hats', petShopTab:'gear'
 };
 
 function levelFromXP(xp){ return Math.floor(xp/120)+1; }
@@ -1104,7 +1382,10 @@ function getProfileData(name){
 async function saveProgress(){
   try{
     localStorage.setItem('mathquest_profile_data_'+state.profileName, JSON.stringify({
-      xp:state.xp, coins:state.coins, bestStars:state.bestStars, totalSeconds:getTotalSeconds()
+      xp:state.xp, coins:state.coins, crystals:state.crystals, bestStars:state.bestStars, totalSeconds:getTotalSeconds(),
+      companionId:state.companionId, avatar:state.avatar,
+      ownedClosetItems:state.ownedClosetItems, equippedClosetItems:state.equippedClosetItems,
+      ownedPetItems:state.ownedPetItems, equippedPetItems:state.equippedPetItems
     }));
     localStorage.setItem('mathquest_lang', LANG);
     localStorage.setItem('mathquest_profile_active', state.profileName);
@@ -1125,8 +1406,12 @@ async function loadProgress(){
       localStorage.setItem('mathquest_profile_data_'+initialName, JSON.stringify({
         xp: legacy ? (legacy.xp||0) : 0,
         coins: legacy ? (legacy.coins||0) : 0,
+        crystals: 0,
         bestStars: legacy ? (legacy.bestStars||{}) : {},
-        totalSeconds: legacy ? (legacy.totalSeconds||0) : 0
+        totalSeconds: legacy ? (legacy.totalSeconds||0) : 0,
+        companionId: 'dog', // Sofia's existing progress carries forward as Wow Wow, her real plushie
+        avatar: {skin:SKIN_TONES[1], eye:EYE_COLORS[0], hair:'short'},
+        ownedClosetItems: [], equippedClosetItems: [], ownedPetItems: [], equippedPetItems: []
       }));
       if(legacy && legacy.lang) localStorage.setItem('mathquest_lang', legacy.lang);
     }
@@ -1138,8 +1423,15 @@ async function loadProgress(){
     if(d){
       state.xp = d.xp || 0;
       state.coins = d.coins || 0;
+      state.crystals = d.crystals || 0;
       state.bestStars = d.bestStars || {};
       totalSecondsBase = d.totalSeconds || 0;
+      state.companionId = d.companionId || null;
+      state.avatar = d.avatar || {skin:SKIN_TONES[1], eye:EYE_COLORS[0], hair:'short'};
+      state.ownedClosetItems = d.ownedClosetItems || [];
+      state.equippedClosetItems = d.equippedClosetItems || [];
+      state.ownedPetItems = d.ownedPetItems || [];
+      state.equippedPetItems = d.equippedPetItems || [];
     }
   }catch(e){ /* no saved progress yet */ }
 }
@@ -1161,6 +1453,10 @@ function render(){
   if(state.screen==='reading-quiz'){ app.innerHTML = renderHUD() + renderReadingQuiz(); wireReadingQuiz(); wireHUD(); return; }
   if(state.screen==='reading-summary'){ app.innerHTML = renderHUD() + renderReadingSummary(); wireReadingSummary(); wireHUD(); return; }
   if(state.screen==='profiles'){ app.innerHTML = renderHUD() + renderProfiles(); wireProfiles(); wireHUD(); return; }
+  if(state.screen==='companion-select'){ app.innerHTML = renderCompanionSelect(); wireCompanionSelect(); return; }
+  if(state.screen==='avatar-customize'){ app.innerHTML = renderHUD() + renderAvatarCustomize(); wireAvatarCustomize(); wireHUD(); return; }
+  if(state.screen==='closet'){ app.innerHTML = renderHUD() + renderCloset(); wireCloset(); wireHUD(); return; }
+  if(state.screen==='pet-shop'){ app.innerHTML = renderHUD() + renderPetShop(); wirePetShop(); wireHUD(); return; }
   app.innerHTML = '<div class="center-screen"><div class="rocket-emoji">🐶</div></div>';
 }
 
@@ -1169,9 +1465,10 @@ function renderHUD(){
   const into = xpIntoLevel(state.xp);
   const pct = Math.round((into/120)*100);
   const lvlLabel = LANG==='en' ? `LVL ${lvl}` : `NIV ${lvl}`;
+  const companion = companionById(state.companionId || 'dog');
   return `
   <div id="hud">
-    <div class="avatar-badge" title="Wow Wow">${plushSVG()}</div>
+    <div class="avatar-badge" title="${esc(companion.name[LANG])}">${companion.svg()}</div>
     <div>
       <div class="hud-name">${esc(state.profileName)}</div>
       <span class="level-badge">${lvlLabel}</span>
@@ -1180,6 +1477,7 @@ function renderHUD(){
       <div class="xp-bar-bg"><div class="xp-bar-fill" style="width:${pct}%"></div></div>
     </div>
     <div class="coin-pill">🦴 ${state.coins}</div>
+    <div class="crystal-pill">💎 ${state.crystals}</div>
     <button class="lang-toggle" id="statsToggle" title="${LANG==='en'?'Time played':'Tiempo jugado'}">⏱️</button>
     <button class="lang-toggle" id="langToggle">${L('langToggle')}</button>
   </div>`;
@@ -1189,6 +1487,34 @@ function wireHUD(){
   if(btn) btn.addEventListener('click', toggleLanguage);
   const stBtn = document.getElementById('statsToggle');
   if(stBtn) stBtn.addEventListener('click', toggleStatsPanel);
+}
+
+/* ============================================================
+   COMPANION SELECT — first login per profile; 3 starters this year
+   ============================================================ */
+function renderCompanionSelect(){
+  const cards = COMPANIONS.map(c=>`
+    <div class="companion-card" data-companion="${c.id}">
+      ${c.svg()}
+      <h4>${c.icon} ${c.name[LANG]}</h4>
+      <p>${c.desc[LANG]}</p>
+    </div>`).join('');
+  return `
+  <div class="center-screen">
+    <h1 class="title-hero blocky-text" style="font-size:30px;">${L('chooseCompanion')}</h1>
+    <p class="subtitle-hero">${L('chooseCompanionSub')}</p>
+    <div class="companion-grid" style="max-width:520px;">${cards}</div>
+  </div>`;
+}
+function wireCompanionSelect(){
+  document.querySelectorAll('[data-companion]').forEach(card=>{
+    card.addEventListener('click', async ()=>{
+      state.companionId = card.getAttribute('data-companion');
+      await saveProgress();
+      state.screen = 'hub';
+      render();
+    });
+  });
 }
 let statsInterval = null;
 function closeStatsPanel(){
@@ -1247,17 +1573,21 @@ function renderHub(){
       </div>
     </div>`;
   }).join('');
+  const companion = companionById(state.companionId || 'dog');
   return `
   <div class="hub-header">
     <div class="hub-header-inner">
-      <div class="plush-hero">${plushSVG()}</div>
+      <div class="plush-hero">${companion.svg()}</div>
       <div>
         <h2 class="blocky-text">${L('chooseWorld')}</h2>
         <p>${L('chooseWorldSub')}</p>
       </div>
     </div>
-    <div style="margin-top:14px;">
+    <div style="margin-top:14px; display:flex; gap:10px; flex-wrap:wrap;">
       <button class="chunky c-gold" id="profilesBtn">🏆 ${LANG==='en'?'Compete with Friends':'Compite con Amigas'}</button>
+      <button class="chunky c-purple" id="closetBtn">🚪 ${L('closet')}</button>
+      <button class="chunky c-coral" id="petShopBtn">${companion.icon} ${L('petShop')}</button>
+      <button class="chunky c-blue" id="avatarBtn">🧑 ${L('customizeAvatar')}</button>
     </div>
   </div>
   <div class="tile-grid">${tiles}</div>`;
@@ -1276,6 +1606,12 @@ function wireHub(){
   });
   const profilesBtn = document.getElementById('profilesBtn');
   if(profilesBtn) profilesBtn.addEventListener('click', ()=>{ state.screen='profiles'; render(); });
+  const closetBtn = document.getElementById('closetBtn');
+  if(closetBtn) closetBtn.addEventListener('click', ()=>{ playShopChime(); state.screen='closet'; render(); });
+  const petShopBtn = document.getElementById('petShopBtn');
+  if(petShopBtn) petShopBtn.addEventListener('click', ()=>{ playShopChime(); state.screen='pet-shop'; render(); });
+  const avatarBtn = document.getElementById('avatarBtn');
+  if(avatarBtn) avatarBtn.addEventListener('click', ()=>{ state.screen='avatar-customize'; render(); });
 }
 
 /* ---------- Examples screen ---------- */
@@ -1435,9 +1771,19 @@ function renderGame(){
 }
 
 function pickPraise(){
-  const opts = LANG==='en'
-    ? ['¡Wow wow! Wow Wow is so proud! 🐶','Correct! Wow Wow does a happy spin! 🐾','Nice work! 🎉','Yes! Perfect. ⭐','Fetch! Got it! 🎾','Webster approves! 🕸️']
-    : ['¡Wow wow! ¡Wow Wow está muy orgulloso! 🐶','¡Correcto! ¡Wow Wow da vueltas de alegría! 🐾','¡Buen trabajo! 🎉','¡Sí! Perfecto. ⭐','¡A buscarla! ¡La tienes! 🎾','¡Webster lo aprueba! 🕸️'];
+  const companion = companionById(state.companionId || 'dog');
+  const generic = LANG==='en'
+    ? ['Nice work! 🎉','Yes! Perfect. ⭐','Webster approves! 🕸️']
+    : ['¡Buen trabajo! 🎉','¡Sí! Perfecto. ⭐','¡Webster lo aprueba! 🕸️'];
+  const byCompanion = {
+    dog: LANG==='en' ? ['¡Wow wow! Wow Wow is so proud! 🐶','Correct! Wow Wow does a happy spin! 🐾','Fetch! Got it! 🎾']
+                      : ['¡Wow wow! ¡Wow Wow está muy orgulloso! 🐶','¡Correcto! ¡Wow Wow da vueltas de alegría! 🐾','¡A buscarla! ¡La tienes! 🎾'],
+    cat: LANG==='en' ? ['Meow-velous! Miso purrs happily! 🐱','Purrfect answer! 🐾','Miso does a happy pounce! 🎉']
+                      : ['¡Miau-nífico! ¡Miso ronronea feliz! 🐱','¡Respuesta purrfecta! 🐾','¡Miso da un salto feliz! 🎉'],
+    dragon: LANG==='en' ? ['Rawr-some! Ember breathes a tiny spark! 🐲','Ember does a happy wing flap! 🔥','Blazing correct! 🔥']
+                        : ['¡Rugi-increíble! ¡Ember sopla una chispita! 🐲','¡Ember agita las alitas feliz! 🔥','¡Correcto y ardiente! 🔥']
+  };
+  const opts = [...generic, ...(byCompanion[companion.id]||[])];
   return opts[randInt(0,opts.length-1)];
 }
 
@@ -1487,7 +1833,9 @@ function answerQuestion(isCorrect, evt){
     const bonus = Math.min(state.streak*2, 20);
     const coinsGained = 10 + bonus;
     const xpGained = 15;
+    const crystalsGained = 2;
     state.coins += coinsGained;
+    state.crystals += crystalsGained;
     state.roundCoins += coinsGained;
     state.roundXP += xpGained;
     const prevLevel = levelFromXP(state.xp);
@@ -1721,8 +2069,9 @@ function answerStoryQuestion(isCorrect){
   state.storyAnswered = true;
   if(isCorrect){
     state.storyCorrect++;
-    const coinsGained = 10, xpGained = 15;
+    const coinsGained = 10, xpGained = 15, crystalsGained = 2;
     state.coins += coinsGained; state.storyRoundCoins += coinsGained;
+    state.crystals += crystalsGained;
     state.xp += xpGained; state.storyRoundXP += xpGained;
   } else {
     state.coins += 2; state.storyRoundCoins += 2;
@@ -1859,12 +2208,18 @@ function wireProfiles(){
 async function switchProfile(name){
   await saveProgress();
   state.profileName = name;
-  const d = getProfileData(name) || {xp:0,coins:0,bestStars:{},totalSeconds:0};
-  state.xp = d.xp||0; state.coins = d.coins||0; state.bestStars = d.bestStars||{};
+  const d = getProfileData(name) || {xp:0,coins:0,crystals:0,bestStars:{},totalSeconds:0,companionId:null,avatar:null,ownedClosetItems:[],equippedClosetItems:[],ownedPetItems:[],equippedPetItems:[]};
+  state.xp = d.xp||0; state.coins = d.coins||0; state.crystals = d.crystals||0; state.bestStars = d.bestStars||{};
   totalSecondsBase = d.totalSeconds||0;
+  state.companionId = d.companionId || null;
+  state.avatar = d.avatar || {skin:SKIN_TONES[1], eye:EYE_COLORS[0], hair:'short'};
+  state.ownedClosetItems = d.ownedClosetItems || [];
+  state.equippedClosetItems = d.equippedClosetItems || [];
+  state.ownedPetItems = d.ownedPetItems || [];
+  state.equippedPetItems = d.equippedPetItems || [];
   sessionStartTs = Date.now();
   try{ localStorage.setItem('mathquest_profile_active', name); }catch(e){}
-  state.screen = 'hub';
+  state.screen = state.companionId ? 'hub' : 'companion-select';
   render();
 }
 async function addProfile(name){
@@ -1873,8 +2228,216 @@ async function addProfile(name){
   if(list.length >= MAX_PROFILES) return;
   list.push(name);
   saveProfileList(list);
-  try{ localStorage.setItem('mathquest_profile_data_'+name, JSON.stringify({xp:0,coins:0,bestStars:{},totalSeconds:0})); }catch(e){}
+  try{ localStorage.setItem('mathquest_profile_data_'+name, JSON.stringify({
+    xp:0,coins:0,crystals:0,bestStars:{},totalSeconds:0,companionId:null,
+    avatar:{skin:SKIN_TONES[1],eye:EYE_COLORS[0],hair:'short'},
+    ownedClosetItems:[],equippedClosetItems:[],ownedPetItems:[],equippedPetItems:[]
+  })); }catch(e){}
   await switchProfile(name);
+}
+
+/* ============================================================
+   AVATAR CUSTOMIZER — free skin tone, eye color, hair style
+   ============================================================ */
+function renderAvatarCustomize(){
+  const a = state.avatar;
+  const skinSwatches = SKIN_TONES.map(c=>`<div class="swatch ${a.skin===c?'selected':''}" data-skin="${c}" style="background:${c};"></div>`).join('');
+  const eyeSwatches = EYE_COLORS.map(c=>`<div class="swatch ${a.eye===c?'selected':''}" data-eye="${c}" style="background:${c};"></div>`).join('');
+  const hairOpts = HAIR_STYLES.map(h=>`<div class="hair-option ${a.hair===h.id?'selected':''}" data-hair="${h.id}">${h[LANG]}</div>`).join('');
+  return `
+  <div class="example-wrap">
+    <div class="game-topbar"><button class="back-link" id="backBtn">${L('backHub')}</button></div>
+    <div class="story-reader" style="text-align:center;">
+      <h2 class="blocky-text" style="color:var(--ink); text-shadow:none;">${L('customizeAvatar')}</h2>
+      <div class="avatar-preview" id="avatarPreview">${avatarSVG(a.skin, a.eye, a.hair)}</div>
+      <div class="customizer-label">${L('skinTone')}</div>
+      <div class="swatch-row">${skinSwatches}</div>
+      <div class="customizer-label">${L('eyeColor')}</div>
+      <div class="swatch-row">${eyeSwatches}</div>
+      <div class="customizer-label">${L('hairStyle')}</div>
+      <div class="hair-row">${hairOpts}</div>
+      <button class="chunky c-purple" id="saveAvatarBtn" style="margin-top:10px;">${L('saveAvatar')}</button>
+    </div>
+  </div>`;
+}
+function wireAvatarCustomize(){
+  document.getElementById('backBtn').addEventListener('click', ()=>{ state.screen='hub'; render(); });
+  function refreshPreview(){
+    document.getElementById('avatarPreview').innerHTML = avatarSVG(state.avatar.skin, state.avatar.eye, state.avatar.hair);
+  }
+  document.querySelectorAll('[data-skin]').forEach(el=>{
+    el.addEventListener('click', ()=>{ state.avatar.skin = el.getAttribute('data-skin'); render(); });
+  });
+  document.querySelectorAll('[data-eye]').forEach(el=>{
+    el.addEventListener('click', ()=>{ state.avatar.eye = el.getAttribute('data-eye'); render(); });
+  });
+  document.querySelectorAll('[data-hair]').forEach(el=>{
+    el.addEventListener('click', ()=>{ state.avatar.hair = el.getAttribute('data-hair'); render(); });
+  });
+  document.getElementById('saveAvatarBtn').addEventListener('click', async ()=>{
+    await saveProgress();
+    state.screen = 'hub';
+    render();
+  });
+}
+
+/* ============================================================
+   CLOSET SHOP — avatar accessories, bought with Bones
+   ============================================================ */
+function renderCloset(){
+  const cats = CLOSET_CATS.map(c=>`<button class="shop-tab ${state.shopTab===c.id?'active':''}" data-shoptab="${c.id}">${c[LANG]}</button>`).join('');
+  const items = CLOSET_ITEMS.filter(i=>i.cat===state.shopTab).map(i=>{
+    const owned = state.ownedClosetItems.includes(i.id);
+    const equipped = state.equippedClosetItems.includes(i.id);
+    const cls = equipped ? 'shop-item equipped' : (owned ? 'shop-item owned' : 'shop-item');
+    const status = equipped ? L('equipped') : (owned ? L('owned') : `🦴 ${i.price}`);
+    return `<div class="${cls}" data-closetitem="${i.id}">
+      <div class="item-icon">${i.icon}</div>
+      <div class="item-name">${i.name[LANG]}</div>
+      <div class="item-price">${status}</div>
+    </div>`;
+  }).join('');
+  return `
+  <div class="example-wrap">
+    <div class="game-topbar"><button class="back-link" id="backBtn">${L('backHub')}</button></div>
+    <div class="shop-header">
+      <div class="shop-icon">🚪👗</div>
+      <h2 class="blocky-text" style="font-size:24px;">${L('closet')}</h2>
+      <div class="coin-pill" style="display:inline-flex; margin-top:6px;">🦴 ${state.coins}</div>
+    </div>
+    <div class="shop-bg">
+      <div class="shop-tabs">${cats}</div>
+      <div class="item-grid">${items}</div>
+    </div>
+  </div>`;
+}
+function wireCloset(){
+  document.getElementById('backBtn').addEventListener('click', ()=>{ state.screen='hub'; render(); });
+  document.querySelectorAll('[data-shoptab]').forEach(el=>{
+    el.addEventListener('click', ()=>{ state.shopTab = el.getAttribute('data-shoptab'); render(); });
+  });
+  document.querySelectorAll('[data-closetitem]').forEach(el=>{
+    el.addEventListener('click', ()=>{ handleClosetItemClick(el.getAttribute('data-closetitem')); });
+  });
+}
+async function handleClosetItemClick(itemId){
+  const item = CLOSET_ITEMS.find(i=>i.id===itemId);
+  if(!item) return;
+  const owned = state.ownedClosetItems.includes(itemId);
+  if(!owned){
+    if(state.coins < item.price){
+      flashShopMessage(L('notEnough'));
+      return;
+    }
+    state.coins -= item.price;
+    state.ownedClosetItems.push(itemId);
+    await saveProgress();
+    render();
+    return;
+  }
+  // toggle equip (one item per category at a time)
+  const sameCatOwned = CLOSET_ITEMS.filter(i=>i.cat===item.cat).map(i=>i.id);
+  if(state.equippedClosetItems.includes(itemId)){
+    state.equippedClosetItems = state.equippedClosetItems.filter(id=>id!==itemId);
+  } else {
+    state.equippedClosetItems = state.equippedClosetItems.filter(id=>!sameCatOwned.includes(id));
+    state.equippedClosetItems.push(itemId);
+  }
+  await saveProgress();
+  render();
+}
+function flashShopMessage(msg){
+  const existing = document.getElementById('shopMsgEl');
+  if(existing) existing.remove();
+  const t = document.createElement('div');
+  t.id = 'shopMsgEl';
+  t.className = 'levelup-toast';
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(()=>t.remove(), 1800);
+}
+
+/* ============================================================
+   PET SHOP — pet gear, home items, and companion-flavored treats,
+   bought with Crystals
+   ============================================================ */
+function renderPetShop(){
+  const companion = companionById(state.companionId || 'dog');
+  const treats = PET_TREATS[companion.id] || [];
+  const cats = PET_CATS.map(c=>`<button class="shop-tab ${state.petShopTab===c.id?'active':''}" data-petshoptab="${c.id}">${c[LANG]}</button>`).join('');
+  let itemsSource;
+  if(state.petShopTab==='treats') itemsSource = treats;
+  else itemsSource = PET_ITEMS.filter(i=>i.cat===state.petShopTab);
+  const items = itemsSource.map(i=>{
+    const owned = state.ownedPetItems.includes(i.id);
+    const equipped = state.equippedPetItems.includes(i.id);
+    const isTreat = state.petShopTab==='treats';
+    const cls = equipped ? 'shop-item equipped' : (owned ? 'shop-item owned' : 'shop-item');
+    let status;
+    if(isTreat) status = `💎 ${i.price}`;
+    else status = equipped ? L('equipped') : (owned ? L('owned') : `💎 ${i.price}`);
+    return `<div class="${cls}" data-petitem="${i.id}" data-istreat="${isTreat?'1':'0'}">
+      <div class="item-icon">${i.icon}</div>
+      <div class="item-name">${i.name[LANG]}</div>
+      <div class="item-price">${status}</div>
+    </div>`;
+  }).join('');
+  return `
+  <div class="example-wrap">
+    <div class="game-topbar"><button class="back-link" id="backBtn">${L('backHub')}</button></div>
+    <div class="shop-header">
+      <div class="shop-icon">${companion.icon}🛍️</div>
+      <h2 class="blocky-text" style="font-size:24px;">${L('petShop')}</h2>
+      <div class="crystal-pill" style="display:inline-flex; margin-top:6px;">💎 ${state.crystals}</div>
+    </div>
+    <div class="shop-bg">
+      <div class="shop-tabs">${cats}</div>
+      <div class="item-grid">${items}</div>
+    </div>
+  </div>`;
+}
+function wirePetShop(){
+  document.getElementById('backBtn').addEventListener('click', ()=>{ state.screen='hub'; render(); });
+  document.querySelectorAll('[data-petshoptab]').forEach(el=>{
+    el.addEventListener('click', ()=>{ state.petShopTab = el.getAttribute('data-petshoptab'); render(); });
+  });
+  document.querySelectorAll('[data-petitem]').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      handlePetItemClick(el.getAttribute('data-petitem'), el.getAttribute('data-istreat')==='1');
+    });
+  });
+}
+async function handlePetItemClick(itemId, isTreat){
+  const companion = companionById(state.companionId || 'dog');
+  if(isTreat){
+    const treat = (PET_TREATS[companion.id]||[]).find(i=>i.id===itemId);
+    if(!treat) return;
+    if(state.crystals < treat.price){ flashShopMessage(L('notEnough')); return; }
+    state.crystals -= treat.price;
+    await saveProgress();
+    flashShopMessage(LANG==='en' ? `${companion.name.en} loved that treat! 💕` : `¡A ${companion.name.es} le encantó! 💕`);
+    return;
+  }
+  const item = PET_ITEMS.find(i=>i.id===itemId);
+  if(!item) return;
+  const owned = state.ownedPetItems.includes(itemId);
+  if(!owned){
+    if(state.crystals < item.price){ flashShopMessage(L('notEnough')); return; }
+    state.crystals -= item.price;
+    state.ownedPetItems.push(itemId);
+    await saveProgress();
+    render();
+    return;
+  }
+  const sameCatOwned = PET_ITEMS.filter(i=>i.cat===item.cat).map(i=>i.id);
+  if(state.equippedPetItems.includes(itemId)){
+    state.equippedPetItems = state.equippedPetItems.filter(id=>id!==itemId);
+  } else {
+    state.equippedPetItems = state.equippedPetItems.filter(id=>!sameCatOwned.includes(id));
+    state.equippedPetItems.push(itemId);
+  }
+  await saveProgress();
+  render();
 }
 
 /* ============================================================
@@ -2030,7 +2593,7 @@ function createDadBot(){
    ============================================================ */
 (async function init(){
   await loadProgress();
-  state.screen = 'hub';
+  state.screen = state.companionId ? 'hub' : 'companion-select';
   render();
   createWebsterBot();
   createDadBot();
