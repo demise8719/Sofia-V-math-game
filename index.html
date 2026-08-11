@@ -392,7 +392,7 @@ button{font-family:inherit;}
 
 /* ---------- Avatar customizer ---------- */
 .avatar-preview{display:flex; justify-content:center; margin:16px 0;}
-.avatar-preview svg{width:130px; height:130px;}
+.avatar-preview svg{width:130px; height:238px;}
 .swatch-row{display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin-bottom:18px;}
 .swatch{
   width:38px; height:38px; border-radius:50%; cursor:pointer; border:3px solid transparent;
@@ -484,7 +484,21 @@ function mcQuestionInt(prompt, answer, spread){
 /* ============================================================
    GOLDEN RETRIEVER PLUSH (Wow Wow) ILLUSTRATION
    ============================================================ */
-function plushSVG(){
+function plushSVG(stage){
+  stage = stage || 0;
+  const worn = stage >= 2; // torn nose + unsewn neck appear as he grows, like the real plushie
+  const veryWorn = stage >= 3;
+  // Nose: clean oval when young; torn/notched edge once worn, showing a little dark stitched gap
+  const nose = worn
+    ? `<path d="M74 66 Q 73 71 76 73 Q 80 75 84 72 Q 87 69 85 65 Q 82 63 78 64 Q 75 64 74 66 Z" fill="#2B2320"/>
+       <path d="M84 68 L 88 70 M85 71 L 89 74" stroke="#1A1512" stroke-width="1.2" stroke-linecap="round"/>`
+    : `<ellipse cx="80" cy="68" rx="7" ry="5" fill="#4A3200"/>`;
+  // Neck seam: normal stitched dashed line when young; a small unsewn gap with peeking white stuffing once worn
+  const neckSeam = worn
+    ? `<path d="M42 100 A 44 26 0 0 1 84 99" stroke="#D89A2E" stroke-width="1.5" fill="none" stroke-dasharray="3 4" opacity="0.5"/>
+       <path d="M84 99 Q 92 103 98 100" stroke="#8A6420" stroke-width="1.3" fill="none" stroke-dasharray="2 2" opacity="0.7"/>
+       <ellipse cx="91" cy="101" rx="6" ry="4" fill="#FFF8ED" opacity="${veryWorn?0.95:0.7}"/>`
+    : `<path d="M42 100 A 44 26 0 0 1 118 100" stroke="#D89A2E" stroke-width="1.5" fill="none" stroke-dasharray="3 4" opacity="0.5"/>`;
   return `<svg viewBox="0 0 160 150" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Wow Wow the golden retriever plush">
     <ellipse cx="80" cy="118" rx="44" ry="26" fill="#D89A2E"/>
     <ellipse cx="80" cy="112" rx="44" ry="26" fill="#F2B84B"/>
@@ -495,7 +509,7 @@ function plushSVG(){
     <path d="M114 40 C 134 44, 138 68, 126 82 C 120 70, 116 55, 108 46 Z" fill="#D89A2E"/>
     <circle cx="80" cy="60" r="38" fill="#F2B84B"/>
     <ellipse cx="80" cy="76" rx="19" ry="13" fill="#FBE3A9"/>
-    <ellipse cx="80" cy="68" rx="7" ry="5" fill="#4A3200"/>
+    ${nose}
     <path d="M80 73 Q 80 82 72 84" stroke="#4A3200" stroke-width="2.5" fill="none" stroke-linecap="round"/>
     <path d="M80 73 Q 80 82 88 84" stroke="#4A3200" stroke-width="2.5" fill="none" stroke-linecap="round"/>
     <path d="M70 88 Q 76 94 82 88" stroke="#FF8FA8" stroke-width="6" fill="none" stroke-linecap="round"/>
@@ -504,7 +518,7 @@ function plushSVG(){
     <circle cx="63" cy="52" r="1.6" fill="#fff"/>
     <circle cx="93" cy="52" r="1.6" fill="#fff"/>
     <path d="M55 78 A 38 38 0 0 1 105 78" stroke="#D89A2E" stroke-width="1.5" fill="none" stroke-dasharray="3 4" opacity="0.6"/>
-    <path d="M42 100 A 44 26 0 0 1 118 100" stroke="#D89A2E" stroke-width="1.5" fill="none" stroke-dasharray="3 4" opacity="0.5"/>
+    ${neckSeam}
     <circle cx="80" cy="98" r="10" fill="#FF5DA2" stroke="#fff" stroke-width="2"/>
     <text x="80" y="102" font-family="Baloo 2, sans-serif" font-size="9" font-weight="800" fill="#fff" text-anchor="middle">WW</text>
   </svg>`;
@@ -594,43 +608,92 @@ function dragonSVG(){
 }
 
 /* ---- Simple customizable avatar face ---- */
-function avatarSVG(skin, eye, hair){
+function avatarSVG(skin, eye, hair, equippedItems){
   skin = skin || '#F1C27D';
   eye = eye || '#6B4423';
-  hair = hair || 'short';
-  let hairShape = '';
+  hair = hair || 'longwavy';
+  equippedItems = equippedItems || [];
+  let hairBack = ''; // rendered behind the head (long hair flowing past shoulders)
+  let hairFront = ''; // rendered on top of the head
   const hc = '#4A3222';
+  const cap = `<path d="M18 55 Q 20 12 60 12 Q 100 12 102 55 Q 90 40 60 40 Q 30 40 18 55 Z" fill="${hc}"/>`;
+
   if(hair==='short'){
-    hairShape = `<path d="M18 55 Q 20 12 60 12 Q 100 12 102 55 Q 90 40 60 40 Q 30 40 18 55 Z" fill="${hc}"/>`;
-  } else if(hair==='ponytail'){
-    hairShape = `<path d="M18 55 Q 20 12 60 12 Q 100 12 102 55 Q 90 40 60 40 Q 30 40 18 55 Z" fill="${hc}"/>
-      <path d="M100 40 Q 118 46 112 78 Q 104 60 96 44 Z" fill="${hc}"/>`;
+    hairFront = cap;
   } else if(hair==='pigtails'){
-    hairShape = `<path d="M18 55 Q 20 12 60 12 Q 100 12 102 55 Q 90 40 60 40 Q 30 40 18 55 Z" fill="${hc}"/>
-      <circle cx="18" cy="60" r="12" fill="${hc}"/><circle cx="102" cy="60" r="12" fill="${hc}"/>`;
-  } else if(hair==='curly'){
-    hairShape = `<circle cx="30" cy="30" r="14" fill="${hc}"/><circle cx="50" cy="18" r="15" fill="${hc}"/>
+    hairFront = cap + `<circle cx="18" cy="60" r="12" fill="${hc}"/><circle cx="102" cy="60" r="12" fill="${hc}"/>`;
+  } else if(hair==='longstraight'){
+    hairBack = `<path d="M18 50 Q 8 105 15 158 L 33 158 Q 27 105 34 55 Z" fill="${hc}"/>
+      <path d="M102 50 Q 112 105 105 158 L 87 158 Q 93 105 86 55 Z" fill="${hc}"/>`;
+    hairFront = cap;
+  } else if(hair==='longwavy'){
+    hairBack = `<path d="M17 50 Q 6 95 13 130 Q 20 140 27 130 Q 32 142 38 130 L 35 55 Z" fill="${hc}"/>
+      <path d="M103 50 Q 114 95 107 130 Q 100 140 93 130 Q 88 142 82 130 L 85 55 Z" fill="${hc}"/>`;
+    hairFront = cap;
+  } else if(hair==='ponytailhigh'){
+    hairBack = `<path d="M96 26 Q 122 30 116 70 Q 108 100 100 120 Q 96 90 92 60 Z" fill="${hc}"/>`;
+    hairFront = cap;
+  } else if(hair==='braid'){
+    hairBack = `<ellipse cx="100" cy="68" rx="10" ry="14" fill="${hc}"/><ellipse cx="103" cy="92" rx="9" ry="13" fill="${hc}"/>
+      <ellipse cx="100" cy="115" rx="8.5" ry="12" fill="${hc}"/><ellipse cx="97" cy="137" rx="7.5" ry="11" fill="${hc}"/>
+      <ellipse cx="96" cy="156" rx="6.5" ry="9" fill="${hc}"/>`;
+    hairFront = cap;
+  } else if(hair==='buns'){
+    hairFront = cap + `<circle cx="34" cy="18" r="12" fill="${hc}"/><circle cx="86" cy="18" r="12" fill="${hc}"/>`;
+  } else if(hair==='curlylong'){
+    hairBack = `<circle cx="20" cy="80" r="13" fill="${hc}"/><circle cx="18" cy="108" r="12" fill="${hc}"/><circle cx="22" cy="134" r="10" fill="${hc}"/>
+      <circle cx="100" cy="80" r="13" fill="${hc}"/><circle cx="102" cy="108" r="12" fill="${hc}"/><circle cx="98" cy="134" r="10" fill="${hc}"/>`;
+    hairFront = `<circle cx="30" cy="30" r="14" fill="${hc}"/><circle cx="50" cy="18" r="15" fill="${hc}"/>
       <circle cx="70" cy="18" r="15" fill="${hc}"/><circle cx="90" cy="30" r="14" fill="${hc}"/>
       <circle cx="60" cy="14" r="13" fill="${hc}"/>`;
   }
-  return `<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Sofia's avatar">
+  const bodyShirt = `<path d="M28 145 Q 60 132 92 145 L 100 205 Q 60 218 20 205 Z" fill="#B8A5E8" stroke="#9B85D6" stroke-width="2"/>`;
+  const overlays = equippedItems.map(id=>renderCatalogOverlay(id, CLOSET_ITEMS, AVATAR_ITEM_POSITIONS)).join('');
+  return `<svg viewBox="0 0 120 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Sofia's avatar">
+    ${hairBack}
+    ${bodyShirt}
     <circle cx="60" cy="68" r="44" fill="${skin}"/>
     <circle cx="44" cy="66" r="7" fill="${eye}"/>
     <circle cx="76" cy="66" r="7" fill="${eye}"/>
     <circle cx="42" cy="64" r="2" fill="#fff"/>
     <circle cx="74" cy="64" r="2" fill="#fff"/>
+    <g stroke="#3A2A1A" stroke-width="1.6" stroke-linecap="round">
+      <path d="M38 57 L 33 52"/><path d="M42 55 L 39 49"/><path d="M47 55 L 46 49"/>
+      <path d="M82 57 L 87 52"/><path d="M78 55 L 81 49"/><path d="M73 55 L 74 49"/>
+    </g>
     <path d="M48 88 Q 60 96 72 88" stroke="#8A5A3A" stroke-width="3" fill="none" stroke-linecap="round"/>
-    ${hairShape}
+    ${hairFront}
+    ${overlays}
   </svg>`;
+}
+
+/* ---- Visual equip overlays: equipped items render as positioned icons on the avatar/pet ---- */
+const AVATAR_ITEM_POSITIONS = {
+  _byCategory: {
+    hats:{x:60, y:8, size:36}, outfits:{x:60, y:178, size:46}, accessories:{x:60, y:148, size:26},
+    shoes:{x:60, y:213, size:24}, silly:{x:60, y:178, size:58}
+  },
+  sunglasses:{x:60, y:66, size:32}, headphones:{x:60, y:38, size:42}, backpack:{x:104, y:172, size:30},
+  bowtie:{x:60, y:148, size:22}, scarf:{x:60, y:150, size:28}, wand:{x:104, y:184, size:26}
+};
+function renderCatalogOverlay(itemId, catalog, positions){
+  const item = catalog.find(i=>i.id===itemId);
+  if(!item) return '';
+  const pos = positions[itemId] || positions._byCategory[item.cat] || positions._byCategory.accessories;
+  return `<text x="${pos.x}" y="${pos.y}" font-size="${pos.size}" text-anchor="middle" dominant-baseline="middle">${item.icon}</text>`;
 }
 
 const SKIN_TONES = ['#FFDBAC','#F1C27D','#E0AC69','#C68642','#8D5524','#4A2C17'];
 const EYE_COLORS = ['#6B4423','#4FC3F7','#6EE7A8','#A67C52','#8C97A8','#E8A33D'];
 const HAIR_STYLES = [
-  {id:'short', en:'Short', es:'Corto'},
-  {id:'ponytail', en:'Ponytail', es:'Coleta'},
+  {id:'longwavy', en:'Long Wavy', es:'Largo Ondulado'},
+  {id:'longstraight', en:'Long Straight', es:'Largo Liso'},
+  {id:'ponytailhigh', en:'High Ponytail', es:'Coleta Alta'},
+  {id:'braid', en:'Braid', es:'Trenza'},
+  {id:'buns', en:'Space Buns', es:'Chonguitos'},
   {id:'pigtails', en:'Pigtails', es:'Coletas'},
-  {id:'curly', en:'Curly', es:'Rizado'},
+  {id:'curlylong', en:'Long Curly', es:'Rizado Largo'},
+  {id:'short', en:'Short', es:'Corto'},
   {id:'none', en:'None', es:'Ninguno'}
 ];
 
@@ -643,6 +706,19 @@ const COMPANIONS = [
   {id:'dragon', icon:'🐲', svg:dragonSVG, name:{en:'Ember', es:'Ember'}, desc:{en:'A tiny dragon who loves math', es:'Un pequeño dragón que ama las matemáticas'}, treatIcon:'🔥', treatName:{en:'Fireberry', es:'Baya de Fuego'}}
 ];
 function companionById(id){ return COMPANIONS.find(c=>c.id===id) || COMPANIONS[0]; }
+
+/* ---- Growth stages: pets grow fast at first, then evolutions take longer ---- */
+const EVOLUTION_STAGES = [
+  {stage:0, minLevel:1, scale:0.68, en:'Baby', es:'Bebé'},
+  {stage:1, minLevel:2, scale:0.85, en:'Young', es:'Joven'},
+  {stage:2, minLevel:5, scale:1.0, en:'Junior', es:'Adolescente'},
+  {stage:3, minLevel:10, scale:1.15, en:'Grown', es:'Adulto'}
+];
+function getEvolutionStage(level){
+  let current = EVOLUTION_STAGES[0];
+  for(const s of EVOLUTION_STAGES){ if(level >= s.minLevel) current = s; }
+  return current;
+}
 
 /* ============================================================
    SHOP CATALOGS
@@ -671,13 +747,24 @@ const CLOSET_ITEMS = [
   {id:'skates', icon:'🛼', cat:'shoes', price:140, name:{en:'Roller Skates', es:'Patines'}},
   {id:'sandals', icon:'🩴', cat:'shoes', price:40, name:{en:'Sandals', es:'Sandalias'}},
   {id:'sparklyshoes', icon:'✨', cat:'shoes', price:180, name:{en:'Sparkly Shoes', es:'Zapatos Brillantes'}},
-  {id:'cleats', icon:'⚽', cat:'shoes', price:90, name:{en:'Soccer Cleats', es:'Tacos de Fútbol'}}
+  {id:'cleats', icon:'⚽', cat:'shoes', price:90, name:{en:'Soccer Cleats', es:'Tacos de Fútbol'}},
+  {id:'dinocostume', icon:'🦖', cat:'silly', price:180, name:{en:'Dinosaur Costume', es:'Disfraz de Dinosaurio'}},
+  {id:'rippedjeans', icon:'👖', cat:'silly', price:90, name:{en:'Ripped Jeans', es:'Jeans Rotos'}},
+  {id:'bananacostume', icon:'🍌', cat:'silly', price:100, name:{en:'Banana Costume', es:'Disfraz de Plátano'}},
+  {id:'hotdogcostume', icon:'🌭', cat:'silly', price:110, name:{en:'Hot Dog Costume', es:'Disfraz de Hot Dog'}},
+  {id:'unicornonesie', icon:'🦄', cat:'silly', price:160, name:{en:'Unicorn Onesie', es:'Pijama de Unicornio'}},
+  {id:'sharkonesie', icon:'🦈', cat:'silly', price:150, name:{en:'Shark Onesie', es:'Pijama de Tiburón'}},
+  {id:'watermelonhelmet', icon:'🍉', cat:'silly', price:70, name:{en:'Watermelon Helmet', es:'Casco de Sandía'}},
+  {id:'tacocostume', icon:'🌮', cat:'silly', price:120, name:{en:'Taco Costume', es:'Disfraz de Taco'}},
+  {id:'aliencostume', icon:'👽', cat:'silly', price:140, name:{en:'Alien Costume', es:'Disfraz de Alienígena'}},
+  {id:'pizzahat', icon:'🍕', cat:'silly', price:60, name:{en:'Pizza Slice Hat', es:'Sombrero de Pizza'}}
 ];
 const CLOSET_CATS = [
   {id:'hats', en:'Hats', es:'Sombreros'},
   {id:'outfits', en:'Outfits', es:'Trajes'},
   {id:'accessories', en:'Accessories', es:'Accesorios'},
-  {id:'shoes', en:'Shoes', es:'Zapatos'}
+  {id:'shoes', en:'Shoes', es:'Zapatos'},
+  {id:'silly', en:'Silly Stuff', es:'Cosas Chistosas'}
 ];
 const PET_ITEMS = [
   {id:'collar', icon:'🔵', cat:'gear', price:30, name:{en:'Collar', es:'Collar'}},
@@ -715,7 +802,146 @@ const PET_CATS = [
   {id:'home', en:'Home', es:'Hogar'}
 ];
 
-/* ---- Shop entry chime, synthesized (no audio file needed) ---- */
+/* ---- Visual equip overlays for pets: equipped gear renders as an icon on the pet ---- */
+const PET_ITEM_POSITIONS = {
+  _byCategory: { gear:{x:80, y:100, size:26} },
+  collar:{x:80, y:96, size:22}, bandana:{x:80, y:98, size:26}, bow:{x:64, y:40, size:20},
+  minibackpack:{x:118, y:88, size:26}, partyhat:{x:80, y:14, size:24}, sweater:{x:80, y:112, size:32},
+  booties:{x:80, y:136, size:20}, petcape:{x:104, y:88, size:30}
+};
+function withPetOverlays(svgString, equippedItemIds){
+  const visible = (equippedItemIds||[]).filter(id=>{
+    const item = PET_ITEMS.find(i=>i.id===id);
+    return item && item.cat !== 'home'; // home items (beds, dens) are collected, not worn
+  });
+  if(!visible.length) return svgString;
+  const overlays = visible.map(id=>renderCatalogOverlay(id, PET_ITEMS, PET_ITEM_POSITIONS)).join('');
+  return svgString.replace('</svg>', overlays + '</svg>');
+}
+
+/* ============================================================
+   SCIENCE VIDEOS — real, freely-embeddable educational videos;
+   watching one earns bones + crystals (once per video)
+   ============================================================ */
+const SCIENCE_VIDEOS = [
+  {id:'watercycle', youtubeId:'z5G4NCwWUxY', channel:'Crash Course Kids',
+    title:{en:'The Great Aqua Adventure', es:'La Gran Aventura del Agua'},
+    desc:{en:'Follow a water drop through evaporation, condensation, and precipitation — the same water cycle from the reading story!', es:'Sigue a una gota de agua por la evaporación, condensación y precipitación — ¡el mismo ciclo del agua del cuento de lectura!'}},
+  {id:'habitats', youtubeId:'p15IrEuhYmo', channel:'Crash Course Kids',
+    title:{en:'Home Sweet Habitat', es:'Hogar Dulce Hábitat'},
+    desc:{en:'What makes a habitat the right home for a plant or animal to survive?', es:'¿Qué hace que un hábitat sea el hogar adecuado para que una planta o animal sobreviva?'}},
+  {id:'foodchains', youtubeId:'MuKs9o1s8h8', channel:'Crash Course Kids',
+    title:{en:'Fabulous Food Chains', es:'Cadenas Alimenticias Fabulosas'},
+    desc:{en:'How energy travels from the sun, to plants, to the animals that eat them.', es:'Cómo viaja la energía del sol, a las plantas, y a los animales que se las comen.'}},
+  {id:'solarsystem', youtubeId:'r9divlhYjr0', channel:'SciShow',
+    title:{en:'The Solar System Explained', es:'El Sistema Solar Explicado'},
+    desc:{en:'A tour of the planets, moons, and other objects orbiting our sun.', es:'Un recorrido por los planetas, lunas y otros objetos que orbitan nuestro sol.'}}
+];
+const WATCH_UNLOCK_SECONDS = 20;
+let videoWatchInterval = null;
+
+function renderVideos(){
+  const cards = SCIENCE_VIDEOS.map(v=>{
+    const watched = state.watchedVideos.includes(v.id);
+    return `
+    <div class="story-card" data-video="${v.id}">
+      <div class="story-icon">📺</div>
+      <div class="story-info">
+        <h3>${v.title[LANG]}</h3>
+        <p>${v.desc[LANG]}</p>
+        <p style="margin-top:4px; font-size:11px; color:#9b8fc7;">${v.channel}${watched?(LANG==='en'?' · ✅ Watched':' · ✅ Visto'):''}</p>
+      </div>
+      <button class="chunky c-orange" data-video="${v.id}" style="padding:10px 16px; font-size:14px;">${LANG==='en'?'Watch':'Ver'}</button>
+    </div>`;
+  }).join('');
+  return `
+  <div class="example-wrap">
+    <div class="hub-header-inner" style="margin-bottom:16px;">
+      <div class="plush-hero" style="animation:none;"><div style="font-size:70px;">📺🔬</div></div>
+      <div>
+        <h2 class="blocky-text" style="font-size:24px; margin:0 0 2px;">${LANG==='en'?'Science Videos':'Videos de Ciencia'}</h2>
+        <p style="color:#C9BFFF; font-size:13.5px; margin:0; max-width:380px;">${LANG==='en'?'Watch a real science video and earn bones + crystals!':'¡Mira un video de ciencia real y gana huesitos + cristales!'}</p>
+      </div>
+    </div>
+    ${cards}
+    <div class="example-actions" style="margin-top:16px;">
+      <button class="chunky c-purple" id="backBtn2">${L('backHub')}</button>
+    </div>
+  </div>`;
+}
+function wireVideos(){
+  document.querySelectorAll('[data-video]').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      state.currentVideoId = el.getAttribute('data-video');
+      state.screen = 'video-player';
+      render();
+    });
+  });
+  const back = document.getElementById('backBtn2');
+  if(back) back.addEventListener('click', ()=>{ state.screen='hub'; render(); });
+}
+function currentVideo(){ return SCIENCE_VIDEOS.find(v=>v.id===state.currentVideoId); }
+function renderVideoPlayer(){
+  const v = currentVideo();
+  const alreadyWatched = state.watchedVideos.includes(v.id);
+  return `
+  <div class="example-wrap">
+    <div class="game-topbar"><button class="back-link" id="backBtn">${L('backHub')}</button></div>
+    <div class="story-reader">
+      <h2 style="text-align:center;">${v.title[LANG]}</h2>
+      <p style="text-align:center; color:var(--ink-soft); font-size:13px; margin-top:-8px;">${v.channel}</p>
+      <div style="position:relative; padding-bottom:56.25%; height:0; overflow:hidden; border-radius:14px; margin:14px 0;">
+        <iframe src="https://www.youtube.com/embed/${v.youtubeId}" title="${esc(v.title[LANG])}"
+          style="position:absolute; top:0; left:0; width:100%; height:100%; border:0;"
+          allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
+      <p style="text-align:center; font-size:14px; color:var(--ink);">${v.desc[LANG]}</p>
+      <div id="videoClaimArea" style="text-align:center; margin-top:14px;"></div>
+    </div>
+  </div>`;
+}
+function wireVideoPlayer(){
+  document.getElementById('backBtn').addEventListener('click', ()=>{
+    if(videoWatchInterval){ clearInterval(videoWatchInterval); videoWatchInterval=null; }
+    state.screen='videos'; render();
+  });
+  const v = currentVideo();
+  const claimArea = document.getElementById('videoClaimArea');
+  if(state.watchedVideos.includes(v.id)){
+    claimArea.innerHTML = `<div class="wp-reveal" style="display:inline-block;">${LANG==='en'?'✅ Already earned rewards for this one — enjoy the rewatch!':'✅ Ya ganaste recompensas por este — ¡disfruta verlo de nuevo!'}</div>`;
+    return;
+  }
+  let secondsLeft = WATCH_UNLOCK_SECONDS;
+  const updateClaimArea = ()=>{
+    if(secondsLeft > 0){
+      claimArea.innerHTML = `<p style="color:var(--ink-soft); font-size:13px;">${LANG==='en'?`Keep watching... rewards unlock in ${secondsLeft}s`:`Sigue viendo... recompensas en ${secondsLeft}s`}</p>`;
+    } else {
+      claimArea.innerHTML = `<button class="chunky c-orange" id="claimVideoBtn">🎁 ${LANG==='en'?'Claim Rewards!':'¡Reclamar Recompensas!'}</button>`;
+      const btn = document.getElementById('claimVideoBtn');
+      if(btn) btn.addEventListener('click', claimVideoReward);
+      if(videoWatchInterval){ clearInterval(videoWatchInterval); videoWatchInterval=null; }
+    }
+  };
+  updateClaimArea();
+  if(videoWatchInterval) clearInterval(videoWatchInterval);
+  videoWatchInterval = setInterval(()=>{
+    secondsLeft--;
+    updateClaimArea();
+  }, 1000);
+}
+async function claimVideoReward(){
+  const v = currentVideo();
+  if(state.watchedVideos.includes(v.id)) return;
+  state.watchedVideos.push(v.id);
+  state.coins += 25;
+  state.crystals += 10;
+  state.xp += 15;
+  await saveProgress();
+  const claimArea = document.getElementById('videoClaimArea');
+  if(claimArea) claimArea.innerHTML = `<div class="wp-reveal" style="display:inline-block;">${LANG==='en'?'🎉 +25 Bones, +10 Crystals, +15 XP!':'🎉 ¡+25 Huesitos, +10 Cristales, +15 XP!'}</div>`;
+}
+
+
 function playShopChime(){
   try{
     const AC = window.AudioContext || window.webkitAudioContext;
@@ -1335,6 +1561,8 @@ let state = {
   // reading
   storyId:null, storyQIndex:0, storyCorrect:0, storyAnswered:false, storySelected:null,
   storyRoundCoins:0, storyRoundXP:0, readingCategory:'ocean',
+  // videos
+  watchedVideos:[], currentVideoId:null,
   // shop UI
   shopTab:'hats', petShopTab:'gear'
 };
@@ -1385,7 +1613,8 @@ async function saveProgress(){
       xp:state.xp, coins:state.coins, crystals:state.crystals, bestStars:state.bestStars, totalSeconds:getTotalSeconds(),
       companionId:state.companionId, avatar:state.avatar,
       ownedClosetItems:state.ownedClosetItems, equippedClosetItems:state.equippedClosetItems,
-      ownedPetItems:state.ownedPetItems, equippedPetItems:state.equippedPetItems
+      ownedPetItems:state.ownedPetItems, equippedPetItems:state.equippedPetItems,
+      watchedVideos:state.watchedVideos
     }));
     localStorage.setItem('mathquest_lang', LANG);
     localStorage.setItem('mathquest_profile_active', state.profileName);
@@ -1410,8 +1639,9 @@ async function loadProgress(){
         bestStars: legacy ? (legacy.bestStars||{}) : {},
         totalSeconds: legacy ? (legacy.totalSeconds||0) : 0,
         companionId: 'dog', // Sofia's existing progress carries forward as Wow Wow, her real plushie
-        avatar: {skin:SKIN_TONES[1], eye:EYE_COLORS[0], hair:'short'},
-        ownedClosetItems: [], equippedClosetItems: [], ownedPetItems: [], equippedPetItems: []
+        avatar: {skin:SKIN_TONES[1], eye:EYE_COLORS[0], hair:'longwavy'},
+        ownedClosetItems: [], equippedClosetItems: [], ownedPetItems: [], equippedPetItems: [],
+        watchedVideos: []
       }));
       if(legacy && legacy.lang) localStorage.setItem('mathquest_lang', legacy.lang);
     }
@@ -1427,11 +1657,12 @@ async function loadProgress(){
       state.bestStars = d.bestStars || {};
       totalSecondsBase = d.totalSeconds || 0;
       state.companionId = d.companionId || null;
-      state.avatar = d.avatar || {skin:SKIN_TONES[1], eye:EYE_COLORS[0], hair:'short'};
+      state.avatar = d.avatar || {skin:SKIN_TONES[1], eye:EYE_COLORS[0], hair:'longwavy'};
       state.ownedClosetItems = d.ownedClosetItems || [];
       state.equippedClosetItems = d.equippedClosetItems || [];
       state.ownedPetItems = d.ownedPetItems || [];
       state.equippedPetItems = d.equippedPetItems || [];
+      state.watchedVideos = d.watchedVideos || [];
     }
   }catch(e){ /* no saved progress yet */ }
 }
@@ -1457,7 +1688,19 @@ function render(){
   if(state.screen==='avatar-customize'){ app.innerHTML = renderHUD() + renderAvatarCustomize(); wireAvatarCustomize(); wireHUD(); return; }
   if(state.screen==='closet'){ app.innerHTML = renderHUD() + renderCloset(); wireCloset(); wireHUD(); return; }
   if(state.screen==='pet-shop'){ app.innerHTML = renderHUD() + renderPetShop(); wirePetShop(); wireHUD(); return; }
+  if(state.screen==='videos'){ app.innerHTML = renderHUD() + renderVideos(); wireVideos(); wireHUD(); return; }
+  if(state.screen==='video-player'){ app.innerHTML = renderHUD() + renderVideoPlayer(); wireVideoPlayer(); wireHUD(); return; }
   app.innerHTML = '<div class="center-screen"><div class="rocket-emoji">🐶</div></div>';
+}
+
+function companionSVGFor(companion, stageObj){
+  // Only Wow Wow currently has stage-specific wear details; others render the same art at every stage,
+  // but all three still visually "grow" via the scale wrapper used on the hub hero and select screen.
+  const base = companion.id === 'dog' ? companion.svg(stageObj.stage) : companion.svg();
+  return withPetOverlays(base, state.equippedPetItems);
+}
+function scaledCompanionSVG(companion, stageObj){
+  return `<div style="transform:scale(${stageObj.scale}); transform-origin:center bottom; display:inline-block;">${companionSVGFor(companion, stageObj)}</div>`;
 }
 
 function renderHUD(){
@@ -1466,9 +1709,10 @@ function renderHUD(){
   const pct = Math.round((into/120)*100);
   const lvlLabel = LANG==='en' ? `LVL ${lvl}` : `NIV ${lvl}`;
   const companion = companionById(state.companionId || 'dog');
+  const stage = getEvolutionStage(lvl);
   return `
   <div id="hud">
-    <div class="avatar-badge" title="${esc(companion.name[LANG])}">${companion.svg()}</div>
+    <div class="avatar-badge" title="${esc(companion.name[LANG])} — ${stage[LANG]}">${companionSVGFor(companion, stage)}</div>
     <div>
       <div class="hud-name">${esc(state.profileName)}</div>
       <span class="level-badge">${lvlLabel}</span>
@@ -1490,21 +1734,24 @@ function wireHUD(){
 }
 
 /* ============================================================
-   COMPANION SELECT — first login per profile; 3 starters this year
+   COMPANION SELECT — first login per profile; 3 starters this year;
+   also reachable later from the hub to switch companions anytime
    ============================================================ */
 function renderCompanionSelect(){
+  const stage = getEvolutionStage(levelFromXP(state.xp));
   const cards = COMPANIONS.map(c=>`
-    <div class="companion-card" data-companion="${c.id}">
-      ${c.svg()}
+    <div class="companion-card ${state.companionId===c.id?'selected':''}" data-companion="${c.id}">
+      ${scaledCompanionSVG(c, stage)}
       <h4>${c.icon} ${c.name[LANG]}</h4>
       <p>${c.desc[LANG]}</p>
     </div>`).join('');
+  const backBtn = state.companionId ? `<div style="margin-top:14px;"><button class="chunky c-purple" id="companionBackBtn">${L('backHub')}</button></div>` : '';
   return `
   <div class="center-screen">
     <h1 class="title-hero blocky-text" style="font-size:30px;">${L('chooseCompanion')}</h1>
     <p class="subtitle-hero">${L('chooseCompanionSub')}</p>
     <div class="companion-grid" style="max-width:520px;">${cards}</div>
-  </div>`;
+    ${backBtn}  </div>`;
 }
 function wireCompanionSelect(){
   document.querySelectorAll('[data-companion]').forEach(card=>{
@@ -1515,6 +1762,8 @@ function wireCompanionSelect(){
       render();
     });
   });
+  const back = document.getElementById('companionBackBtn');
+  if(back) back.addEventListener('click', ()=>{ state.screen='hub'; render(); });
 }
 let statsInterval = null;
 function closeStatsPanel(){
@@ -1574,13 +1823,15 @@ function renderHub(){
     </div>`;
   }).join('');
   const companion = companionById(state.companionId || 'dog');
+  const stage = getEvolutionStage(levelFromXP(state.xp));
   return `
   <div class="hub-header">
     <div class="hub-header-inner">
-      <div class="plush-hero">${companion.svg()}</div>
+      <div class="plush-hero">${scaledCompanionSVG(companion, stage)}</div>
       <div>
         <h2 class="blocky-text">${L('chooseWorld')}</h2>
         <p>${L('chooseWorldSub')}</p>
+        <p style="color:var(--gold); font-family:'Baloo 2'; font-weight:800; font-size:12.5px; margin-top:4px;">${companion.icon} ${companion.name[LANG]} — ${stage[LANG]}</p>
       </div>
     </div>
     <div style="margin-top:14px; display:flex; gap:10px; flex-wrap:wrap;">
@@ -1588,6 +1839,8 @@ function renderHub(){
       <button class="chunky c-purple" id="closetBtn">🚪 ${L('closet')}</button>
       <button class="chunky c-coral" id="petShopBtn">${companion.icon} ${L('petShop')}</button>
       <button class="chunky c-blue" id="avatarBtn">🧑 ${L('customizeAvatar')}</button>
+      <button class="chunky c-green" id="changeCompanionBtn">🔄 ${LANG==='en'?'Change Pet':'Cambiar Mascota'}</button>
+      <button class="chunky c-orange" id="videosBtn">📺 ${LANG==='en'?'Science Videos':'Videos de Ciencia'}</button>
     </div>
   </div>
   <div class="tile-grid">${tiles}</div>`;
@@ -1612,6 +1865,10 @@ function wireHub(){
   if(petShopBtn) petShopBtn.addEventListener('click', ()=>{ playShopChime(); state.screen='pet-shop'; render(); });
   const avatarBtn = document.getElementById('avatarBtn');
   if(avatarBtn) avatarBtn.addEventListener('click', ()=>{ state.screen='avatar-customize'; render(); });
+  const changeCompanionBtn = document.getElementById('changeCompanionBtn');
+  if(changeCompanionBtn) changeCompanionBtn.addEventListener('click', ()=>{ state.screen='companion-select'; render(); });
+  const videosBtn = document.getElementById('videosBtn');
+  if(videosBtn) videosBtn.addEventListener('click', ()=>{ state.screen='videos'; render(); });
 }
 
 /* ---------- Examples screen ---------- */
@@ -2208,15 +2465,16 @@ function wireProfiles(){
 async function switchProfile(name){
   await saveProgress();
   state.profileName = name;
-  const d = getProfileData(name) || {xp:0,coins:0,crystals:0,bestStars:{},totalSeconds:0,companionId:null,avatar:null,ownedClosetItems:[],equippedClosetItems:[],ownedPetItems:[],equippedPetItems:[]};
+  const d = getProfileData(name) || {xp:0,coins:0,crystals:0,bestStars:{},totalSeconds:0,companionId:null,avatar:null,ownedClosetItems:[],equippedClosetItems:[],ownedPetItems:[],equippedPetItems:[],watchedVideos:[]};
   state.xp = d.xp||0; state.coins = d.coins||0; state.crystals = d.crystals||0; state.bestStars = d.bestStars||{};
   totalSecondsBase = d.totalSeconds||0;
   state.companionId = d.companionId || null;
-  state.avatar = d.avatar || {skin:SKIN_TONES[1], eye:EYE_COLORS[0], hair:'short'};
+  state.avatar = d.avatar || {skin:SKIN_TONES[1], eye:EYE_COLORS[0], hair:'longwavy'};
   state.ownedClosetItems = d.ownedClosetItems || [];
   state.equippedClosetItems = d.equippedClosetItems || [];
   state.ownedPetItems = d.ownedPetItems || [];
   state.equippedPetItems = d.equippedPetItems || [];
+  state.watchedVideos = d.watchedVideos || [];
   sessionStartTs = Date.now();
   try{ localStorage.setItem('mathquest_profile_active', name); }catch(e){}
   state.screen = state.companionId ? 'hub' : 'companion-select';
@@ -2230,8 +2488,9 @@ async function addProfile(name){
   saveProfileList(list);
   try{ localStorage.setItem('mathquest_profile_data_'+name, JSON.stringify({
     xp:0,coins:0,crystals:0,bestStars:{},totalSeconds:0,companionId:null,
-    avatar:{skin:SKIN_TONES[1],eye:EYE_COLORS[0],hair:'short'},
-    ownedClosetItems:[],equippedClosetItems:[],ownedPetItems:[],equippedPetItems:[]
+    avatar:{skin:SKIN_TONES[1],eye:EYE_COLORS[0],hair:'longwavy'},
+    ownedClosetItems:[],equippedClosetItems:[],ownedPetItems:[],equippedPetItems:[],
+    watchedVideos:[]
   })); }catch(e){}
   await switchProfile(name);
 }
@@ -2249,13 +2508,14 @@ function renderAvatarCustomize(){
     <div class="game-topbar"><button class="back-link" id="backBtn">${L('backHub')}</button></div>
     <div class="story-reader" style="text-align:center;">
       <h2 class="blocky-text" style="color:var(--ink); text-shadow:none;">${L('customizeAvatar')}</h2>
-      <div class="avatar-preview" id="avatarPreview">${avatarSVG(a.skin, a.eye, a.hair)}</div>
+      <div class="avatar-preview" id="avatarPreview">${avatarSVG(a.skin, a.eye, a.hair, state.equippedClosetItems)}</div>
       <div class="customizer-label">${L('skinTone')}</div>
       <div class="swatch-row">${skinSwatches}</div>
       <div class="customizer-label">${L('eyeColor')}</div>
       <div class="swatch-row">${eyeSwatches}</div>
       <div class="customizer-label">${L('hairStyle')}</div>
       <div class="hair-row">${hairOpts}</div>
+      <p style="color:var(--ink-soft); font-size:12px; margin-top:6px;">${LANG==='en'?'Tip: equip items from the Closet to see them here too!':'¡Consejo: equipa artículos del Clóset para verlos aquí también!'}</p>
       <button class="chunky c-purple" id="saveAvatarBtn" style="margin-top:10px;">${L('saveAvatar')}</button>
     </div>
   </div>`;
@@ -2263,7 +2523,7 @@ function renderAvatarCustomize(){
 function wireAvatarCustomize(){
   document.getElementById('backBtn').addEventListener('click', ()=>{ state.screen='hub'; render(); });
   function refreshPreview(){
-    document.getElementById('avatarPreview').innerHTML = avatarSVG(state.avatar.skin, state.avatar.eye, state.avatar.hair);
+    document.getElementById('avatarPreview').innerHTML = avatarSVG(state.avatar.skin, state.avatar.eye, state.avatar.hair, state.equippedClosetItems);
   }
   document.querySelectorAll('[data-skin]').forEach(el=>{
     el.addEventListener('click', ()=>{ state.avatar.skin = el.getAttribute('data-skin'); render(); });
