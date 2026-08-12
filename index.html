@@ -607,95 +607,13 @@ function dragonSVG(){
   </svg>`;
 }
 
-/* ---- Simple customizable avatar face ---- */
-function avatarSVG(skin, eye, hair, equippedItems){
-  skin = skin || '#F1C27D';
-  eye = eye || '#6B4423';
-  hair = hair || 'longwavy';
-  equippedItems = equippedItems || [];
-  let hairBack = ''; // rendered behind the head (long hair flowing past shoulders)
-  let hairFront = ''; // rendered on top of the head
-  const hc = '#4A3222';
-  const cap = `<path d="M18 55 Q 20 12 60 12 Q 100 12 102 55 Q 90 40 60 40 Q 30 40 18 55 Z" fill="${hc}"/>`;
-
-  if(hair==='short'){
-    hairFront = cap;
-  } else if(hair==='pigtails'){
-    hairFront = cap + `<circle cx="18" cy="60" r="12" fill="${hc}"/><circle cx="102" cy="60" r="12" fill="${hc}"/>`;
-  } else if(hair==='longstraight'){
-    hairBack = `<path d="M18 50 Q 8 105 15 158 L 33 158 Q 27 105 34 55 Z" fill="${hc}"/>
-      <path d="M102 50 Q 112 105 105 158 L 87 158 Q 93 105 86 55 Z" fill="${hc}"/>`;
-    hairFront = cap;
-  } else if(hair==='longwavy'){
-    hairBack = `<path d="M17 50 Q 6 95 13 130 Q 20 140 27 130 Q 32 142 38 130 L 35 55 Z" fill="${hc}"/>
-      <path d="M103 50 Q 114 95 107 130 Q 100 140 93 130 Q 88 142 82 130 L 85 55 Z" fill="${hc}"/>`;
-    hairFront = cap;
-  } else if(hair==='ponytailhigh'){
-    hairBack = `<path d="M96 26 Q 122 30 116 70 Q 108 100 100 120 Q 96 90 92 60 Z" fill="${hc}"/>`;
-    hairFront = cap;
-  } else if(hair==='braid'){
-    hairBack = `<ellipse cx="100" cy="68" rx="10" ry="14" fill="${hc}"/><ellipse cx="103" cy="92" rx="9" ry="13" fill="${hc}"/>
-      <ellipse cx="100" cy="115" rx="8.5" ry="12" fill="${hc}"/><ellipse cx="97" cy="137" rx="7.5" ry="11" fill="${hc}"/>
-      <ellipse cx="96" cy="156" rx="6.5" ry="9" fill="${hc}"/>`;
-    hairFront = cap;
-  } else if(hair==='buns'){
-    hairFront = cap + `<circle cx="34" cy="18" r="12" fill="${hc}"/><circle cx="86" cy="18" r="12" fill="${hc}"/>`;
-  } else if(hair==='curlylong'){
-    hairBack = `<circle cx="20" cy="80" r="13" fill="${hc}"/><circle cx="18" cy="108" r="12" fill="${hc}"/><circle cx="22" cy="134" r="10" fill="${hc}"/>
-      <circle cx="100" cy="80" r="13" fill="${hc}"/><circle cx="102" cy="108" r="12" fill="${hc}"/><circle cx="98" cy="134" r="10" fill="${hc}"/>`;
-    hairFront = `<circle cx="30" cy="30" r="14" fill="${hc}"/><circle cx="50" cy="18" r="15" fill="${hc}"/>
-      <circle cx="70" cy="18" r="15" fill="${hc}"/><circle cx="90" cy="30" r="14" fill="${hc}"/>
-      <circle cx="60" cy="14" r="13" fill="${hc}"/>`;
-  }
-  const bodyShirt = `<path d="M28 145 Q 60 132 92 145 L 100 205 Q 60 218 20 205 Z" fill="#B8A5E8" stroke="#9B85D6" stroke-width="2"/>`;
-  const overlays = equippedItems.map(id=>renderCatalogOverlay(id, CLOSET_ITEMS, AVATAR_ITEM_POSITIONS)).join('');
-  return `<svg viewBox="0 0 120 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Sofia's avatar">
-    ${hairBack}
-    ${bodyShirt}
-    <circle cx="60" cy="68" r="44" fill="${skin}"/>
-    <circle cx="44" cy="66" r="7" fill="${eye}"/>
-    <circle cx="76" cy="66" r="7" fill="${eye}"/>
-    <circle cx="42" cy="64" r="2" fill="#fff"/>
-    <circle cx="74" cy="64" r="2" fill="#fff"/>
-    <g stroke="#3A2A1A" stroke-width="1.6" stroke-linecap="round">
-      <path d="M38 57 L 33 52"/><path d="M42 55 L 39 49"/><path d="M47 55 L 46 49"/>
-      <path d="M82 57 L 87 52"/><path d="M78 55 L 81 49"/><path d="M73 55 L 74 49"/>
-    </g>
-    <path d="M48 88 Q 60 96 72 88" stroke="#8A5A3A" stroke-width="3" fill="none" stroke-linecap="round"/>
-    ${hairFront}
-    ${overlays}
-  </svg>`;
-}
-
-/* ---- Visual equip overlays: equipped items render as positioned icons on the avatar/pet ---- */
-const AVATAR_ITEM_POSITIONS = {
-  _byCategory: {
-    hats:{x:60, y:8, size:36}, outfits:{x:60, y:178, size:46}, accessories:{x:60, y:148, size:26},
-    shoes:{x:60, y:213, size:24}, silly:{x:60, y:178, size:58}
-  },
-  sunglasses:{x:60, y:66, size:32}, headphones:{x:60, y:38, size:42}, backpack:{x:104, y:172, size:30},
-  bowtie:{x:60, y:148, size:22}, scarf:{x:60, y:150, size:28}, wand:{x:104, y:184, size:26}
-};
+/* ---- Visual equip overlays: equipped items render as positioned icons on the pet (the avatar) ---- */
 function renderCatalogOverlay(itemId, catalog, positions){
   const item = catalog.find(i=>i.id===itemId);
   if(!item) return '';
   const pos = positions[itemId] || positions._byCategory[item.cat] || positions._byCategory.accessories;
   return `<text x="${pos.x}" y="${pos.y}" font-size="${pos.size}" text-anchor="middle" dominant-baseline="middle">${item.icon}</text>`;
 }
-
-const SKIN_TONES = ['#FFDBAC','#F1C27D','#E0AC69','#C68642','#8D5524','#4A2C17'];
-const EYE_COLORS = ['#6B4423','#4FC3F7','#6EE7A8','#A67C52','#8C97A8','#E8A33D'];
-const HAIR_STYLES = [
-  {id:'longwavy', en:'Long Wavy', es:'Largo Ondulado'},
-  {id:'longstraight', en:'Long Straight', es:'Largo Liso'},
-  {id:'ponytailhigh', en:'High Ponytail', es:'Coleta Alta'},
-  {id:'braid', en:'Braid', es:'Trenza'},
-  {id:'buns', en:'Space Buns', es:'Chonguitos'},
-  {id:'pigtails', en:'Pigtails', es:'Coletas'},
-  {id:'curlylong', en:'Long Curly', es:'Rizado Largo'},
-  {id:'short', en:'Short', es:'Corto'},
-  {id:'none', en:'None', es:'Ninguno'}
-];
 
 /* ============================================================
    COMPANIONS — this year's 3 starter pets (rotates in future years)
@@ -809,14 +727,26 @@ const PET_ITEM_POSITIONS = {
   minibackpack:{x:118, y:88, size:26}, partyhat:{x:80, y:14, size:24}, sweater:{x:80, y:112, size:32},
   booties:{x:80, y:136, size:20}, petcape:{x:104, y:88, size:30}
 };
-function withPetOverlays(svgString, equippedItemIds){
-  const visible = (equippedItemIds||[]).filter(id=>{
+/* ---- Closet items (hats/outfits/accessories/shoes/silly) now dress the pet directly,
+   since the pet itself is the avatar. Positions tuned for the shared 160x150 pet viewBox. ---- */
+const CLOSET_PET_POSITIONS = {
+  _byCategory: {
+    hats:{x:80, y:16, size:38}, outfits:{x:80, y:110, size:48}, accessories:{x:80, y:93, size:26},
+    shoes:{x:80, y:136, size:22}, silly:{x:80, y:104, size:60}
+  },
+  sunglasses:{x:80, y:50, size:32}, headphones:{x:80, y:34, size:42}, backpack:{x:122, y:98, size:30},
+  bowtie:{x:80, y:90, size:22}, scarf:{x:80, y:92, size:28}, wand:{x:122, y:110, size:26}
+};
+function withPetOverlays(svgString, equippedClosetIds, equippedPetIds){
+  const petGear = (equippedPetIds||[]).filter(id=>{
     const item = PET_ITEMS.find(i=>i.id===id);
     return item && item.cat !== 'home'; // home items (beds, dens) are collected, not worn
   });
-  if(!visible.length) return svgString;
-  const overlays = visible.map(id=>renderCatalogOverlay(id, PET_ITEMS, PET_ITEM_POSITIONS)).join('');
-  return svgString.replace('</svg>', overlays + '</svg>');
+  const closetGear = equippedClosetIds || [];
+  if(!petGear.length && !closetGear.length) return svgString;
+  const closetOverlays = closetGear.map(id=>renderCatalogOverlay(id, CLOSET_ITEMS, CLOSET_PET_POSITIONS)).join('');
+  const petOverlays = petGear.map(id=>renderCatalogOverlay(id, PET_ITEMS, PET_ITEM_POSITIONS)).join('');
+  return svgString.replace('</svg>', closetOverlays + petOverlays + '</svg>');
 }
 
 /* ============================================================
@@ -1548,11 +1478,10 @@ const READING_LINKS = {
    STATE
    ============================================================ */
 let state = {
-  screen:'loading', // loading | hub | examples | game | summary | reading-list | reading-story | reading-quiz | reading-summary | profiles | companion-select | avatar-customize | closet | pet-shop
+  screen:'loading', // loading | hub | examples | game | summary | reading-list | reading-story | reading-quiz | reading-summary | profiles | companion-select | closet | pet-shop | videos | video-player
   profileName:'Sofia Villarreal Castañeda', level:1, xp:0, coins:0, crystals:0,
   bestStars:{}, // topicId -> stars
-  companionId:null, // null until first chosen
-  avatar:{skin:SKIN_TONES[1], eye:EYE_COLORS[0], hair:'short'},
+  companionId:null, // null until first chosen — the pet IS the avatar now
   ownedClosetItems:[], equippedClosetItems:[],
   ownedPetItems:[], equippedPetItems:[],
   // in-round
@@ -1611,7 +1540,7 @@ async function saveProgress(){
   try{
     localStorage.setItem('mathquest_profile_data_'+state.profileName, JSON.stringify({
       xp:state.xp, coins:state.coins, crystals:state.crystals, bestStars:state.bestStars, totalSeconds:getTotalSeconds(),
-      companionId:state.companionId, avatar:state.avatar,
+      companionId:state.companionId,
       ownedClosetItems:state.ownedClosetItems, equippedClosetItems:state.equippedClosetItems,
       ownedPetItems:state.ownedPetItems, equippedPetItems:state.equippedPetItems,
       watchedVideos:state.watchedVideos
@@ -1639,7 +1568,6 @@ async function loadProgress(){
         bestStars: legacy ? (legacy.bestStars||{}) : {},
         totalSeconds: legacy ? (legacy.totalSeconds||0) : 0,
         companionId: 'dog', // Sofia's existing progress carries forward as Wow Wow, her real plushie
-        avatar: {skin:SKIN_TONES[1], eye:EYE_COLORS[0], hair:'longwavy'},
         ownedClosetItems: [], equippedClosetItems: [], ownedPetItems: [], equippedPetItems: [],
         watchedVideos: []
       }));
@@ -1657,7 +1585,6 @@ async function loadProgress(){
       state.bestStars = d.bestStars || {};
       totalSecondsBase = d.totalSeconds || 0;
       state.companionId = d.companionId || null;
-      state.avatar = d.avatar || {skin:SKIN_TONES[1], eye:EYE_COLORS[0], hair:'longwavy'};
       state.ownedClosetItems = d.ownedClosetItems || [];
       state.equippedClosetItems = d.equippedClosetItems || [];
       state.ownedPetItems = d.ownedPetItems || [];
@@ -1685,7 +1612,6 @@ function render(){
   if(state.screen==='reading-summary'){ app.innerHTML = renderHUD() + renderReadingSummary(); wireReadingSummary(); wireHUD(); return; }
   if(state.screen==='profiles'){ app.innerHTML = renderHUD() + renderProfiles(); wireProfiles(); wireHUD(); return; }
   if(state.screen==='companion-select'){ app.innerHTML = renderCompanionSelect(); wireCompanionSelect(); return; }
-  if(state.screen==='avatar-customize'){ app.innerHTML = renderHUD() + renderAvatarCustomize(); wireAvatarCustomize(); wireHUD(); return; }
   if(state.screen==='closet'){ app.innerHTML = renderHUD() + renderCloset(); wireCloset(); wireHUD(); return; }
   if(state.screen==='pet-shop'){ app.innerHTML = renderHUD() + renderPetShop(); wirePetShop(); wireHUD(); return; }
   if(state.screen==='videos'){ app.innerHTML = renderHUD() + renderVideos(); wireVideos(); wireHUD(); return; }
@@ -1696,8 +1622,9 @@ function render(){
 function companionSVGFor(companion, stageObj){
   // Only Wow Wow currently has stage-specific wear details; others render the same art at every stage,
   // but all three still visually "grow" via the scale wrapper used on the hub hero and select screen.
+  // The pet is the avatar now — it wears everything equipped from both the Closet and the Pet Shop.
   const base = companion.id === 'dog' ? companion.svg(stageObj.stage) : companion.svg();
-  return withPetOverlays(base, state.equippedPetItems);
+  return withPetOverlays(base, state.equippedClosetItems, state.equippedPetItems);
 }
 function scaledCompanionSVG(companion, stageObj){
   return `<div style="transform:scale(${stageObj.scale}); transform-origin:center bottom; display:inline-block;">${companionSVGFor(companion, stageObj)}</div>`;
@@ -1838,7 +1765,6 @@ function renderHub(){
       <button class="chunky c-gold" id="profilesBtn">🏆 ${LANG==='en'?'Compete with Friends':'Compite con Amigas'}</button>
       <button class="chunky c-purple" id="closetBtn">🚪 ${L('closet')}</button>
       <button class="chunky c-coral" id="petShopBtn">${companion.icon} ${L('petShop')}</button>
-      <button class="chunky c-blue" id="avatarBtn">🧑 ${L('customizeAvatar')}</button>
       <button class="chunky c-green" id="changeCompanionBtn">🔄 ${LANG==='en'?'Change Pet':'Cambiar Mascota'}</button>
       <button class="chunky c-orange" id="videosBtn">📺 ${LANG==='en'?'Science Videos':'Videos de Ciencia'}</button>
     </div>
@@ -1863,8 +1789,6 @@ function wireHub(){
   if(closetBtn) closetBtn.addEventListener('click', ()=>{ playShopChime(); state.screen='closet'; render(); });
   const petShopBtn = document.getElementById('petShopBtn');
   if(petShopBtn) petShopBtn.addEventListener('click', ()=>{ playShopChime(); state.screen='pet-shop'; render(); });
-  const avatarBtn = document.getElementById('avatarBtn');
-  if(avatarBtn) avatarBtn.addEventListener('click', ()=>{ state.screen='avatar-customize'; render(); });
   const changeCompanionBtn = document.getElementById('changeCompanionBtn');
   if(changeCompanionBtn) changeCompanionBtn.addEventListener('click', ()=>{ state.screen='companion-select'; render(); });
   const videosBtn = document.getElementById('videosBtn');
@@ -2465,11 +2389,10 @@ function wireProfiles(){
 async function switchProfile(name){
   await saveProgress();
   state.profileName = name;
-  const d = getProfileData(name) || {xp:0,coins:0,crystals:0,bestStars:{},totalSeconds:0,companionId:null,avatar:null,ownedClosetItems:[],equippedClosetItems:[],ownedPetItems:[],equippedPetItems:[],watchedVideos:[]};
+  const d = getProfileData(name) || {xp:0,coins:0,crystals:0,bestStars:{},totalSeconds:0,companionId:null,ownedClosetItems:[],equippedClosetItems:[],ownedPetItems:[],equippedPetItems:[],watchedVideos:[]};
   state.xp = d.xp||0; state.coins = d.coins||0; state.crystals = d.crystals||0; state.bestStars = d.bestStars||{};
   totalSecondsBase = d.totalSeconds||0;
   state.companionId = d.companionId || null;
-  state.avatar = d.avatar || {skin:SKIN_TONES[1], eye:EYE_COLORS[0], hair:'longwavy'};
   state.ownedClosetItems = d.ownedClosetItems || [];
   state.equippedClosetItems = d.equippedClosetItems || [];
   state.ownedPetItems = d.ownedPetItems || [];
@@ -2488,7 +2411,6 @@ async function addProfile(name){
   saveProfileList(list);
   try{ localStorage.setItem('mathquest_profile_data_'+name, JSON.stringify({
     xp:0,coins:0,crystals:0,bestStars:{},totalSeconds:0,companionId:null,
-    avatar:{skin:SKIN_TONES[1],eye:EYE_COLORS[0],hair:'longwavy'},
     ownedClosetItems:[],equippedClosetItems:[],ownedPetItems:[],equippedPetItems:[],
     watchedVideos:[]
   })); }catch(e){}
@@ -2498,53 +2420,12 @@ async function addProfile(name){
 /* ============================================================
    AVATAR CUSTOMIZER — free skin tone, eye color, hair style
    ============================================================ */
-function renderAvatarCustomize(){
-  const a = state.avatar;
-  const skinSwatches = SKIN_TONES.map(c=>`<div class="swatch ${a.skin===c?'selected':''}" data-skin="${c}" style="background:${c};"></div>`).join('');
-  const eyeSwatches = EYE_COLORS.map(c=>`<div class="swatch ${a.eye===c?'selected':''}" data-eye="${c}" style="background:${c};"></div>`).join('');
-  const hairOpts = HAIR_STYLES.map(h=>`<div class="hair-option ${a.hair===h.id?'selected':''}" data-hair="${h.id}">${h[LANG]}</div>`).join('');
-  return `
-  <div class="example-wrap">
-    <div class="game-topbar"><button class="back-link" id="backBtn">${L('backHub')}</button></div>
-    <div class="story-reader" style="text-align:center;">
-      <h2 class="blocky-text" style="color:var(--ink); text-shadow:none;">${L('customizeAvatar')}</h2>
-      <div class="avatar-preview" id="avatarPreview">${avatarSVG(a.skin, a.eye, a.hair, state.equippedClosetItems)}</div>
-      <div class="customizer-label">${L('skinTone')}</div>
-      <div class="swatch-row">${skinSwatches}</div>
-      <div class="customizer-label">${L('eyeColor')}</div>
-      <div class="swatch-row">${eyeSwatches}</div>
-      <div class="customizer-label">${L('hairStyle')}</div>
-      <div class="hair-row">${hairOpts}</div>
-      <p style="color:var(--ink-soft); font-size:12px; margin-top:6px;">${LANG==='en'?'Tip: equip items from the Closet to see them here too!':'¡Consejo: equipa artículos del Clóset para verlos aquí también!'}</p>
-      <button class="chunky c-purple" id="saveAvatarBtn" style="margin-top:10px;">${L('saveAvatar')}</button>
-    </div>
-  </div>`;
-}
-function wireAvatarCustomize(){
-  document.getElementById('backBtn').addEventListener('click', ()=>{ state.screen='hub'; render(); });
-  function refreshPreview(){
-    document.getElementById('avatarPreview').innerHTML = avatarSVG(state.avatar.skin, state.avatar.eye, state.avatar.hair, state.equippedClosetItems);
-  }
-  document.querySelectorAll('[data-skin]').forEach(el=>{
-    el.addEventListener('click', ()=>{ state.avatar.skin = el.getAttribute('data-skin'); render(); });
-  });
-  document.querySelectorAll('[data-eye]').forEach(el=>{
-    el.addEventListener('click', ()=>{ state.avatar.eye = el.getAttribute('data-eye'); render(); });
-  });
-  document.querySelectorAll('[data-hair]').forEach(el=>{
-    el.addEventListener('click', ()=>{ state.avatar.hair = el.getAttribute('data-hair'); render(); });
-  });
-  document.getElementById('saveAvatarBtn').addEventListener('click', async ()=>{
-    await saveProgress();
-    state.screen = 'hub';
-    render();
-  });
-}
-
 /* ============================================================
-   CLOSET SHOP — avatar accessories, bought with Bones
+   CLOSET SHOP — items that dress the pet (bought with Bones)
    ============================================================ */
 function renderCloset(){
+  const companion = companionById(state.companionId || 'dog');
+  const stage = getEvolutionStage(levelFromXP(state.xp));
   const cats = CLOSET_CATS.map(c=>`<button class="shop-tab ${state.shopTab===c.id?'active':''}" data-shoptab="${c.id}">${c[LANG]}</button>`).join('');
   const items = CLOSET_ITEMS.filter(i=>i.cat===state.shopTab).map(i=>{
     const owned = state.ownedClosetItems.includes(i.id);
@@ -2561,8 +2442,9 @@ function renderCloset(){
   <div class="example-wrap">
     <div class="game-topbar"><button class="back-link" id="backBtn">${L('backHub')}</button></div>
     <div class="shop-header">
-      <div class="shop-icon">🚪👗</div>
+      <div style="display:flex; justify-content:center;">${scaledCompanionSVG(companion, stage)}</div>
       <h2 class="blocky-text" style="font-size:24px;">${L('closet')}</h2>
+      <p style="color:#C9BFFF; font-size:12.5px; margin:2px 0 0;">${LANG==='en'?`Dress up ${companion.name.en}!`:`¡Viste a ${companion.name.es}!`}</p>
       <div class="coin-pill" style="display:inline-flex; margin-top:6px;">🦴 ${state.coins}</div>
     </div>
     <div class="shop-bg">
@@ -2646,8 +2528,9 @@ function renderPetShop(){
   <div class="example-wrap">
     <div class="game-topbar"><button class="back-link" id="backBtn">${L('backHub')}</button></div>
     <div class="shop-header">
-      <div class="shop-icon">${companion.icon}🛍️</div>
+      <div style="display:flex; justify-content:center;">${scaledCompanionSVG(companion, getEvolutionStage(levelFromXP(state.xp)))}</div>
       <h2 class="blocky-text" style="font-size:24px;">${L('petShop')}</h2>
+      <p style="color:#C9BFFF; font-size:12.5px; margin:2px 0 0;">${LANG==='en'?`Gear up ${companion.name.en}!`:`¡Equipa a ${companion.name.es}!`}</p>
       <div class="crystal-pill" style="display:inline-flex; margin-top:6px;">💎 ${state.crystals}</div>
     </div>
     <div class="shop-bg">
