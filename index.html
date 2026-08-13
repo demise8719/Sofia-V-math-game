@@ -607,10 +607,26 @@ function dragonSVG(){
   </svg>`;
 }
 
-/* ---- Visual equip overlays: equipped items render as positioned icons on the pet (the avatar) ---- */
+/* ---- Visual equip overlays: equipped items render as positioned icons on the pet (the avatar).
+   A couple of items (like jeans) get real fitted vector art instead of a floating emoji so they
+   actually look worn rather than pasted on. ---- */
+function jeansShape(){
+  return `
+    <rect x="57" y="92" width="46" height="20" rx="7" fill="#5B7FBE" stroke="#3F5A94" stroke-width="2"/>
+    <rect x="59" y="106" width="17" height="43" rx="7" fill="#5B7FBE" stroke="#3F5A94" stroke-width="2"/>
+    <rect x="84" y="106" width="17" height="43" rx="7" fill="#5B7FBE" stroke="#3F5A94" stroke-width="2"/>
+    <circle cx="67" cy="128" r="4" fill="#FBE3A9" stroke="#3F5A94" stroke-width="1"/>
+    <circle cx="93" cy="135" r="3.5" fill="#FBE3A9" stroke="#3F5A94" stroke-width="1"/>
+    <line x1="63" y1="98" x2="63" y2="106" stroke="#3F5A94" stroke-width="1" opacity="0.5"/>
+    <line x1="97" y1="98" x2="97" y2="106" stroke="#3F5A94" stroke-width="1" opacity="0.5"/>
+    <circle cx="80" cy="100" r="2" fill="#3F5A94"/>
+  `;
+}
+const FITTED_SHAPES = { rippedjeans: jeansShape };
 function renderCatalogOverlay(itemId, catalog, positions){
   const item = catalog.find(i=>i.id===itemId);
   if(!item) return '';
+  if(FITTED_SHAPES[itemId]) return FITTED_SHAPES[itemId]();
   const pos = positions[itemId] || positions._byCategory[item.cat] || positions._byCategory.accessories;
   return `<text x="${pos.x}" y="${pos.y}" font-size="${pos.size}" text-anchor="middle" dominant-baseline="middle">${item.icon}</text>`;
 }
@@ -731,11 +747,11 @@ const PET_ITEM_POSITIONS = {
    since the pet itself is the avatar. Positions tuned for the shared 160x150 pet viewBox. ---- */
 const CLOSET_PET_POSITIONS = {
   _byCategory: {
-    hats:{x:80, y:16, size:38}, outfits:{x:80, y:110, size:48}, accessories:{x:80, y:93, size:26},
-    shoes:{x:80, y:136, size:22}, silly:{x:80, y:104, size:60}
+    hats:{x:80, y:16, size:36}, outfits:{x:80, y:118, size:34}, accessories:{x:80, y:93, size:24},
+    shoes:{x:80, y:138, size:20}, silly:{x:80, y:120, size:38}
   },
-  sunglasses:{x:80, y:50, size:32}, headphones:{x:80, y:34, size:42}, backpack:{x:122, y:98, size:30},
-  bowtie:{x:80, y:90, size:22}, scarf:{x:80, y:92, size:28}, wand:{x:122, y:110, size:26}
+  sunglasses:{x:80, y:50, size:30}, headphones:{x:80, y:34, size:38}, backpack:{x:122, y:100, size:26},
+  bowtie:{x:80, y:90, size:20}, scarf:{x:80, y:92, size:24}, wand:{x:122, y:112, size:24}
 };
 function withPetOverlays(svgString, equippedClosetIds, equippedPetIds){
   const petGear = (equippedPetIds||[]).filter(id=>{
@@ -1664,11 +1680,16 @@ function wireHUD(){
    COMPANION SELECT — first login per profile; 3 starters this year;
    also reachable later from the hub to switch companions anytime
    ============================================================ */
+function plainCompanionSVG(companion, stageObj){
+  // Companion select screen shows pets undressed — equipped gear shouldn't bleed onto options you haven't chosen.
+  const base = companion.id === 'dog' ? companion.svg(stageObj.stage) : companion.svg();
+  return `<div style="transform:scale(${stageObj.scale}); transform-origin:center bottom; display:inline-block;">${base}</div>`;
+}
 function renderCompanionSelect(){
   const stage = getEvolutionStage(levelFromXP(state.xp));
   const cards = COMPANIONS.map(c=>`
     <div class="companion-card ${state.companionId===c.id?'selected':''}" data-companion="${c.id}">
-      ${scaledCompanionSVG(c, stage)}
+      ${plainCompanionSVG(c, stage)}
       <h4>${c.icon} ${c.name[LANG]}</h4>
       <p>${c.desc[LANG]}</p>
     </div>`).join('');
