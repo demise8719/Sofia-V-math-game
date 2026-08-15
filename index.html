@@ -141,28 +141,67 @@ button{font-family:inherit;}
 #nameInput:focus{border-color:var(--pink);}
 
 /* ---------- Hub ---------- */
-.hub-header{padding:18px 20px 4px;}
-.hub-header-inner{display:flex; align-items:center; gap:16px; flex-wrap:wrap;}
-.plush-hero{flex-shrink:0; animation:float 4s ease-in-out infinite;}
-.plush-hero svg{width:108px; height:108px; display:block; filter:drop-shadow(0 6px 10px rgba(0,0,0,.35));}
-.hub-header h2{margin:0 0 2px; font-size:27px;}
-.hub-header p{color:#C9BFFF; margin:0; font-size:14px; max-width:420px;}
+.hub-header{padding:6px 20px 4px;}
+.section-title{margin:0 0 2px; font-size:22px; color:#fff; font-family:'Baloo 2'; font-weight:700;}
+.section-sub{color:#C9BFFF; margin:0; font-size:13.5px; max-width:420px;}
+
+/* Pet stage — the showcase hero for the avatar-building experience */
+.pet-stage{
+  position:relative; margin:16px 20px 14px; padding:26px 20px 20px;
+  border-radius:28px; overflow:hidden; text-align:center;
+  background:linear-gradient(165deg, #2E2158 0%, #251A47 60%, #1E1440 100%);
+  border:1px solid rgba(255,255,255,.08);
+  box-shadow:0 20px 40px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.06);
+}
+.pet-stage-glow{
+  position:absolute; top:-30px; left:50%; transform:translateX(-50%);
+  width:220px; height:220px; border-radius:50%;
+  background:radial-gradient(circle, rgba(255,201,60,.28) 0%, transparent 70%);
+  pointer-events:none;
+}
+.pet-stage-figure{position:relative; animation:float 4.5s ease-in-out infinite;}
+.pet-stage-figure svg{width:150px; height:auto; display:inline-block; filter:drop-shadow(0 10px 16px rgba(0,0,0,.4));}
+.pet-stage-info{margin-top:4px;}
+.pet-stage-name{font-family:'Baloo 2'; font-weight:800; font-size:19px; color:#fff;}
+.pet-stage-badge{
+  display:inline-block; margin-top:3px; padding:3px 12px; border-radius:20px;
+  background:rgba(255,201,60,.16); border:1px solid rgba(255,201,60,.4);
+  color:#FFD866; font-family:'Baloo 2'; font-weight:700; font-size:12px;
+}
+.pet-stage-actions{display:flex; gap:9px; justify-content:center; flex-wrap:wrap; margin-top:16px;}
+.hub-secondary-row{display:flex; gap:9px; justify-content:center; margin:0 20px 18px; flex-wrap:wrap;}
+
+/* Softer, more refined pill buttons for the avatar/pet experience */
+.pill-btn{
+  border:none; border-radius:999px; padding:11px 18px; font-family:'Baloo 2'; font-weight:700;
+  font-size:13.5px; cursor:pointer; color:#fff; background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.14); transition:transform .12s ease, background .15s ease;
+  box-shadow:0 4px 10px rgba(0,0,0,.2);
+}
+.pill-btn:active{transform:translateY(2px) scale(.98);}
+.pill-btn-primary{
+  background:linear-gradient(135deg, var(--purple), #8B6FE8); border-color:transparent;
+  box-shadow:0 6px 16px rgba(108,92,231,.45);
+}
+.pill-btn-ghost{background:rgba(255,255,255,.06); color:#C9BFFF;}
+.pill-btn-ghost:hover{background:rgba(255,255,255,.12); color:#fff;}
+
 .tile-grid{
   display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
   gap:18px; padding:18px 20px 30px;
 }
 .tile{
-  background:var(--panel); border-radius:18px; overflow:hidden;
-  border:3px solid rgba(36,27,69,.14);
-  box-shadow:0 8px 0 rgba(0,0,0,.25), 0 14px 24px rgba(0,0,0,.35);
+  background:var(--panel); border-radius:20px; overflow:hidden;
+  border:1px solid rgba(36,27,69,.08);
+  box-shadow:0 4px 14px rgba(0,0,0,.18);
   transition:transform .15s ease, box-shadow .15s ease;
   display:flex; flex-direction:column;
 }
-.tile:hover{transform:translateY(-4px); box-shadow:0 12px 0 rgba(0,0,0,.25), 0 20px 30px rgba(0,0,0,.4);}
+.tile:hover{transform:translateY(-4px); box-shadow:0 10px 24px rgba(0,0,0,.25);}
 .tile-top{
   height:110px; display:flex; align-items:center; justify-content:center;
   font-size:52px; position:relative;
-  border-bottom:3px solid rgba(0,0,0,.15);
+  border-bottom:1px solid rgba(0,0,0,.08);
 }
 .tile-top .stars{position:absolute; bottom:8px; right:10px; font-size:13px; letter-spacing:1px;}
 .tile-body{padding:14px 16px 16px;}
@@ -484,43 +523,49 @@ function mcQuestionInt(prompt, answer, spread){
 /* ============================================================
    GOLDEN RETRIEVER PLUSH (Wow Wow) ILLUSTRATION
    ============================================================ */
+/* ---- Shared dressable body rig — same torso/arms/legs for all 3 pets, so clothing actually fits.
+   Only the head is pet-specific, which keeps each pet's personality distinct. ---- */
+function sharedBody(color, dark){
+  return `
+    <ellipse cx="55" cy="185" rx="15" ry="9" fill="${dark}"/>
+    <ellipse cx="105" cy="185" rx="15" ry="9" fill="${dark}"/>
+    <rect x="42" y="148" width="26" height="42" rx="13" fill="${color}"/>
+    <rect x="92" y="148" width="26" height="42" rx="13" fill="${color}"/>
+    <rect x="30" y="98" width="22" height="50" rx="11" fill="${color}"/>
+    <rect x="108" y="98" width="22" height="50" rx="11" fill="${color}"/>
+    <rect x="45" y="88" width="70" height="72" rx="30" fill="${color}"/>
+  `;
+}
 function plushSVG(stage){
   stage = stage || 0;
   const worn = stage >= 2; // torn nose + unsewn neck appear as he grows, like the real plushie
   const veryWorn = stage >= 3;
-  // Nose: clean oval when young; torn/notched edge once worn, showing a little dark stitched gap
   const nose = worn
     ? `<path d="M74 66 Q 73 71 76 73 Q 80 75 84 72 Q 87 69 85 65 Q 82 63 78 64 Q 75 64 74 66 Z" fill="#2B2320"/>
        <path d="M84 68 L 88 70 M85 71 L 89 74" stroke="#1A1512" stroke-width="1.2" stroke-linecap="round"/>`
     : `<ellipse cx="80" cy="68" rx="7" ry="5" fill="#4A3200"/>`;
-  // Neck seam: normal stitched dashed line when young; a small unsewn gap with peeking white stuffing once worn
+  // Unsewn neck seam: shows right at the head-to-body join once he's worn — a small gap with stuffing peeking through
   const neckSeam = worn
-    ? `<path d="M42 100 A 44 26 0 0 1 84 99" stroke="#D89A2E" stroke-width="1.5" fill="none" stroke-dasharray="3 4" opacity="0.5"/>
-       <path d="M84 99 Q 92 103 98 100" stroke="#8A6420" stroke-width="1.3" fill="none" stroke-dasharray="2 2" opacity="0.7"/>
-       <ellipse cx="91" cy="101" rx="6" ry="4" fill="#FFF8ED" opacity="${veryWorn?0.95:0.7}"/>`
-    : `<path d="M42 100 A 44 26 0 0 1 118 100" stroke="#D89A2E" stroke-width="1.5" fill="none" stroke-dasharray="3 4" opacity="0.5"/>`;
-  return `<svg viewBox="0 0 160 150" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Wow Wow the golden retriever plush">
-    <ellipse cx="80" cy="118" rx="44" ry="26" fill="#D89A2E"/>
-    <ellipse cx="80" cy="112" rx="44" ry="26" fill="#F2B84B"/>
-    <ellipse cx="80" cy="118" rx="24" ry="15" fill="#FBE3A9"/>
-    <ellipse cx="46" cy="126" rx="12" ry="9" fill="#F2B84B" stroke="#D89A2E" stroke-width="2"/>
-    <ellipse cx="114" cy="126" rx="12" ry="9" fill="#F2B84B" stroke="#D89A2E" stroke-width="2"/>
-    <path d="M46 40 C 26 44, 22 68, 34 82 C 40 70, 44 55, 52 46 Z" fill="#D89A2E"/>
-    <path d="M114 40 C 134 44, 138 68, 126 82 C 120 70, 116 55, 108 46 Z" fill="#D89A2E"/>
-    <circle cx="80" cy="60" r="38" fill="#F2B84B"/>
-    <ellipse cx="80" cy="76" rx="19" ry="13" fill="#FBE3A9"/>
-    ${nose}
-    <path d="M80 73 Q 80 82 72 84" stroke="#4A3200" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-    <path d="M80 73 Q 80 82 88 84" stroke="#4A3200" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-    <path d="M70 88 Q 76 94 82 88" stroke="#FF8FA8" stroke-width="6" fill="none" stroke-linecap="round"/>
-    <circle cx="65" cy="54" r="5.5" fill="#241B45"/>
-    <circle cx="95" cy="54" r="5.5" fill="#241B45"/>
-    <circle cx="63" cy="52" r="1.6" fill="#fff"/>
-    <circle cx="93" cy="52" r="1.6" fill="#fff"/>
-    <path d="M55 78 A 38 38 0 0 1 105 78" stroke="#D89A2E" stroke-width="1.5" fill="none" stroke-dasharray="3 4" opacity="0.6"/>
+    ? `<path d="M46 88 Q 60 96 74 88" stroke="#8A6420" stroke-width="1.3" fill="none" stroke-dasharray="2 2" opacity="0.7"/>
+       <ellipse cx="60" cy="90" rx="7" ry="4.5" fill="#FFF8ED" opacity="${veryWorn?0.95:0.7}"/>`
+    : `<path d="M40 87 A 40 12 0 0 0 120 87" stroke="#D89A2E" stroke-width="1.5" fill="none" stroke-dasharray="3 4" opacity="0.5"/>`;
+  return `<svg viewBox="0 0 160 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Wow Wow the golden retriever plush">
+    ${sharedBody('#F2B84B','#D89A2E')}
     ${neckSeam}
-    <circle cx="80" cy="98" r="10" fill="#FF5DA2" stroke="#fff" stroke-width="2"/>
-    <text x="80" y="102" font-family="Baloo 2, sans-serif" font-size="9" font-weight="800" fill="#fff" text-anchor="middle">WW</text>
+    <path d="M36 40 C 16 44, 12 68, 24 82 C 30 70, 34 55, 42 46 Z" fill="#D89A2E"/>
+    <path d="M124 40 C 144 44, 148 68, 136 82 C 130 70, 126 55, 118 46 Z" fill="#D89A2E"/>
+    <circle cx="80" cy="60" r="42" fill="#F2B84B"/>
+    <ellipse cx="80" cy="78" rx="20" ry="14" fill="#FBE3A9"/>
+    ${nose}
+    <path d="M80 76 Q 80 86 72 88" stroke="#4A3200" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <path d="M80 76 Q 80 86 88 88" stroke="#4A3200" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <path d="M70 90 Q 76 96 82 90" stroke="#FF8FA8" stroke-width="6" fill="none" stroke-linecap="round"/>
+    <circle cx="64" cy="54" r="6" fill="#241B45"/>
+    <circle cx="96" cy="54" r="6" fill="#241B45"/>
+    <circle cx="62" cy="52" r="1.8" fill="#fff"/>
+    <circle cx="94" cy="52" r="1.8" fill="#fff"/>
+    <circle cx="80" cy="118" r="11" fill="#FF5DA2" stroke="#fff" stroke-width="2"/>
+    <text x="80" y="122" font-family="Baloo 2, sans-serif" font-size="9" font-weight="800" fill="#fff" text-anchor="middle">WW</text>
   </svg>`;
 }
 
@@ -554,75 +599,103 @@ function spiderSVG(){
   </svg>`;
 }
 
-/* ---- Cat companion plush ---- */
+/* ---- Cat companion ---- */
 function catSVG(){
-  return `<svg viewBox="0 0 160 150" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Cat companion plush">
-    <ellipse cx="80" cy="118" rx="42" ry="25" fill="#93A0BE"/>
-    <ellipse cx="80" cy="112" rx="42" ry="25" fill="#B8C4D9"/>
-    <ellipse cx="80" cy="118" rx="22" ry="14" fill="#F0F3FA"/>
-    <path d="M118 105 Q 138 100 134 78 Q 130 92 114 96 Z" fill="#B8C4D9"/>
-    <path d="M46 122 Q 30 128 32 138" stroke="#93A0BE" stroke-width="8" fill="none" stroke-linecap="round"/>
+  return `<svg viewBox="0 0 160 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Cat companion">
+    ${sharedBody('#B8C4D9','#93A0BE')}
     <path d="M40 34 L 30 6 L 56 28 Z" fill="#B8C4D9" stroke="#93A0BE" stroke-width="2"/>
     <path d="M120 34 L 130 6 L 104 28 Z" fill="#B8C4D9" stroke="#93A0BE" stroke-width="2"/>
     <path d="M42 30 L 36 14 L 52 27 Z" fill="#F4A6C1"/>
     <path d="M118 30 L 124 14 L 108 27 Z" fill="#F4A6C1"/>
-    <circle cx="80" cy="58" r="36" fill="#B8C4D9"/>
-    <ellipse cx="80" cy="72" rx="18" ry="12" fill="#F0F3FA"/>
-    <path d="M80 68 L 75 74 L 85 74 Z" fill="#F4A6C1"/>
-    <path d="M80 75 Q 74 80 68 78" stroke="#4A5570" stroke-width="2" fill="none" stroke-linecap="round"/>
-    <path d="M80 75 Q 86 80 92 78" stroke="#4A5570" stroke-width="2" fill="none" stroke-linecap="round"/>
-    <circle cx="65" cy="54" r="6" fill="#241B45"/>
-    <circle cx="95" cy="54" r="6" fill="#241B45"/>
+    <circle cx="80" cy="58" r="40" fill="#B8C4D9"/>
+    <ellipse cx="80" cy="74" rx="19" ry="13" fill="#F0F3FA"/>
+    <path d="M80 70 L 75 76 L 85 76 Z" fill="#F4A6C1"/>
+    <path d="M80 77 Q 74 82 68 80" stroke="#4A5570" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <path d="M80 77 Q 86 82 92 80" stroke="#4A5570" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <circle cx="65" cy="54" r="6.5" fill="#241B45"/>
+    <circle cx="95" cy="54" r="6.5" fill="#241B45"/>
     <circle cx="63" cy="52" r="1.8" fill="#fff"/>
     <circle cx="93" cy="52" r="1.8" fill="#fff"/>
-    <path d="M50 64 L 20 60 M50 68 L 20 70 M50 60 L 22 52" stroke="#4A5570" stroke-width="1.2" opacity="0.6"/>
-    <path d="M110 64 L 140 60 M110 68 L 140 70 M110 60 L 138 52" stroke="#4A5570" stroke-width="1.2" opacity="0.6"/>
-    <circle cx="80" cy="98" r="9" fill="#4FC3F7" stroke="#fff" stroke-width="2"/>
+    <path d="M50 64 L 20 60 M50 68 L 20 70" stroke="#4A5570" stroke-width="1.2" opacity="0.6"/>
+    <path d="M110 64 L 140 60 M110 68 L 140 70" stroke="#4A5570" stroke-width="1.2" opacity="0.6"/>
+    <circle cx="80" cy="118" r="10" fill="#4FC3F7" stroke="#fff" stroke-width="2"/>
   </svg>`;
 }
 
-/* ---- Baby dragon companion plush ---- */
+/* ---- Baby dragon companion ---- */
 function dragonSVG(){
-  return `<svg viewBox="0 0 160 150" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Baby dragon companion plush">
-    <ellipse cx="80" cy="118" rx="42" ry="25" fill="#9B7FE0"/>
-    <ellipse cx="80" cy="112" rx="42" ry="25" fill="#B79DF0"/>
-    <ellipse cx="80" cy="118" rx="20" ry="13" fill="#EBE1FF"/>
-    <path d="M118 100 Q 140 96 136 116 Q 128 108 112 106 Z" fill="#B79DF0" stroke="#9B7FE0" stroke-width="2"/>
-    <path d="M40 96 Q 18 92 22 112 Q 30 104 46 102 Z" fill="#B79DF0" stroke="#9B7FE0" stroke-width="2"/>
-    <path d="M62 30 L 58 16 L 70 28 Z" fill="#7A5FC7"/>
-    <path d="M80 26 L 78 10 L 90 24 Z" fill="#7A5FC7"/>
-    <path d="M98 30 L 96 16 L 108 28 Z" fill="#7A5FC7"/>
-    <circle cx="80" cy="58" r="34" fill="#B79DF0"/>
-    <ellipse cx="80" cy="74" rx="17" ry="11" fill="#EBE1FF"/>
-    <circle cx="73" cy="76" r="1.6" fill="#7A5FC7"/>
-    <circle cx="87" cy="76" r="1.6" fill="#7A5FC7"/>
-    <path d="M72 82 Q 80 87 88 82" stroke="#5A4390" stroke-width="2.2" fill="none" stroke-linecap="round"/>
-    <circle cx="66" cy="53" r="6" fill="#241B45"/>
-    <circle cx="94" cy="53" r="6" fill="#241B45"/>
-    <circle cx="64" cy="51" r="1.8" fill="#fff"/>
-    <circle cx="92" cy="51" r="1.8" fill="#fff"/>
-    <path d="M46 100 Q 32 108 36 122 Q 44 116 50 108" fill="#B79DF0" stroke="#9B7FE0" stroke-width="2"/>
-    <path d="M32 118 L 26 112 L 36 116 Z" fill="#7A5FC7"/>
-    <circle cx="80" cy="97" r="9" fill="#FF9F5A" stroke="#fff" stroke-width="2"/>
+  return `<svg viewBox="0 0 160 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Baby dragon companion">
+    ${sharedBody('#B79DF0','#9B7FE0')}
+    <path d="M62 26 L 58 10 L 70 24 Z" fill="#7A5FC7"/>
+    <path d="M80 22 L 78 6 L 90 20 Z" fill="#7A5FC7"/>
+    <path d="M98 26 L 96 10 L 108 24 Z" fill="#7A5FC7"/>
+    <circle cx="80" cy="56" r="38" fill="#B79DF0"/>
+    <ellipse cx="80" cy="72" rx="17" ry="11" fill="#EBE1FF"/>
+    <circle cx="73" cy="74" r="1.6" fill="#7A5FC7"/>
+    <circle cx="87" cy="74" r="1.6" fill="#7A5FC7"/>
+    <path d="M72 80 Q 80 85 88 80" stroke="#5A4390" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+    <circle cx="66" cy="51" r="6.5" fill="#241B45"/>
+    <circle cx="94" cy="51" r="6.5" fill="#241B45"/>
+    <circle cx="64" cy="49" r="1.8" fill="#fff"/>
+    <circle cx="92" cy="49" r="1.8" fill="#fff"/>
+    <circle cx="80" cy="117" r="10" fill="#FF9F5A" stroke="#fff" stroke-width="2"/>
   </svg>`;
 }
 
 /* ---- Visual equip overlays: equipped items render as positioned icons on the pet (the avatar).
-   A couple of items (like jeans) get real fitted vector art instead of a floating emoji so they
-   actually look worn rather than pasted on. ---- */
+   Clothing that needs to actually wrap the body (pants, outfits, shoes) gets real fitted vector
+   art built for the shared body rig, instead of a floating emoji, so it genuinely looks worn. ---- */
 function jeansShape(){
   return `
-    <rect x="57" y="92" width="46" height="20" rx="7" fill="#5B7FBE" stroke="#3F5A94" stroke-width="2"/>
-    <rect x="59" y="106" width="17" height="43" rx="7" fill="#5B7FBE" stroke="#3F5A94" stroke-width="2"/>
-    <rect x="84" y="106" width="17" height="43" rx="7" fill="#5B7FBE" stroke="#3F5A94" stroke-width="2"/>
-    <circle cx="67" cy="128" r="4" fill="#FBE3A9" stroke="#3F5A94" stroke-width="1"/>
-    <circle cx="93" cy="135" r="3.5" fill="#FBE3A9" stroke="#3F5A94" stroke-width="1"/>
-    <line x1="63" y1="98" x2="63" y2="106" stroke="#3F5A94" stroke-width="1" opacity="0.5"/>
-    <line x1="97" y1="98" x2="97" y2="106" stroke="#3F5A94" stroke-width="1" opacity="0.5"/>
-    <circle cx="80" cy="100" r="2" fill="#3F5A94"/>
+    <rect x="40" y="146" width="30" height="46" rx="13" fill="#5B7FBE" stroke="#3F5A94" stroke-width="2"/>
+    <rect x="90" y="146" width="30" height="46" rx="13" fill="#5B7FBE" stroke="#3F5A94" stroke-width="2"/>
+    <rect x="43" y="140" width="74" height="20" rx="10" fill="#5B7FBE" stroke="#3F5A94" stroke-width="2"/>
+    <circle cx="55" cy="168" r="4.5" fill="#FBE3A9" stroke="#3F5A94" stroke-width="1"/>
+    <circle cx="105" cy="175" r="4" fill="#FBE3A9" stroke="#3F5A94" stroke-width="1"/>
+    <circle cx="80" cy="148" r="2" fill="#3F5A94"/>
   `;
 }
-const FITTED_SHAPES = { rippedjeans: jeansShape };
+function outfitWrap(color, dark, opts){
+  opts = opts || {};
+  const badge = opts.badge ? `<text x="80" y="128" font-size="22" text-anchor="middle" dominant-baseline="middle">${opts.badge}</text>` : '';
+  return `
+    <rect x="38" y="86" width="84" height="76" rx="26" fill="${color}" stroke="${dark}" stroke-width="2"/>
+    <rect x="28" y="96" width="22" height="48" rx="11" fill="${color}" stroke="${dark}" stroke-width="2"/>
+    <rect x="110" y="96" width="22" height="48" rx="11" fill="${color}" stroke="${dark}" stroke-width="2"/>
+    ${badge}
+  `;
+}
+function shoesWrap(color, dark){
+  return `
+    <ellipse cx="55" cy="187" rx="17" ry="10" fill="${color}" stroke="${dark}" stroke-width="2"/>
+    <ellipse cx="105" cy="187" rx="17" ry="10" fill="${color}" stroke="${dark}" stroke-width="2"/>
+  `;
+}
+const FITTED_SHAPES = {
+  rippedjeans: jeansShape,
+  hoodie: ()=>outfitWrap('#6C5CE7','#4A3BB0'),
+  cape: ()=>outfitWrap('#E24D4D','#B03A3A', {badge:'🦸'}),
+  labcoat: ()=>outfitWrap('#F5F5F5','#CFCFCF', {badge:'🥼'}),
+  rainbow: ()=>outfitWrap('#FF9F5A','#E67A2E', {badge:'🌈'}),
+  spacesuit: ()=>outfitWrap('#E8E8E8','#B8B8B8', {badge:'👨‍🚀'}),
+  tutu: ()=>outfitWrap('#FF8FA8','#E2698A', {badge:'🩰'}),
+  dinocostume: ()=>outfitWrap('#4CAF50','#2E7D32', {badge:'🦖'}),
+  bananacostume: ()=>outfitWrap('#FFD93D','#E0B800', {badge:'🍌'}),
+  hotdogcostume: ()=>outfitWrap('#E0A458','#B87F3A', {badge:'🌭'}),
+  unicornonesie: ()=>outfitWrap('#FFF0F5','#F0C9DC', {badge:'🦄'}),
+  sharkonesie: ()=>outfitWrap('#8899AA','#5F6E7D', {badge:'🦈'}),
+  tacocostume: ()=>outfitWrap('#E8C878','#C4A055', {badge:'🌮'}),
+  aliencostume: ()=>outfitWrap('#7FDB7F','#4CAE4C', {badge:'👽'}),
+  sneakers: ()=>shoesWrap('#fff','#4A5570'),
+  rainboots: ()=>shoesWrap('#4FC3F7','#1E9FDB'),
+  skates: ()=>shoesWrap('#FF5DA2','#D63F82'),
+  sandals: ()=>shoesWrap('#E8A33D','#B87F1E'),
+  sparklyshoes: ()=>shoesWrap('#FFD866','#E0B800'),
+  cleats: ()=>shoesWrap('#2FBE7A','#1E8F5C'),
+  sweater: ()=>outfitWrap('#E8A33D','#B87F1E'),
+  petcape: ()=>outfitWrap('#E24D4D','#B03A3A', {badge:'🦸'}),
+  booties: ()=>shoesWrap('#F4A6C1','#D6789F')
+};
 function renderCatalogOverlay(itemId, catalog, positions){
   const item = catalog.find(i=>i.id===itemId);
   if(!item) return '';
@@ -738,20 +811,19 @@ const PET_CATS = [
 
 /* ---- Visual equip overlays for pets: equipped gear renders as an icon on the pet ---- */
 const PET_ITEM_POSITIONS = {
-  _byCategory: { gear:{x:80, y:100, size:26} },
-  collar:{x:80, y:96, size:22}, bandana:{x:80, y:98, size:26}, bow:{x:64, y:40, size:20},
-  minibackpack:{x:118, y:88, size:26}, partyhat:{x:80, y:14, size:24}, sweater:{x:80, y:112, size:32},
-  booties:{x:80, y:136, size:20}, petcape:{x:104, y:88, size:30}
+  _byCategory: { gear:{x:80, y:92, size:22} },
+  collar:{x:80, y:88, size:20}, bandana:{x:80, y:90, size:24}, bow:{x:64, y:22, size:18},
+  minibackpack:{x:130, y:108, size:24}, partyhat:{x:80, y:6, size:22}
 };
 /* ---- Closet items (hats/outfits/accessories/shoes/silly) now dress the pet directly,
-   since the pet itself is the avatar. Positions tuned for the shared 160x150 pet viewBox. ---- */
+   since the pet itself is the avatar. Positions tuned for the shared 160x200 body rig. ---- */
 const CLOSET_PET_POSITIONS = {
   _byCategory: {
-    hats:{x:80, y:16, size:36}, outfits:{x:80, y:118, size:34}, accessories:{x:80, y:93, size:24},
-    shoes:{x:80, y:138, size:20}, silly:{x:80, y:120, size:38}
+    hats:{x:80, y:8, size:32}, outfits:{x:80, y:125, size:30}, accessories:{x:80, y:92, size:22},
+    shoes:{x:80, y:187, size:18}, silly:{x:80, y:125, size:34}
   },
-  sunglasses:{x:80, y:50, size:30}, headphones:{x:80, y:34, size:38}, backpack:{x:122, y:100, size:26},
-  bowtie:{x:80, y:90, size:20}, scarf:{x:80, y:92, size:24}, wand:{x:122, y:112, size:24}
+  sunglasses:{x:80, y:66, size:28}, headphones:{x:80, y:48, size:36}, backpack:{x:130, y:112, size:26},
+  bowtie:{x:80, y:90, size:18}, scarf:{x:80, y:90, size:22}, wand:{x:130, y:126, size:22}
 };
 function withPetOverlays(svgString, equippedClosetIds, equippedPetIds){
   const petGear = (equippedPetIds||[]).filter(id=>{
@@ -1773,22 +1845,26 @@ function renderHub(){
   const companion = companionById(state.companionId || 'dog');
   const stage = getEvolutionStage(levelFromXP(state.xp));
   return `
+  <div class="pet-stage">
+    <div class="pet-stage-glow"></div>
+    <div class="pet-stage-figure">${scaledCompanionSVG(companion, stage)}</div>
+    <div class="pet-stage-info">
+      <div class="pet-stage-name">${companion.icon} ${companion.name[LANG]}</div>
+      <div class="pet-stage-badge">${stage[LANG]}</div>
+    </div>
+    <div class="pet-stage-actions">
+      <button class="pill-btn pill-btn-primary" id="closetBtn">🚪 ${L('closet')}</button>
+      <button class="pill-btn pill-btn-primary" id="petShopBtn">${companion.icon} ${L('petShop')}</button>
+      <button class="pill-btn" id="changeCompanionBtn">🔄 ${LANG==='en'?'Change Pet':'Cambiar Mascota'}</button>
+    </div>
+  </div>
+  <div class="hub-secondary-row">
+    <button class="pill-btn pill-btn-ghost" id="profilesBtn">🏆 ${LANG==='en'?'Friends':'Amigas'}</button>
+    <button class="pill-btn pill-btn-ghost" id="videosBtn">📺 ${LANG==='en'?'Videos':'Videos'}</button>
+  </div>
   <div class="hub-header">
-    <div class="hub-header-inner">
-      <div class="plush-hero">${scaledCompanionSVG(companion, stage)}</div>
-      <div>
-        <h2 class="blocky-text">${L('chooseWorld')}</h2>
-        <p>${L('chooseWorldSub')}</p>
-        <p style="color:var(--gold); font-family:'Baloo 2'; font-weight:800; font-size:12.5px; margin-top:4px;">${companion.icon} ${companion.name[LANG]} — ${stage[LANG]}</p>
-      </div>
-    </div>
-    <div style="margin-top:14px; display:flex; gap:10px; flex-wrap:wrap;">
-      <button class="chunky c-gold" id="profilesBtn">🏆 ${LANG==='en'?'Compete with Friends':'Compite con Amigas'}</button>
-      <button class="chunky c-purple" id="closetBtn">🚪 ${L('closet')}</button>
-      <button class="chunky c-coral" id="petShopBtn">${companion.icon} ${L('petShop')}</button>
-      <button class="chunky c-green" id="changeCompanionBtn">🔄 ${LANG==='en'?'Change Pet':'Cambiar Mascota'}</button>
-      <button class="chunky c-orange" id="videosBtn">📺 ${LANG==='en'?'Science Videos':'Videos de Ciencia'}</button>
-    </div>
+    <h2 class="section-title">${L('chooseWorld')}</h2>
+    <p class="section-sub">${L('chooseWorldSub')}</p>
   </div>
   <div class="tile-grid">${tiles}</div>`;
 }
