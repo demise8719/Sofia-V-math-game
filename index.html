@@ -376,6 +376,11 @@ button{font-family:inherit;}
   border:3px solid #fff;
 }
 .dad-bot:active{transform:translateY(3px);}
+.dev-badge{
+  position:fixed; top:10px; left:10px; z-index:60; font-family:'Fredoka'; font-weight:700;
+  font-size:11px; color:#fff; background:#E24D4D; padding:5px 10px; border-radius:10px;
+  box-shadow:0 3px 8px rgba(0,0,0,.25); pointer-events:none;
+}
 .dad-panel{
   position:fixed; bottom:76px; right:16px; width:270px; background:#fff; color:var(--ink);
   border-radius:16px; padding:16px 18px; box-shadow:0 12px 28px rgba(45,38,80,.25); z-index:41;
@@ -973,6 +978,10 @@ function playShopChime(){
    LANGUAGE / i18n
    ============================================================ */
 let LANG = 'en';
+// Hidden dev/testing mode — activate by adding ?dev=1 to the URL. Not linked from anywhere in
+// the UI, so Sofia won't stumble into it. Lets items be "purchased" for free to test how they
+// look, without ever touching the real saved coin/crystal totals.
+let DEV_MODE = false;
 const STRINGS = {
   en:{
     chooseWorld:'Choose your world, Sofia! 🐾',
@@ -2552,11 +2561,13 @@ async function handleClosetItemClick(itemId){
   if(!item) return;
   const owned = state.ownedClosetItems.includes(itemId);
   if(!owned){
-    if(state.coins < item.price){
-      flashShopMessage(L('notEnough'));
-      return;
+    if(!DEV_MODE){
+      if(state.coins < item.price){
+        flashShopMessage(L('notEnough'));
+        return;
+      }
+      state.coins -= item.price;
     }
-    state.coins -= item.price;
     state.ownedClosetItems.push(itemId);
     await saveProgress();
     render();
@@ -2640,8 +2651,10 @@ async function handlePetItemClick(itemId, isTreat){
   if(isTreat){
     const treat = (PET_TREATS[companion.id]||[]).find(i=>i.id===itemId);
     if(!treat) return;
-    if(state.crystals < treat.price){ flashShopMessage(L('notEnough')); return; }
-    state.crystals -= treat.price;
+    if(!DEV_MODE){
+      if(state.crystals < treat.price){ flashShopMessage(L('notEnough')); return; }
+      state.crystals -= treat.price;
+    }
     await saveProgress();
     flashShopMessage(LANG==='en' ? `${companion.name.en} loved that treat! 💕` : `¡A ${companion.name.es} le encantó! 💕`);
     return;
@@ -2650,8 +2663,10 @@ async function handlePetItemClick(itemId, isTreat){
   if(!item) return;
   const owned = state.ownedPetItems.includes(itemId);
   if(!owned){
-    if(state.crystals < item.price){ flashShopMessage(L('notEnough')); return; }
-    state.crystals -= item.price;
+    if(!DEV_MODE){
+      if(state.crystals < item.price){ flashShopMessage(L('notEnough')); return; }
+      state.crystals -= item.price;
+    }
     state.ownedPetItems.push(itemId);
     await saveProgress();
     render();
@@ -2815,16 +2830,28 @@ function createDadBot(){
   bot.addEventListener('click', onDadClick);
   document.body.appendChild(bot);
 }
+function createDevBadge(){
+  const badge = document.createElement('div');
+  badge.id = 'devBadgeEl';
+  badge.className = 'dev-badge';
+  badge.textContent = '🛠️ DEV MODE — free items';
+  document.body.appendChild(badge);
+}
 
 /* ============================================================
    INIT
    ============================================================ */
 (async function init(){
+  try{
+    const params = new URLSearchParams(window.location.search);
+    DEV_MODE = params.get('dev') === '1' || params.get('debug') === '1';
+  }catch(e){ DEV_MODE = false; }
   await loadProgress();
   state.screen = state.companionId ? 'hub' : 'companion-select';
   render();
   createWebsterBot();
   createDadBot();
+  if(DEV_MODE) createDevBadge();
   setInterval(saveProgress, 20000);
   window.addEventListener('pagehide', ()=>{ saveProgress(); });
 })();
