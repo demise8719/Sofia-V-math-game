@@ -1,0 +1,20 @@
+{
+  "name": "sofia-v-math-game",
+  "version": "1.0.0",
+  "description": "Sofia Villarreal Castañeda's Math Quest",
+  "private": true,
+  "scripts": {
+    "dev": "serve .",
+    "build": "echo 'Static HTML site - no build needed'"
+  },
+  "keywords": [
+    "math",
+    "game",
+    "education"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@vercel/analytics": "^2.0.1"
+  }
+}
